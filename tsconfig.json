@@ -1,0 +1,33 @@
+{
+    "compilerOptions": {
+        "strict": true,
+        "outDir": "./dist/",
+        "inlineSourceMap": true,
+
+        "target": "es2017",
+        "module": "esnext",
+        "moduleResolution": "node",
+
+        "experimentalDecorators": true,
+        "allowSyntheticDefaultImports": true,
+        "resolveJsonModule": true,
+
+        "noUnusedLocals": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+
+        "baseUrl": ".",
+        "paths": {
+            "@Constants": ["./src/Constants.ts"],
+            "@img/*": ["./src/assets/img/*"],
+            "@css/*": ["./src/assets/css/*"],
+        },
+    },
+    "exclude": [
+        "node_modules",
+        "dist",
+    ],
+    "include": [
+        "src/**/*",
+    ],
+}
