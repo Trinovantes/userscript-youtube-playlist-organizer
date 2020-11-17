@@ -3,7 +3,7 @@ name: Release Build
 on:
   push:
     tags:
-    - 'v*'
+      - 'v*'
 
 env:
   AUTO_TAG: latest
@@ -14,62 +14,61 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
 
-    - name: Checkout Repository
-      uses: actions/checkout@v2
-      with:
-        submodules: 'recursive'
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock', '**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
 
-    - name: Cache node modules
-      uses: actions/cache@v2
-      env:
-        cache-name: cache-node-modules
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock', '**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-build-${{ env.cache-name }}-
-          ${{ runner.os }}-build-
-          ${{ runner.os }}-
+      - name: Install Dependencies
+        run: yarn install
 
-    - name: Install Dependencies
-      run: yarn install
+      - name: Build
+        run: yarn build
 
-    - name: Build
-      run: yarn build
+      - name: Update Current Release
+        id: update_current
+        uses: Trinovantes/action-automatic-release@v2.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          is_prerelease: false
 
-    - name: Update Current Release
-      id: update_current
-      uses: Trinovantes/action-automatic-release@v2.0.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        is_prerelease: false
+      - name: Upload Asset to Current Release
+        uses:  Trinovantes/action-release-upload@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          release_id: ${{ steps.update_current.outputs.release_id }}
+          upload_url: ${{ steps.update_current.outputs.upload_url }}
+          files: ./dist/*.user.js
 
-    - name: Upload Asset to Current Release
-      uses:  Trinovantes/action-release-upload@v1.0.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        release_id: ${{ steps.update_current.outputs.release_id }}
-        upload_url: ${{ steps.update_current.outputs.upload_url }}
-        files: ./dist/*.user.js
+      - name: Update Latest Build Release
+        id: update_latest
+        uses: Trinovantes/action-automatic-release@v2.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          auto_release_tag: ${{ env.AUTO_TAG }}
+          auto_release_title: "Latest Build"
+          is_prerelease: false
 
-    - name: Update Latest Build Release
-      id: update_latest
-      uses: Trinovantes/action-automatic-release@v2.0.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        auto_release_tag: ${{ env.AUTO_TAG }}
-        auto_release_title: "Latest Build"
-        is_prerelease: false
-
-    - name: Upload Asset to Latest Build Release
-      uses:  Trinovantes/action-release-upload@v1.0.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        release_id: ${{ steps.update_latest.outputs.release_id }}
-        upload_url: ${{ steps.update_latest.outputs.upload_url }}
-        files: ./dist/*.user.js
+      - name: Upload Asset to Latest Build Release
+        uses:  Trinovantes/action-release-upload@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          release_id: ${{ steps.update_latest.outputs.release_id }}
+          upload_url: ${{ steps.update_latest.outputs.upload_url }}
+          files: ./dist/*.user.js
