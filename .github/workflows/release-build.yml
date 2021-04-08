@@ -7,6 +7,7 @@ on:
 
 env:
   AUTO_TAG: latest
+  AUTO_TITLE: Latest Build
 
 jobs:
   release_build:
@@ -35,14 +36,14 @@ jobs:
 
       - name: Update Current Release
         id: update_current
-        uses: Trinovantes/action-automatic-release@v2.0.0
+        uses: Trinovantes/action-automatic-release@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           is_prerelease: false
 
       - name: Upload Asset to Current Release
-        uses:  Trinovantes/action-release-upload@v1.0.0
+        uses:  Trinovantes/action-release-upload@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -52,16 +53,16 @@ jobs:
 
       - name: Update Latest Build Release
         id: update_latest
-        uses: Trinovantes/action-automatic-release@v2.0.0
+        uses: Trinovantes/action-automatic-release@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           auto_release_tag: ${{ env.AUTO_TAG }}
-          auto_release_title: "Latest Build"
+          auto_release_title: ${{ env.AUTO_TITLE }}
           is_prerelease: false
 
       - name: Upload Asset to Latest Build Release
-        uses:  Trinovantes/action-release-upload@v1.0.0
+        uses:  Trinovantes/action-release-upload@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
