@@ -18,9 +18,7 @@
 
         "baseUrl": ".",
         "paths": {
-            "@Constants": ["./src/Constants.ts"],
-            "@img/*": ["./src/assets/img/*"],
-            "@css/*": ["./src/assets/css/*"],
+            "@/*": ["./src/*"],
         },
     },
     "exclude": [
@@ -29,5 +27,7 @@
     ],
     "include": [
         "src/**/*",
+        ".eslintrc.js",
+        "webpack.config.ts",
     ],
 }

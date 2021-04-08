@@ -17,9 +17,9 @@ As of [2016](https://developers.google.com/youtube/v3/revision_history#september
 
 ### Disclaimer
 
-This tool relies on timers and jQuery selectors to find playlists and videos on the page. Random input/UI lag may break script. In addition, this tool *will* stop working whenever YouTube's markup changes.
+This tool relies on timers and jQuery selectors to find playlists and videos on the page. Random lag may break the script. In addition, this tool *will* stop working whenever YouTube's markup changes.
 
-# Installation Guide
+## Installation Guide
 
 1. Install a Userscript manager for your web browser
     * [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/) (Firefox)
@@ -27,9 +27,9 @@ This tool relies on timers and jQuery selectors to find playlists and videos on 
 
 2. [Download the latest build](https://github.com/Trinovantes/userscript-youtube-playlist-organizer/releases/download/latest/userscript-youtube-playlist-organizer.user.js). If you have Greasemonkey or Tampermonkey installed, then you should immediately be prompted with a confirmation window asking you if you wish to install this Userscript.
 
-# Dev Guide
+## Dev Guide
 
-1. Install prereq
+1. Install prereqs
 
     * `node`
     * `yarn`
@@ -48,13 +48,6 @@ This tool relies on timers and jQuery selectors to find playlists and videos on 
     yarn dev
     ```
 
-4. In Tampermonkey options:
+4. In Chrome:
 
-    * Go to `Utilities` tab
-    * Install from URL: `http://localhost:8080/userscript-youtube-playlist-organizer.meta.js`
-    * Go to `Installed Userscripts` tab
-    * Open the recently installed script and add this line (change the path accordingly) inside the config headers.
-
-        ```
-        // @require file:///path\to\dist\userscript-youtube-playlist-organizer.user.js
-        ```
+    * Go to `http://localhost:8080/userscript-youtube-playlist-organizer.proxy.user.js` and install the script

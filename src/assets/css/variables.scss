@@ -1,4 +1,44 @@
 $ytb-masthead-height: 56px;
+$ytb-player-margin: 12px;
+$ytb-player-width: 400px + ($ytb-player-margin * 2);
+$dragarea-width: 400px;
 
-$margin: 40px;
-$settings-width: 400px;
+$btn-size: 48px;
+$padding: 20px;
+$min-dialog-width: 300px;
+
+$border-radius: 4px;
+$border: 1px solid #ddd;
+
+.margins{
+    margin: $padding 0;
+
+    &:first-child{
+        margin-top: 0;
+    }
+    &:last-child{
+        margin-bottom: 0;
+    }
+}
+
+.icon-btn{
+    background-size: 50% 50%;
+    background-color: white;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 50%;
+    cursor: pointer;
+    display: block;
+    transition: 0.25s;
+
+    width: $btn-size;
+    height: $btn-size;
+
+    text-decoration: none;
+    text-indent: -9999px;
+    overflow: hidden;
+
+    &:hover{
+        background-color: #eee;
+    }
+}

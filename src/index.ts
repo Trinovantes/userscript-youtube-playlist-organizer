@@ -1,12 +1,16 @@
-'use strict'
-
-import PlaylistOrganizer from './PlaylistOrganizer'
+import UserscriptApp from '@/components/UserscriptApp.vue'
+import { createApp } from 'vue'
 
 async function main() {
     await $.when($.ready)
-    const organizer = new PlaylistOrganizer()
-    organizer.run()
+
+    const appContainerId = 'userscript-app'
+    $('body').append(`<div id="${appContainerId}">`)
+
+    const app = createApp(UserscriptApp)
+    app.mount(`#${appContainerId}`)
 }
 
-import '@css/main.scss'
-void main()
+main().catch((err) => {
+    console.warn(DEFINE.NAME, err)
+})
