@@ -64,10 +64,12 @@ module.exports = {
         'import/no-unresolved': 'off',
         'import/no-extraneous-dependencies': 'off',
 
-        'comma-dangle': ['error', 'always-multiline'],
+        'comma-dangle': 'off',
+        '@typescript-eslint/comma-dangle': ['error', 'always-multiline'],
+
         'space-before-function-paren': ['error', 'never'],
         'indent': ['error', 4, {
-            SwitchCase: 1,
+            'SwitchCase': 1,
         }],
 
         'vue/html-indent': ['error', 4],
@@ -113,5 +115,36 @@ module.exports = {
         '@typescript-eslint/semi': ['error', 'never'],
 
         'no-debugger': 'error',
+
+        '@typescript-eslint/naming-convention': [
+            'error',
+            {
+                'selector': 'default',
+                'format': null,
+                'modifiers': ['requiresQuotes'],
+            },
+            {
+                'selector': 'typeLike',
+                'format': ['PascalCase'],
+            },
+            {
+                'selector': 'parameter',
+                'format': ['strictCamelCase'],
+                'leadingUnderscore': 'allow',
+            },
+            {
+                'selector': 'memberLike',
+                'modifiers': ['private'],
+                'format': ['strictCamelCase'],
+                'leadingUnderscore': 'require',
+            },
+            {
+                'selector': [
+                    'variableLike',
+                    'method',
+                ],
+                'format': ['strictCamelCase', 'UPPER_CASE'],
+            },
+        ],
     },
 }

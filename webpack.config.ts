@@ -28,7 +28,7 @@ if (isDev) {
     console.info(msg)
 }
 
-const Config: webpack.Configuration = {
+const config: webpack.Configuration = {
     target: 'web',
 
     mode: isDev
@@ -145,4 +145,4 @@ const Config: webpack.Configuration = {
     ],
 }
 
-export default Config
+export default config
