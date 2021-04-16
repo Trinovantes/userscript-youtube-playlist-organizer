@@ -183,7 +183,9 @@ export async function findPlaylistsInSidebar(): Promise<Array<Playlist>> {
         playlists.push({ youtubeId, name })
     }
 
-    return playlists
+    return playlists.sort((a, b) => {
+        return a.name.localeCompare(b.name)
+    })
 }
 
 async function findDelayedElement(selector: string, parent?: HTMLElement | JQuery<HTMLElement>): Promise<JQuery<HTMLElement>> {
