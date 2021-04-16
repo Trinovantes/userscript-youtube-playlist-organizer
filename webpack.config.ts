@@ -38,7 +38,7 @@ const Config: webpack.Configuration = {
         ? 'inline-source-map'
         : false,
 
-    entry: path.resolve(srcDir, 'index.ts'),
+    entry: path.resolve(srcDir, 'main.ts'),
     output: {
         filename: `${packageJson.name}.user.js`,
     },
