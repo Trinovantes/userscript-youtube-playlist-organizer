@@ -1,7 +1,6 @@
 {
     "compilerOptions": {
         "strict": true,
-        "outDir": "./dist/",
         "inlineSourceMap": true,
 
         "target": "es2017",
