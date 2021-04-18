@@ -1,5 +1,5 @@
-import { DATA_ATTR_ID, DATA_TRANSFER_KEY, LIKED_LIST_ID } from '@/Constants'
-import { sleep, waitDelayedPredicate } from '@/utils'
+import { DATA_ATTR_ID, DATA_TRANSFER_KEY, LIKED_LIST_ID, MAX_UI_WAIT_ATTEMPTS, UI_WAIT_TIME } from '@/Constants'
+import { sleep } from '@/utils'
 
 export interface Playlist {
     youtubeId: string
@@ -145,7 +145,7 @@ export function registerDragListeners(): void {
 export async function findPlaylistsInSidebar(): Promise<Array<Playlist>> {
     // Need to wait for YouTube to finish lazy loading
     const $homeSection = await findDelayedElement('#contentContainer ytd-guide-section-renderer:nth-child(1)')
-    if (!$homeSection) {
+    if (!$homeSection.length) {
         throw new Error('Cannot find playlist container')
     }
 
@@ -153,7 +153,7 @@ export async function findPlaylistsInSidebar(): Promise<Array<Playlist>> {
     $showMoreBtn.trigger('click')
 
     const $playlistLinks = await findDelayedElement('#expandable-items > ytd-guide-entry-renderer', $homeSection)
-    if (!$playlistLinks) {
+    if (!$playlistLinks.length) {
         throw new Error('Cannot find playlists inside container')
     }
 
@@ -191,20 +191,23 @@ export async function findPlaylistsInSidebar(): Promise<Array<Playlist>> {
 async function findDelayedElement(selector: string, parent?: HTMLElement | JQuery<HTMLElement>): Promise<JQuery<HTMLElement>> {
     let target: JQuery<HTMLElement> | null = null
 
-    await waitDelayedPredicate(() => {
+    for (let attempts = 0; attempts < MAX_UI_WAIT_ATTEMPTS; attempts++) {
+        // Exponential back off
+        const delay = UI_WAIT_TIME * Math.pow(2, attempts)
+        console.info(DEFINE.NAME, `Waiting ${delay}ms`)
+        await sleep(delay)
+
         if (parent) {
             target = $(parent).find(selector)
         } else {
             target = $(selector)
         }
 
-        if (target.length > 0) {
+        if (target.length) {
             console.info(DEFINE.NAME, 'findDelayedElement()', `Found "${selector}"`, target)
-            return true
-        } else {
-            return false
+            break
         }
-    })
+    }
 
     if (!target) {
         throw new Error(`findDelayedElement() failed to find "${selector}"`)
