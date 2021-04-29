@@ -1,14 +1,12 @@
 <template>
-    <div>
-        <div class="group actions">
-            <div class="hspace" />
-            <a
-                class="btn"
-                @click="onClose"
-            >
-                Close
-            </a>
-        </div>
+    <div class="group actions">
+        <div class="hspace" />
+        <a
+            class="btn"
+            @click="onClose"
+        >
+            Close
+        </a>
     </div>
 </template>
 
