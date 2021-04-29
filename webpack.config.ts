@@ -90,12 +90,7 @@ const config: webpack.Configuration = {
             },
             {
                 test: /\.(png|jpg|gif)$/,
-                use: {
-                    loader: 'url-loader',
-                    options: {
-                        esModule: false,
-                    },
-                },
+                type: 'asset/inline',
             },
         ],
     },
