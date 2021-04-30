@@ -3,18 +3,19 @@
         "strict": true,
         "inlineSourceMap": true,
 
-        "target": "es2017",
+        "target": "esnext",
         "module": "esnext",
         "moduleResolution": "node",
 
-        "experimentalDecorators": true,
         "allowSyntheticDefaultImports": true,
         "resolveJsonModule": true,
+        "forceConsistentCasingInFileNames": true,
 
         "noUnusedLocals": true,
         "noImplicitReturns": true,
         "noFallthroughCasesInSwitch": true,
 
+        "outDir": "dist",
         "baseUrl": ".",
         "paths": {
             "@/*": ["./src/*"],
