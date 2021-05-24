@@ -83,7 +83,7 @@ const config: webpack.Configuration = {
                     {
                         loader: 'sass-loader',
                         options: {
-                            additionalData: '@import "@/assets/css/variables.scss";',
+                            additionalData: '@use "sass:math"; @import "@/assets/css/variables.scss";',
                         },
                     },
                 ],

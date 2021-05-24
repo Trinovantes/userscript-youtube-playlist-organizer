@@ -154,7 +154,7 @@ export default defineComponent({
 
     display: flex;
     flex-direction: column;
-    gap: $padding / 4;
+    gap: math.div($padding, 4);
 
     .dropzone{
         color: white;

@@ -42,7 +42,7 @@ export default defineComponent({
 
 .actions{
     display: flex;
-    gap: $padding / 2;
+    gap: math.div($padding, 2);
 
     .hspace{
         flex: 1;
@@ -56,14 +56,14 @@ label{
     display: grid;
     cursor: pointer;
     font-weight: bold;
-    gap: $padding / 2;
+    gap: math.div($padding, 2);
     grid-template-columns: 1fr 3fr;
 }
 
 input{
     border: $border;
     border-radius: $border-radius;
-    padding: $padding / 4;
+    padding: math.div($padding, 4);
 
     &:focus{
         border-color: black;

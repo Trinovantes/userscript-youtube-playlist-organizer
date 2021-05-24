@@ -120,7 +120,7 @@ export default defineComponent({
         border-radius: $border-radius;
         cursor: pointer;
         display: inline-block;
-        padding: ($padding / 4) ($padding / 2);
+        padding: math.div($padding, 4) math.div($padding, 2);
         text-decoration: none;
 
         &:hover{
