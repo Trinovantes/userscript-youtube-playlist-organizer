@@ -4,9 +4,6 @@
 const path = require('path')
 
 module.exports = {
-    // https://eslint.org/docs/user-guide/configuring#configuration-cascading-and-hierarchy
-    // This option interrupts the configuration hierarchy at this file
-    // Remove this if you have an higher level ESLint config file (it usually happens into a monorepos)
     root: true,
 
     parserOptions: {
@@ -14,14 +11,13 @@ module.exports = {
         parser: '@typescript-eslint/parser',
         project: path.resolve(__dirname, './tsconfig.json'),
         tsconfigRootDir: __dirname,
-        ecmaVersion: 2017, // Allows for the parsing of modern ECMAScript features
+        ecmaVersion: 2020, // Allows for the parsing of modern ECMAScript features
         sourceType: 'module', // Allows for the use of imports
     },
 
     // Predefines global variables (e.g. browser env predefines 'window' variable)
     env: {
         browser: true,
-        node: true,
     },
 
     // Disable warnings for variables that are accessed but not defined in same file
