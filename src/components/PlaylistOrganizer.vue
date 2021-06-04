@@ -82,7 +82,7 @@ export default defineComponent({
             window.addEventListener('yt-navigate-finish', render)
         })
         onUnmounted(() => {
-            window.removeEventListener('yt-navigate-finish', render, true)
+            window.removeEventListener('yt-navigate-finish', render)
         })
 
         const onDragOver = (event: DragEvent) => {
