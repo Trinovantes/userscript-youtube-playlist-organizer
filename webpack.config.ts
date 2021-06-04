@@ -119,7 +119,7 @@ const config: webpack.Configuration = {
             headers: {
                 name: packageJson.productName,
                 version: isDev
-                    ? '[version]-build.[buildNo]'
+                    ? '0.0.0'
                     : '[version]',
                 match: [
                     '*://*.youtube.com/*',

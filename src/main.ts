@@ -1,10 +1,11 @@
 import UserscriptApp from '@/components/UserscriptApp.vue'
 import { createApp } from 'vue'
+import '@/assets/css/main.scss'
 
 async function main() {
     await $.when($.ready)
 
-    const appContainerId = 'userscript-app'
+    const appContainerId = DEFINE.NAME
     $('body').append(`<div id="${appContainerId}">`)
 
     const app = createApp(UserscriptApp)

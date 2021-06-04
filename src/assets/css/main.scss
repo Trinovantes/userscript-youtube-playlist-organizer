@@ -1,0 +1,20 @@
+.draggable-video{
+    cursor: pointer;
+    position: relative;
+    margin-bottom: 5px;
+
+    &:before{
+        border: 5px dashed grey;
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0; bottom: 0;
+        left: 0; right: 0;
+        z-index: 0;
+    }
+
+    &.dragging:before{
+        background: rgba(black, 0.2);
+        border-color: white;
+    }
+}

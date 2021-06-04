@@ -3,7 +3,7 @@
         <div class="hspace" />
         <a
             class="btn"
-            @click="onClose"
+            @click="$emit('close')"
         >
             Close
         </a>
@@ -17,16 +17,6 @@ export default defineComponent({
     emits: [
         'close',
     ],
-
-    setup(props, { emit }) {
-        const onClose = () => {
-            emit('close')
-        }
-
-        return {
-            onClose,
-        }
-    },
 })
 </script>
 
@@ -49,24 +39,27 @@ export default defineComponent({
     }
 }
 
-label{
-    @extend .margins;
-
-    align-items: center;
-    display: grid;
-    cursor: pointer;
-    font-weight: bold;
-    gap: math.div($padding, 2);
-    grid-template-columns: 1fr 3fr;
-}
-
-input{
+a.btn{
+    background-color: white;
     border: $border;
     border-radius: $border-radius;
-    padding: math.div($padding, 4);
+    cursor: pointer;
+    display: inline-block;
+    padding: math.div($padding, 4) math.div($padding, 2);
+    text-decoration: none;
 
-    &:focus{
-        border-color: black;
+    &:hover{
+        background-color: #eee;
+    }
+
+    &.positive{
+        background-color: green;
+        border-color: darkgreen;
+        color: white;
+
+        &:hover{
+            background-color: darkgreen;
+        }
     }
 }
 </style>
