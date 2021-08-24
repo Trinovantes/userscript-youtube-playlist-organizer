@@ -54,5 +54,8 @@
         "webpack-cli": "^4.6.0",
         "webpack-dev-server": "^4.0.0",
         "webpack-userscript": "^2.5.7"
+    },
+    "resolutions": {
+        "**/eslint-import-resolver-node": "0.3.4"
     }
 }
