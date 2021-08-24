@@ -96,8 +96,9 @@ const config: webpack.Configuration = {
     },
 
     devServer: {
-        writeToDisk: true,
-        inline: false,
+        devMiddleware: {
+            writeToDisk: true,
+        },
     },
 
     plugins: [
