@@ -96,6 +96,7 @@ const config: webpack.Configuration = {
     },
 
     devServer: {
+        hot: false,
         devMiddleware: {
             writeToDisk: true,
         },
