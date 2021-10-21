@@ -79,9 +79,8 @@ export default defineComponent({
     a.settings-btn{
         @extend .icon-btn;
 
-        margin-right: $dragarea-width + $ytb-player-width;
         position: fixed;
-        bottom: $padding; right: $padding;
+        bottom: $padding; right: $dragarea-width + $ytb-player-width + $padding;
         z-index: 9999;
 
         background-image: url('@/assets/img/settings.png');
