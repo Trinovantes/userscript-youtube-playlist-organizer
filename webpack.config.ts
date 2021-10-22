@@ -53,27 +53,19 @@ const config: webpack.Configuration = {
     module: {
         rules: [
             {
-                test: /\.vue$/,
-                use: [
-                    {
-                        loader: 'vue-loader',
-                        options: {
-                            optimizeSSR: false,
-                        },
-                    },
-                ],
-            },
-            {
                 test: /\.tsx?$/,
                 exclude: /node_modules/,
-                use: [
-                    {
-                        loader: 'ts-loader',
-                        options: {
-                            appendTsSuffixTo: [/\.vue$/],
-                        },
+                use: [{
+                    loader: 'esbuild-loader',
+                    options: {
+                        loader: 'ts',
+                        target: 'es2020',
                     },
-                ],
+                }],
+            },
+            {
+                test: /\.vue$/,
+                use: 'vue-loader',
             },
             {
                 test: /\.s(a|c)ss$/,
