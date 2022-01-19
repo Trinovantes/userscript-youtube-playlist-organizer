@@ -5,6 +5,7 @@ import { VueLoaderPlugin } from 'vue-loader'
 import packageJson from './package.json'
 import url from 'url'
 import { EOL } from 'os'
+import 'webpack-dev-server'
 
 const isDev = (process.env.NODE_ENV === 'development')
 const srcDir = path.resolve(__dirname, 'src')
@@ -128,7 +129,7 @@ const config: webpack.Configuration = {
             },
             proxyScript: {
                 enable: isDev,
-                baseUrl: baseUrl,
+                baseUrl,
             },
         }),
     ],

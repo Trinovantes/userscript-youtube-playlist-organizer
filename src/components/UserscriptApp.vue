@@ -9,7 +9,7 @@
                     {{ projectUrl }}
                 </a>
 
-                <Settings
+                <UserscriptAppSettings
                     @close="isOpen = false"
                 />
             </div>
@@ -29,13 +29,13 @@
 
 <script lang="ts">
 import { ref, defineComponent, onMounted } from 'vue'
-import Settings from '@/components/Settings.vue'
+import UserscriptAppSettings from '@/components/UserscriptAppSettings.vue'
 import PlaylistOrganizer from '@/components/PlaylistOrganizer.vue'
 import { determineIsOnPlaylistPage } from '@/PlaylistOrganizer'
 
 export default defineComponent({
     components: {
-        Settings,
+        UserscriptAppSettings,
         PlaylistOrganizer,
     },
 
