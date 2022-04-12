@@ -11,6 +11,7 @@
         "allowSyntheticDefaultImports": true,
         "resolveJsonModule": true,
         "forceConsistentCasingInFileNames": true,
+        "jsx": "preserve",
 
         "noUnusedLocals": true,
         "noImplicitReturns": true,
