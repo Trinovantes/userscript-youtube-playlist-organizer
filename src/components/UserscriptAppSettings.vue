@@ -1,3 +1,13 @@
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+    emits: [
+        'close',
+    ],
+})
+</script>
+
 <template>
     <div class="group actions">
         <div class="hspace" />
@@ -9,16 +19,6 @@
         </a>
     </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-    emits: [
-        'close',
-    ],
-})
-</script>
 
 <style lang="scss" scoped>
 .group{

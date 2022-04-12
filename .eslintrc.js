@@ -82,6 +82,10 @@ module.exports = {
             multiline: 1,
         }],
 
+        'vue/component-tags-order': ['error', {
+            'order': ['script', 'template', 'style'],
+        }],
+
         '@typescript-eslint/type-annotation-spacing': 'error',
         '@typescript-eslint/restrict-template-expressions': ['error', {
             allowNumber: true,

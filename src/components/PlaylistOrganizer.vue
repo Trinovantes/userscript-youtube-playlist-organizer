@@ -1,51 +1,3 @@
-<template>
-    <div
-        v-if="playlists.length > 0"
-        class="playlist-organizer"
-    >
-        <div
-            v-for="playlist of playlists"
-            :key="playlist.youtubeId"
-            class="dropzone"
-            @dragover="onDragOver"
-            @dragenter="onDragEnter"
-            @dragleave="onDragLeave"
-            @drop="(ev) => onDrop(ev, ActionType.ADD_PLAYLIST)"
-        >
-            {{ playlist.name }}
-        </div>
-
-        <div
-            class="dropzone remove-from-list"
-            @dragover="onDragOver"
-            @dragenter="onDragEnter"
-            @dragleave="onDragLeave"
-            @drop="(ev) => onDrop(ev, ActionType.REMOVE)"
-        >
-            Remove from List
-        </div>
-        <div
-            class="dropzone add-to-queue"
-            @dragover="onDragOver"
-            @dragenter="onDragEnter"
-            @dragleave="onDragLeave"
-            @drop="(ev) => onDrop(ev, ActionType.ADD_QUEUE)"
-        >
-            Add to Queue
-        </div>
-        <div
-            v-if="!isOnWatchLater"
-            class="dropzone add-to-watch-later"
-            @dragover="onDragOver"
-            @dragenter="onDragEnter"
-            @dragleave="onDragLeave"
-            @drop="(ev) => onDrop(ev, ActionType.ADD_WATCH_LATER)"
-        >
-            Add to Watch Later
-        </div>
-    </div>
-</template>
-
 <script lang="ts">
 import { DATA_TRANSFER_KEY, WATCH_LATER_LIST_ID } from '@/Constants'
 import { ActionType, triggerAction, determineCurrentPlaylist, findPlaylistsInSidebar, Playlist, registerDragListeners } from '@/PlaylistOrganizer'
@@ -139,6 +91,54 @@ export default defineComponent({
     },
 })
 </script>
+
+<template>
+    <div
+        v-if="playlists.length > 0"
+        class="playlist-organizer"
+    >
+        <div
+            v-for="playlist of playlists"
+            :key="playlist.youtubeId"
+            class="dropzone"
+            @dragover="onDragOver"
+            @dragenter="onDragEnter"
+            @dragleave="onDragLeave"
+            @drop="(ev) => onDrop(ev, ActionType.ADD_PLAYLIST)"
+        >
+            {{ playlist.name }}
+        </div>
+
+        <div
+            class="dropzone remove-from-list"
+            @dragover="onDragOver"
+            @dragenter="onDragEnter"
+            @dragleave="onDragLeave"
+            @drop="(ev) => onDrop(ev, ActionType.REMOVE)"
+        >
+            Remove from List
+        </div>
+        <div
+            class="dropzone add-to-queue"
+            @dragover="onDragOver"
+            @dragenter="onDragEnter"
+            @dragleave="onDragLeave"
+            @drop="(ev) => onDrop(ev, ActionType.ADD_QUEUE)"
+        >
+            Add to Queue
+        </div>
+        <div
+            v-if="!isOnWatchLater"
+            class="dropzone add-to-watch-later"
+            @dragover="onDragOver"
+            @dragenter="onDragEnter"
+            @dragleave="onDragLeave"
+            @drop="(ev) => onDrop(ev, ActionType.ADD_WATCH_LATER)"
+        >
+            Add to Watch Later
+        </div>
+    </div>
+</template>
 
 <style lang="scss" scoped>
 .playlist-organizer{

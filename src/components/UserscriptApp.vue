@@ -1,32 +1,3 @@
-<template>
-    <div v-if="isOnPlaylistPage" class="userscript-youtube-playlist-organizer">
-        <div v-if="isOpen" class="dialog-wrapper">
-            <div class="dialog">
-                <h1>
-                    {{ title }}
-                </h1>
-                <a :href="projectUrl" class="url">
-                    {{ projectUrl }}
-                </a>
-
-                <UserscriptAppSettings
-                    @close="isOpen = false"
-                />
-            </div>
-        </div>
-
-        <PlaylistOrganizer />
-
-        <a
-            class="settings-btn"
-            :title="title"
-            @click="isOpen = true"
-        >
-            Settings
-        </a>
-    </div>
-</template>
-
 <script lang="ts">
 import { ref, defineComponent, onMounted } from 'vue'
 import UserscriptAppSettings from '@/components/UserscriptAppSettings.vue'
@@ -60,6 +31,35 @@ export default defineComponent({
     },
 })
 </script>
+
+<template>
+    <div v-if="isOnPlaylistPage" class="userscript-youtube-playlist-organizer">
+        <div v-if="isOpen" class="dialog-wrapper">
+            <div class="dialog">
+                <h1>
+                    {{ title }}
+                </h1>
+                <a :href="projectUrl" class="url">
+                    {{ projectUrl }}
+                </a>
+
+                <UserscriptAppSettings
+                    @close="isOpen = false"
+                />
+            </div>
+        </div>
+
+        <PlaylistOrganizer />
+
+        <a
+            class="settings-btn"
+            :title="title"
+            @click="isOpen = true"
+        >
+            Settings
+        </a>
+    </div>
+</template>
 
 <style lang="scss">
 .userscript-youtube-playlist-organizer{
