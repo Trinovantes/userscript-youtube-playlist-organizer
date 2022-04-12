@@ -1,5 +1,5 @@
 import { DATA_ATTR_ID, DATA_TRANSFER_KEY, LIKED_LIST_ID, MAX_UI_WAIT_ATTEMPTS, UI_WAIT_TIME } from '@/Constants'
-import { sleep } from '@/utils'
+import { sleep } from '@/utils/sleep'
 
 export interface Playlist {
     youtubeId: string
