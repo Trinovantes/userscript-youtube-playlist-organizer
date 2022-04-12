@@ -2,12 +2,16 @@ name: Release Build
 
 on:
   push:
+    branches:
+      - master
     tags:
-      - 'v*'
-
-env:
-  AUTO_TAG: latest
-  AUTO_TITLE: Latest Build
+      - v*
+    paths-ignore:
+      - .github/**
+      - .vscode/**
+      - .editorconfig
+      - .gitignore
+      - README.md
 
 jobs:
   release_build:
@@ -15,57 +19,41 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout
         uses: actions/checkout@v2
-        with:
-          submodules: 'recursive'
 
       - name: Cache node_modules
         uses: actions/cache@v2
         env:
-          cache-name: cache-node-modules
+          CACHE_NAME: cache-node-modules
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock', '**/package-lock.json') }}
+          key: ${{ runner.os }}-build-${{ env.CACHE_NAME }}-${{ hashFiles('**/yarn.lock', '**/package-lock.json') }}
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: yarn install
+
+      - name: Run linter
+        run: yarn lint
 
       - name: Build
         run: yarn build
 
-      - name: Update Current Release
-        id: update_current
+      - name: Update current release
         uses: Trinovantes/action-automatic-release@master
+        id: update_current
+        if: startsWith(github.ref, 'refs/tags/')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           is_prerelease: false
 
-      - name: Upload Asset to Current Release
-        uses:  Trinovantes/action-release-upload@master
+      - name: Upload asset to current release
+        uses: Trinovantes/action-release-upload@master
+        if: startsWith(github.ref, 'refs/tags/')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           release_id: ${{ steps.update_current.outputs.release_id }}
           upload_url: ${{ steps.update_current.outputs.upload_url }}
-          files: ./dist/*.user.js
-
-      - name: Update Latest Build Release
-        id: update_latest
-        uses: Trinovantes/action-automatic-release@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          auto_release_tag: ${{ env.AUTO_TAG }}
-          auto_release_title: ${{ env.AUTO_TITLE }}
-          is_prerelease: false
-
-      - name: Upload Asset to Latest Build Release
-        uses:  Trinovantes/action-release-upload@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          release_id: ${{ steps.update_latest.outputs.release_id }}
-          upload_url: ${{ steps.update_latest.outputs.upload_url }}
           files: ./dist/*.user.js

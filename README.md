@@ -25,7 +25,7 @@ This tool relies on timers and jQuery selectors to find playlists and videos on 
     * [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/) (Firefox)
     * [Tampermonkey](https://www.tampermonkey.net/) (Chrome, Firefox, Safari, Edge)
 
-2. [Download the latest build](https://github.com/Trinovantes/userscript-youtube-playlist-organizer/releases/download/latest/userscript-youtube-playlist-organizer.user.js). If you have Greasemonkey or Tampermonkey installed, then you should immediately be prompted with a confirmation window asking you if you wish to install this Userscript.
+2. [Download the latest build](https://github.com/Trinovantes/userscript-youtube-playlist-organizer/releases/latest/download/userscript-youtube-playlist-organizer.user.js). If you have Greasemonkey or Tampermonkey installed, then you should immediately be prompted with a confirmation window asking you if you wish to install this Userscript.
 
 ## Dev Guide
 
@@ -36,7 +36,7 @@ This tool relies on timers and jQuery selectors to find playlists and videos on 
     * Tampermonkey on Chrome
 
 2. In Chrome:
-    
+
     * Go to `chrome://extensions/`
     * Go into Tampermonkey's details
     * Enable `Allow access to file URLs`
