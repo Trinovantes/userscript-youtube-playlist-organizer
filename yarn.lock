@@ -4831,7 +4831,7 @@ vue-loader@^17.0.0:
     hash-sum "^2.0.0"
     loader-utils "^2.0.0"
 
-vue@^3.0.11:
+vue@^3.2.32:
   version "3.2.32"
   resolved "https://registry.yarnpkg.com/vue/-/vue-3.2.32.tgz#a09840e237384c673f421ff7280c4469714f2ac0"
   integrity sha512-6L3jKZApF042OgbCkh+HcFeAkiYi3Lovi8wNhWqIK98Pi5efAMLZzRHgi91v+60oIRxdJsGS9sTMsb+yDpY8Eg==
