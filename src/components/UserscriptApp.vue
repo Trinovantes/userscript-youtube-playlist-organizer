@@ -2,7 +2,7 @@
 import { ref, defineComponent, onMounted } from 'vue'
 import UserscriptAppSettings from '@/components/UserscriptAppSettings.vue'
 import PlaylistOrganizer from '@/components/PlaylistOrganizer.vue'
-import { determineIsOnPlaylistPage } from '@/PlaylistOrganizer'
+import { determineIsOnPlaylistPage } from '@/services/ytb/determineIsOnPlaylistPage'
 
 export default defineComponent({
     components: {
@@ -33,8 +33,14 @@ export default defineComponent({
 </script>
 
 <template>
-    <div v-if="isOnPlaylistPage" class="userscript-youtube-playlist-organizer">
-        <div v-if="isOpen" class="dialog-wrapper">
+    <div
+        v-if="isOnPlaylistPage"
+        class="userscript-youtube-playlist-organizer"
+    >
+        <div
+            v-if="isOpen"
+            class="dialog-wrapper"
+        >
             <div class="dialog">
                 <h1>
                     {{ title }}

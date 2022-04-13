@@ -1,6 +1,9 @@
 <script lang="ts">
 import { DATA_TRANSFER_KEY, WATCH_LATER_LIST_ID } from '@/Constants'
-import { ActionType, triggerAction, determineCurrentPlaylist, findPlaylistsInSidebar, Playlist, registerDragListeners } from '@/PlaylistOrganizer'
+import { Playlist, determineCurrentPlaylist } from '@/services/ytb/determineCurrentPlaylist'
+import { findPlaylistsInSidebar } from '@/services/ytb/findPlaylistInSidebar'
+import { registerDragListeners } from '@/services/ytb/registerEventListeners'
+import { ActionType, triggerAction } from '@/services/ytb/triggerAction'
 import { computed, defineComponent, onMounted, onUnmounted, ref } from 'vue'
 
 export default defineComponent({
@@ -66,10 +69,8 @@ export default defineComponent({
             $(event.target).removeClass('highlight')
 
             const targetPlaylistName = $(event.target).text().trim()
-            console.info(DEFINE.NAME, 'onDrop()', `targetPlaylistName:"${targetPlaylistName}"`)
-
             const elementId = event.dataTransfer?.getData(DATA_TRANSFER_KEY)
-            console.info(DEFINE.NAME, 'onDrop()', `elementId:"${elementId}"`)
+            console.info(DEFINE.NAME, 'onDrop()', `action:${action}`, `targetPlaylistName:"${targetPlaylistName}"`, `elementId:"${elementId}"`)
 
             if (!targetPlaylistName || !elementId) {
                 return
