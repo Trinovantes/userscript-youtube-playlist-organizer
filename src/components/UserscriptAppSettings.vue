@@ -5,28 +5,95 @@ export default defineComponent({
     emits: [
         'close',
     ],
+
+    setup() {
+        return {
+            title: `${DEFINE.PRODUCT_NAME} ${DEFINE.VERSION}`,
+            projectUrl: DEFINE.REPO.url,
+        }
+    },
 })
 </script>
 
 <template>
-    <div class="group actions">
-        <div class="hspace" />
-        <a
-            class="btn"
-            @click="$emit('close')"
-        >
-            Close
-        </a>
+    <div class="settings">
+        <div class="group">
+            <h1>
+                {{ title }}
+            </h1>
+            <a :href="projectUrl" class="project-url">
+                {{ projectUrl }}
+            </a>
+        </div>
+
+        <div class="group actions">
+            <div class="hspace" />
+
+            <a
+                class="btn"
+                @click="$emit('close')"
+            >
+                Close
+            </a>
+        </div>
     </div>
 </template>
 
 <style lang="scss" scoped>
-.group{
-    border-top: $border;
-    padding: $padding 0;
+.settings{
+    display: grid;
+    gap: $padding;
+}
 
-    &:last-child{
-        padding-bottom: 0;
+h1{
+    font-size: 24px;
+    font-weight: bold;
+}
+
+h2{
+    font-size: 21px;
+    font-weight: bold;
+}
+
+a.project-url{
+    display: block;
+    color: blue;
+    text-decoration: none;
+
+    &:hover{
+        text-decoration: underline;
+    }
+}
+
+.group{
+    display: grid;
+    gap: math.div($padding, 2);
+
+    &:not(:first-child){
+        border-top: $border;
+        padding-top: $padding;
+    }
+}
+
+label{
+    cursor: pointer;
+    font-weight: bold;
+
+    align-items: center;
+    display: grid;
+    gap: math.div($padding, 2);
+    grid-template-columns: 1fr 2fr;
+}
+
+input{
+    font-weight: normal;
+
+    border: $border;
+    border-radius: $border-radius;
+    padding: math.div($padding, 4);
+
+    &:focus{
+        border-color: black;
     }
 }
 

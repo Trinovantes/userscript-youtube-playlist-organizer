@@ -10,17 +10,6 @@ $min-dialog-width: 300px;
 $border-radius: 4px;
 $border: 1px solid #ddd;
 
-.margins{
-    margin: $padding 0;
-
-    &:first-child{
-        margin-top: 0;
-    }
-    &:last-child{
-        margin-bottom: 0;
-    }
-}
-
 .icon-btn{
     background-size: 50% 50%;
     background-color: white;

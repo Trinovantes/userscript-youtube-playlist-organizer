@@ -42,13 +42,6 @@ export default defineComponent({
             class="dialog-wrapper"
         >
             <div class="dialog">
-                <h1>
-                    {{ title }}
-                </h1>
-                <a :href="projectUrl" class="url">
-                    {{ projectUrl }}
-                </a>
-
                 <UserscriptAppSettings
                     @close="isOpen = false"
                 />
@@ -68,70 +61,56 @@ export default defineComponent({
 </template>
 
 <style lang="scss">
-.userscript-youtube-playlist-organizer{
-    *{
-        background: none;
-        outline: none;
-        border: none;
-        margin: 0;
-        padding: 0;
+.userscript-youtube-playlist-organizer *{
+    background: none;
+    outline: none;
+    border: none;
+    margin: 0;
+    padding: 0;
 
-        color: #111;
-        font-size: 15px;
-        font-weight: normal;
-        line-height: 1.5;
+    color: #111;
+    font-size: 15px;
+    font-weight: normal;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.5;
+    vertical-align: baseline;
+}
+</style>
+
+<style lang="scss" scoped>
+a.settings-btn{
+    @extend .icon-btn;
+
+    position: fixed;
+    bottom: $padding;
+    right: $padding;
+    z-index: 9999;
+
+    background-image: url('@/assets/img/settings.png');
+    box-shadow: rgba(11, 11, 11, 0.1) 0 2px 8px;
+
+    &:hover{
+        box-shadow: rgba(11, 11, 11, 0.4) 0 0px 8px;
     }
+}
 
-    a.settings-btn{
-        @extend .icon-btn;
+.dialog-wrapper{
+    background: rgba(11, 11, 11, 0.4);
 
-        position: fixed;
-        bottom: $padding; right: $dragarea-width + $ytb-player-width + $padding;
-        z-index: 9999;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 99999;
 
-        background-image: url('@/assets/img/settings.png');
-        box-shadow: rgba(11, 11, 11, 0.1) 0 2px 8px;
+    > .dialog{
+        background: white;
+        padding: $padding;
+        border-radius: $border-radius;
 
-        &:hover{
-            box-shadow: rgba(11, 11, 11, 0.4) 0 0px 8px;
-        }
-    }
-
-    .dialog-wrapper{
-        background: rgba(11, 11, 11, 0.4);
-
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        z-index: 99999;
-
-        > .dialog{
-            background: white;
-            padding: $padding;
-            border-radius: $border-radius;
-
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translateY(-50%) translateX(-50%);
-            min-width: $min-dialog-width;
-
-            h1{
-                font-size: 24px;
-                font-weight: bold;
-            }
-
-            a.url{
-                display: block;
-                margin-bottom: $padding;
-
-                color: blue;
-                text-decoration: none;
-
-                &:hover{
-                    text-decoration: underline;
-                }
-            }
-        }
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translateY(-50%) translateX(-50%);
+        min-width: $min-dialog-width;
     }
 }
 </style>
