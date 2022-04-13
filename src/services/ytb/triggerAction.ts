@@ -19,7 +19,9 @@ export async function triggerAction(action: ActionType, elementId: string, targe
 
     switch (action) {
         case ActionType.ADD_PLAYLIST: {
-            const $actionLink = $($menuLinks.filter('[has-separator]'))
+            const $actionLink = $($menuLinks.filter(function() {
+                return $(this).find('yt-formatted-string').text().toLowerCase().startsWith('save to playlist')
+            }))
             $actionLink.trigger('click')
 
             const $popup = await findDelayedElement('ytd-popup-container ytd-add-to-playlist-renderer')
@@ -71,19 +73,25 @@ export async function triggerAction(action: ActionType, elementId: string, targe
         }
 
         case ActionType.ADD_WATCH_LATER: {
-            const $actionLink = $($menuLinks[1])
+            const $actionLink = $($menuLinks.filter(function() {
+                return $(this).find('yt-formatted-string').text().toLowerCase().startsWith('save to watch later')
+            }))
             $actionLink.trigger('click')
             break
         }
 
         case ActionType.ADD_QUEUE: {
-            const $actionLink = $($menuLinks[0])
+            const $actionLink = $($menuLinks.filter(function() {
+                return $(this).find('yt-formatted-string').text().toLowerCase().startsWith('add to queue')
+            }))
             $actionLink.trigger('click')
             break
         }
 
         case ActionType.REMOVE: {
-            const $actionLink = $($menuLinks.filter('[has-separator]').next())
+            const $actionLink = $($menuLinks.filter(function() {
+                return $(this).find('yt-formatted-string').text().toLowerCase().startsWith('remove from')
+            }))
             $actionLink.trigger('click')
             break
         }
