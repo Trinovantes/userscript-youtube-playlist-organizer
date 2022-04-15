@@ -63,8 +63,9 @@ jobs:
           files: ./dist/*.user.js
 
       - name: Update latest build release
-        id: update_latest
         uses: Trinovantes/action-automatic-release@master
+        id: update_latest
+        if: startsWith(github.ref, 'refs/tags/')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -73,7 +74,8 @@ jobs:
           is_prerelease: false
 
       - name: Upload Asset to latest build release
-        uses:  Trinovantes/action-release-upload@master
+        uses: Trinovantes/action-release-upload@master
+        if: startsWith(github.ref, 'refs/tags/')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
