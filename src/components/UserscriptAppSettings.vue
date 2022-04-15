@@ -45,6 +45,25 @@ export default defineComponent({
     gap: $padding;
 }
 
+.group{
+    display: grid;
+    gap: math.div($padding, 2);
+
+    &:not(:first-child){
+        border-top: $border;
+        padding-top: $padding;
+    }
+
+    &.actions{
+        display: flex;
+        gap: math.div($padding, 2);
+
+        .hspace{
+            flex: 1;
+        }
+    }
+}
+
 h1{
     font-size: 24px;
     font-weight: bold;
@@ -62,16 +81,6 @@ a.project-url{
 
     &:hover{
         text-decoration: underline;
-    }
-}
-
-.group{
-    display: grid;
-    gap: math.div($padding, 2);
-
-    &:not(:first-child){
-        border-top: $border;
-        padding-top: $padding;
     }
 }
 
@@ -94,15 +103,6 @@ input{
 
     &:focus{
         border-color: black;
-    }
-}
-
-.actions{
-    display: flex;
-    gap: math.div($padding, 2);
-
-    .hspace{
-        flex: 1;
     }
 }
 
