@@ -45,6 +45,7 @@
         "eslint-plugin-promise": "^6.0.0",
         "eslint-plugin-vue": "^8.3.0",
         "eslint-utils": "^3.0.0",
+        "html-webpack-plugin": "^5.5.0",
         "sass": "^1.32.8",
         "sass-loader": "^12.1.0",
         "style-loader": "^3.2.1",

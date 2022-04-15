@@ -5,6 +5,7 @@ import { VueLoaderPlugin } from 'vue-loader'
 import packageJson from './package.json'
 import url from 'url'
 import { EOL } from 'os'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
 import 'webpack-dev-server'
 
 const isDev = (process.env.NODE_ENV === 'development')
@@ -108,6 +109,9 @@ const config: webpack.Configuration = {
             'DEFINE.REPO': JSON.stringify(packageJson.repository),
         }),
         new VueLoaderPlugin(),
+        new HtmlWebpackPlugin({
+            inject: false,
+        }),
         new WebpackUserscript({
             headers: {
                 name: packageJson.productName,
