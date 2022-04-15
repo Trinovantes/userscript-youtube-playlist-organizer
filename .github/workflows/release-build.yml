@@ -13,6 +13,10 @@ on:
       - .gitignore
       - README.md
 
+env:
+  AUTO_TAG: latest
+  AUTO_TITLE: Latest Build
+
 jobs:
   release_build:
     name: Release Build
@@ -56,4 +60,23 @@ jobs:
         with:
           release_id: ${{ steps.update_current.outputs.release_id }}
           upload_url: ${{ steps.update_current.outputs.upload_url }}
+          files: ./dist/*.user.js
+
+      - name: Update latest build release
+        id: update_latest
+        uses: Trinovantes/action-automatic-release@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          auto_release_tag: ${{ env.AUTO_TAG }}
+          auto_release_title: ${{ env.AUTO_TITLE }}
+          is_prerelease: false
+
+      - name: Upload Asset to latest build release
+        uses:  Trinovantes/action-release-upload@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          release_id: ${{ steps.update_latest.outputs.release_id }}
+          upload_url: ${{ steps.update_latest.outputs.upload_url }}
           files: ./dist/*.user.js
