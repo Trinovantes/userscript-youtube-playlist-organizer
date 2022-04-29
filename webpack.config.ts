@@ -1,12 +1,12 @@
-import path from 'path'
-import webpack from 'webpack'
-import WebpackUserscript from 'webpack-userscript'
-import { VueLoaderPlugin } from 'vue-loader'
-import packageJson from './package.json'
-import url from 'url'
 import { EOL } from 'os'
+import path from 'path'
+import url from 'url'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
+import { VueLoaderPlugin } from 'vue-loader'
+import webpack from 'webpack'
 import 'webpack-dev-server'
+import WebpackUserscript from 'webpack-userscript'
+import packageJson from './package.json'
 
 const isDev = (process.env.NODE_ENV === 'development')
 const srcDir = path.resolve(__dirname, 'src')

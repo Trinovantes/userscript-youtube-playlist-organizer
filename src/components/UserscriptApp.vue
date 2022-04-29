@@ -1,7 +1,7 @@
 <script lang="ts">
 import { ref, defineComponent, onMounted } from 'vue'
-import UserscriptAppSettings from '@/components/UserscriptAppSettings.vue'
 import PlaylistOrganizer from '@/components/PlaylistOrganizer.vue'
+import UserscriptAppSettings from '@/components/UserscriptAppSettings.vue'
 import { determineIsOnPlaylistPage } from '@/services/ytb/determineIsOnPlaylistPage'
 
 export default defineComponent({

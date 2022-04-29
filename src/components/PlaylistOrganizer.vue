@@ -1,10 +1,10 @@
 <script lang="ts">
+import { computed, defineComponent, onMounted, onUnmounted, ref } from 'vue'
 import { DATA_TRANSFER_KEY, WATCH_LATER_LIST_ID } from '@/Constants'
 import { Playlist, determineCurrentPlaylist } from '@/services/ytb/determineCurrentPlaylist'
 import { findPlaylistsInSidebar } from '@/services/ytb/findPlaylistInSidebar'
 import { registerDragListeners } from '@/services/ytb/registerEventListeners'
 import { ActionType, triggerAction } from '@/services/ytb/triggerAction'
-import { computed, defineComponent, onMounted, onUnmounted, ref } from 'vue'
 
 export default defineComponent({
     setup() {

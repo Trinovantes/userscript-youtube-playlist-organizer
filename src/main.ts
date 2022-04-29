@@ -1,6 +1,6 @@
+import { createApp } from 'vue'
 import '@/assets/css/main.scss'
 import UserscriptApp from '@/components/UserscriptApp.vue'
-import { createApp } from 'vue'
 
 async function main() {
     await $.when($.ready)
