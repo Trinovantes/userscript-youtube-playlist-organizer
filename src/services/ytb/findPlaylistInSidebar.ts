@@ -1,6 +1,6 @@
 import { LIKED_LIST_ID } from '@/Constants'
 import { findDelayedElement } from '@/utils/findDelayedElement'
-import { Playlist } from './determineCurrentPlaylist'
+import type { Playlist } from './determineCurrentPlaylist'
 
 export async function findPlaylistsInSidebar(): Promise<Array<Playlist>> {
     // Need to wait for YouTube to finish lazy loading
