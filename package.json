@@ -13,7 +13,7 @@
     "scripts": {
         "dev": "cross-env NODE_ENV=development webpack serve",
         "build": "webpack",
-        "lint": "eslint --ext .ts,.js,.vue --ignore-path .gitignore ."
+        "lint": "tsc --noemit && eslint --ext .ts,.js,.vue --ignore-path .gitignore ."
     },
     "babel": {
         "presets": [
