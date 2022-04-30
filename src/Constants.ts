@@ -1,3 +1,5 @@
+export const TITLE = `${DEFINE.PRODUCT_NAME} ${DEFINE.VERSION}`
+
 export const LOCALSTORE_STATE = 'LOCALSTORE_STATE'
 export const DATA_TRANSFER_KEY = 'dragElementId'
 export const DATA_ATTR_ID = 'data-element-id'

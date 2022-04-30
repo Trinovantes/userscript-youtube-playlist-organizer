@@ -1,5 +1,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { TITLE } from '@/Constants'
 
 export default defineComponent({
     emits: [
@@ -8,7 +9,7 @@ export default defineComponent({
 
     setup() {
         return {
-            title: `${DEFINE.PRODUCT_NAME} ${DEFINE.VERSION}`,
+            TITLE,
             projectUrl: DEFINE.REPO.url,
         }
     },
@@ -19,7 +20,7 @@ export default defineComponent({
     <div class="settings">
         <div class="group">
             <h1>
-                {{ title }}
+                {{ TITLE }}
             </h1>
             <a :href="projectUrl" class="project-url">
                 {{ projectUrl }}

@@ -1,34 +1,19 @@
-<script lang="ts">
-import { ref, defineComponent, onMounted } from 'vue'
+<script lang="ts" setup>
+import { ref, onMounted } from 'vue'
+import { TITLE } from '@/Constants'
 import PlaylistOrganizer from '@/components/PlaylistOrganizer.vue'
 import UserscriptAppSettings from '@/components/UserscriptAppSettings.vue'
 import { determineIsOnPlaylistPage } from '@/services/ytb/determineIsOnPlaylistPage'
 
-export default defineComponent({
-    components: {
-        UserscriptAppSettings,
-        PlaylistOrganizer,
-    },
+const isOpen = ref(false)
+const isOnPlaylistPage = ref(false)
 
-    setup() {
-        const isOpen = ref(false)
-        const isOnPlaylistPage = ref(false)
+onMounted(() => {
+    isOnPlaylistPage.value = determineIsOnPlaylistPage()
+})
 
-        onMounted(() => {
-            isOnPlaylistPage.value = determineIsOnPlaylistPage()
-        })
-
-        window.addEventListener('yt-navigate-finish', () => {
-            isOnPlaylistPage.value = determineIsOnPlaylistPage()
-        })
-
-        return {
-            title: `${DEFINE.PRODUCT_NAME} ${DEFINE.VERSION}`,
-            projectUrl: DEFINE.REPO.url,
-            isOpen,
-            isOnPlaylistPage,
-        }
-    },
+window.addEventListener('yt-navigate-finish', () => {
+    isOnPlaylistPage.value = determineIsOnPlaylistPage()
 })
 </script>
 
@@ -52,7 +37,7 @@ export default defineComponent({
 
         <a
             class="settings-btn"
-            :title="title"
+            :title="TITLE"
             @click="isOpen = true"
         >
             Settings
