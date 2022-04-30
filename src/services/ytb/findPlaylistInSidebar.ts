@@ -5,17 +5,9 @@ import type { Playlist } from './determineCurrentPlaylist'
 export async function findPlaylistsInSidebar(): Promise<Array<Playlist>> {
     // Need to wait for YouTube to finish lazy loading
     const $homeSection = await findDelayedElement('#contentContainer ytd-guide-section-renderer:nth-child(1)')
-    if (!$homeSection.length) {
-        throw new Error('Cannot find playlist container')
-    }
-
-    const $showMoreBtn = $homeSection.find('ytd-guide-collapsible-entry-renderer #expander-item')
+    const $showMoreBtn = await findDelayedElement('ytd-guide-collapsible-entry-renderer #expander-item', $homeSection)
     $showMoreBtn.trigger('click')
-
     const $playlistLinks = await findDelayedElement('#expandable-items > ytd-guide-entry-renderer', $homeSection)
-    if (!$playlistLinks.length) {
-        throw new Error('Cannot find playlists inside container')
-    }
 
     const playlists: Array<Playlist> = []
 

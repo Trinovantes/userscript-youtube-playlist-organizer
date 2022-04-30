@@ -22,7 +22,7 @@ export async function findDelayedElement(selector: string, parent?: HTMLElement 
         }
     }
 
-    if (!target) {
+    if (!target || target.length === 0) {
         throw new Error(`findDelayedElement() failed to find "${selector}"`)
     }
 
