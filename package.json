@@ -48,6 +48,7 @@
         "eslint-utils": "^3.0.0",
         "html-webpack-plugin": "^5.5.0",
         "lodash-es": "^4.17.21",
+        "pinia": "^2.0.13",
         "sass": "^1.32.8",
         "sass-loader": "^12.1.0",
         "style-loader": "^3.2.1",

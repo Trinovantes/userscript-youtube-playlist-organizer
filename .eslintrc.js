@@ -18,6 +18,7 @@ module.exports = {
     // Predefines global variables (e.g. browser env predefines 'window' variable)
     env: {
         browser: true,
+        'vue/setup-compiler-macros': true,
     },
 
     // Disable warnings for variables that are accessed but not defined in same file

@@ -6,7 +6,11 @@ import { Playlist, determineCurrentPlaylist } from '@/services/ytb/determineCurr
 import { findPlaylistsInSidebar } from '@/services/ytb/findPlaylistInSidebar'
 import { registerDragListeners } from '@/services/ytb/registerEventListeners'
 import { ActionType, triggerAction } from '@/services/ytb/triggerAction'
+import { useStore } from '@/store'
 import { findDelayedElement } from '@/utils/findDelayedElement'
+
+const store = useStore()
+const showActionsAtTop = computed(() => store.showActionsAtTop)
 
 interface DropZone {
     key: string
@@ -49,10 +53,9 @@ const dropZones = computed<Array<DropZone>>(() => {
         })
     }
 
-    return [
-        ...playlistZones,
-        ...actionsZones,
-    ]
+    return showActionsAtTop.value
+        ? [...actionsZones, ...playlistZones]
+        : [...playlistZones, ...actionsZones]
 })
 
 const currentPlaylist = ref<Playlist | null>(null)

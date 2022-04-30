@@ -1,19 +1,11 @@
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script lang="ts" setup>
 import { TITLE } from '@/Constants'
+import { useStore } from '@/store'
 
-export default defineComponent({
-    emits: [
-        'close',
-    ],
+defineEmits(['close'])
 
-    setup() {
-        return {
-            TITLE,
-            projectUrl: DEFINE.REPO.url,
-        }
-    },
-})
+const projectUrl = DEFINE.REPO.url
+const store = useStore()
 </script>
 
 <template>
@@ -27,14 +19,34 @@ export default defineComponent({
             </a>
         </div>
 
-        <div class="group actions">
-            <div class="hspace" />
+        <div class="group">
+            <label
+                for="showActionsAtTop"
+                title="Moves the zones for &quot;Remove from List&quot;, &quot;Add to Queue&quot;, and &quot;Add to Watch Later&quot; to the top of the sidebar list"
+            >
+                Show Action Drop Zones at the Top of List
 
+                <input
+                    id="showActionsAtTop"
+                    v-model="store.showActionsAtTop"
+                    type="checkbox"
+                >
+            </label>
+        </div>
+
+        <div class="group actions">
+            <a
+                class="btn positive"
+                @click="store.save(); $emit('close')"
+            >
+                Save
+            </a>
+            <div class="hspace" />
             <a
                 class="btn"
-                @click="$emit('close')"
+                @click="store.load(); $emit('close')"
             >
-                Close
+                Cancel
             </a>
         </div>
     </div>
