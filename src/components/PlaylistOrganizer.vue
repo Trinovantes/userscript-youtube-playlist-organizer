@@ -1,10 +1,12 @@
 <script lang="ts">
-import { computed, defineComponent, onMounted, onUnmounted, ref } from 'vue'
-import { DATA_TRANSFER_KEY, WATCH_LATER_LIST_ID } from '@/Constants'
+import { debounce } from 'lodash-es'
+import { computed, defineComponent, onBeforeMount, onMounted, onUnmounted, ref } from 'vue'
+import { DATA_TRANSFER_KEY, UI_WAIT_TIME, WATCH_LATER_LIST_ID } from '@/Constants'
 import { Playlist, determineCurrentPlaylist } from '@/services/ytb/determineCurrentPlaylist'
 import { findPlaylistsInSidebar } from '@/services/ytb/findPlaylistInSidebar'
 import { registerDragListeners } from '@/services/ytb/registerEventListeners'
 import { ActionType, triggerAction } from '@/services/ytb/triggerAction'
+import { findDelayedElement } from '@/utils/findDelayedElement'
 
 export default defineComponent({
     setup() {
@@ -17,23 +19,27 @@ export default defineComponent({
             observer.disconnect()
         })
 
-        const render = () => {
+        const render = debounce(() => {
             void (async() => {
+                console.info(DEFINE.NAME, 'Render')
+
                 playlists.value = await findPlaylistsInSidebar()
                 currentPlaylist.value = determineCurrentPlaylist()
 
+                const $videoListContainer = await findDelayedElement('#contents.ytd-playlist-video-list-renderer')
                 registerDragListeners()
 
-                const $videoListContainer = $('#contents.ytd-playlist-video-list-renderer')
                 observer.disconnect()
                 observer.observe($videoListContainer[0], {
                     childList: true,
                 })
             })()
-        }
+        }, UI_WAIT_TIME)
 
-        onMounted(() => {
+        onBeforeMount(() => {
             render()
+        })
+        onMounted(() => {
             window.addEventListener('yt-navigate-finish', render)
         })
         onUnmounted(() => {
