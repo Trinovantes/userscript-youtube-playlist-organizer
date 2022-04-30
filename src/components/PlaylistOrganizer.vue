@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { debounce } from 'lodash-es'
-import { computed, onBeforeMount, onMounted, onUnmounted, ref } from 'vue'
-import { DATA_TRANSFER_KEY, UI_WAIT_TIME, WATCH_LATER_LIST_ID } from '@/Constants'
+import { computed, onBeforeMount, onMounted, onUnmounted, ref, watch } from 'vue'
+import { DATA_TRANSFER_KEY, PADDING, UI_WAIT_TIME, WATCH_LATER_LIST_ID, YTB_PLAYER_WIDTH, YTB_MASTHEAD_HEIGHT_PX, YTB_PLAYER_WIDTH_PX } from '@/Constants'
 import { Playlist, determineCurrentPlaylist } from '@/services/ytb/determineCurrentPlaylist'
 import { findPlaylistsInSidebar } from '@/services/ytb/findPlaylistInSidebar'
 import { registerDragListeners } from '@/services/ytb/registerEventListeners'
@@ -11,6 +11,17 @@ import { findDelayedElement } from '@/utils/findDelayedElement'
 
 const store = useStore()
 const showActionsAtTop = computed(() => store.showActionsAtTop)
+
+const dropZoneWidth = computed(() => store.dropZoneWidth)
+const dropZoneWidthPx = computed(() => `${store.dropZoneWidth}px`)
+const updateContainerMargins = async() => {
+    const $playlistContainer = await findDelayedElement('ytd-playlist-video-list-renderer.ytd-item-section-renderer')
+    $playlistContainer.css({
+        margin: '0',
+        marginRight: `${dropZoneWidth.value + YTB_PLAYER_WIDTH + PADDING}px`,
+    })
+}
+watch(dropZoneWidth, updateContainerMargins)
 
 interface DropZone {
     key: string
@@ -74,9 +85,10 @@ const render = debounce(() => {
         playlists.value = await findPlaylistsInSidebar()
         currentPlaylist.value = determineCurrentPlaylist()
 
+        await updateContainerMargins()
+
         const $videoListContainer = await findDelayedElement('#contents.ytd-playlist-video-list-renderer')
         registerDragListeners()
-
         observer.disconnect()
         observer.observe($videoListContainer[0], {
             childList: true,
@@ -162,10 +174,10 @@ const onDrop = (event: DragEvent, action: ActionType) => {
     overflow-y: auto;
 
     position: fixed;
-    top: $ytb-masthead-height;
-    right: $ytb-player-width;
-    width: $dragarea-width;
-    height: calc(100vh - #{$ytb-masthead-height});
+    top: v-bind(YTB_MASTHEAD_HEIGHT_PX);
+    right: v-bind(YTB_PLAYER_WIDTH_PX);
+    width: v-bind(dropZoneWidthPx);
+    height: calc(100vh - v-bind(YTB_MASTHEAD_HEIGHT_PX));
 
     display: flex;
     flex-direction: column;

@@ -32,6 +32,14 @@ const store = useStore()
                     type="checkbox"
                 >
             </label>
+            <label for="dropZoneWidth">
+                Drop Zone Width
+                <input
+                    id="dropZoneWidth"
+                    v-model.number="store.dropZoneWidth"
+                    type="number"
+                >
+            </label>
         </div>
 
         <div class="group actions">

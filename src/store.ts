@@ -7,11 +7,13 @@ const HYDRATION_KEY = '__INITIAL_STATE__'
 // ----------------------------------------------------------------------------
 
 interface State {
+    dropZoneWidth: number
     showActionsAtTop: boolean
 }
 
 function createDefaultState(): State {
     const defaultState: State = {
+        dropZoneWidth: 400,
         showActionsAtTop: false,
     }
 
