@@ -1,6 +1,6 @@
-<script lang="ts">
+<script lang="ts" setup>
 import { debounce } from 'lodash-es'
-import { computed, defineComponent, onBeforeMount, onMounted, onUnmounted, ref } from 'vue'
+import { computed, onBeforeMount, onMounted, onUnmounted, ref } from 'vue'
 import { DATA_TRANSFER_KEY, UI_WAIT_TIME, WATCH_LATER_LIST_ID } from '@/Constants'
 import { Playlist, determineCurrentPlaylist } from '@/services/ytb/determineCurrentPlaylist'
 import { findPlaylistsInSidebar } from '@/services/ytb/findPlaylistInSidebar'
@@ -8,141 +8,146 @@ import { registerDragListeners } from '@/services/ytb/registerEventListeners'
 import { ActionType, triggerAction } from '@/services/ytb/triggerAction'
 import { findDelayedElement } from '@/utils/findDelayedElement'
 
-export default defineComponent({
-    setup() {
-        const playlists = ref<Array<Playlist>>([])
-        const currentPlaylist = ref<Playlist | null>(null)
-        const isOnWatchLater = computed(() => currentPlaylist.value?.youtubeId === WATCH_LATER_LIST_ID)
+interface DropZone {
+    key: string
+    class?: string
+    label: string
+    action: ActionType
+}
+const playlists = ref<Array<Playlist>>([])
+const dropZones = computed<Array<DropZone>>(() => {
+    const actionsZones: Array<DropZone> = [
+        {
+            key: 'remove-from-list',
+            class: 'remove-from-list',
+            label: 'Remove from List',
+            action: ActionType.REMOVE,
+        },
+        {
+            key: 'add-to-queue',
+            class: 'add-to-queue',
+            label: 'Add to Queue',
+            action: ActionType.ADD_QUEUE,
+        },
+    ]
 
-        const observer = new MutationObserver(registerDragListeners)
-        onUnmounted(() => {
-            observer.disconnect()
+    if (!isOnWatchLater.value) {
+        actionsZones.push({
+            key: 'add-to-watch-later',
+            class: 'add-to-watch-later',
+            label: 'Add to Watch Later',
+            action: ActionType.ADD_WATCH_LATER,
         })
+    }
 
-        const render = debounce(() => {
-            void (async() => {
-                console.info(DEFINE.NAME, 'Render')
-
-                playlists.value = await findPlaylistsInSidebar()
-                currentPlaylist.value = determineCurrentPlaylist()
-
-                const $videoListContainer = await findDelayedElement('#contents.ytd-playlist-video-list-renderer')
-                registerDragListeners()
-
-                observer.disconnect()
-                observer.observe($videoListContainer[0], {
-                    childList: true,
-                })
-            })()
-        }, UI_WAIT_TIME)
-
-        onBeforeMount(() => {
-            render()
+    const playlistZones: Array<DropZone> = []
+    for (const playlist of playlists.value) {
+        playlistZones.push({
+            key: playlist.youtubeId,
+            label: playlist.name,
+            action: ActionType.ADD_PLAYLIST,
         })
-        onMounted(() => {
-            window.addEventListener('yt-navigate-finish', render)
-        })
-        onUnmounted(() => {
-            window.removeEventListener('yt-navigate-finish', render)
-        })
+    }
 
-        const onDragOver = (event: DragEvent) => {
-            event.preventDefault()
-            event.stopPropagation()
-        }
-
-        const onDragEnter = (event: DragEvent) => {
-            if (!event.target) {
-                return
-            }
-
-            $(event.target).addClass('highlight')
-        }
-
-        const onDragLeave = (event: DragEvent) => {
-            if (!event.target) {
-                return
-            }
-
-            $(event.target).removeClass('highlight')
-        }
-
-        const onDrop = (event: DragEvent, action: ActionType) => {
-            if (!event.target) {
-                return
-            }
-
-            $(event.target).removeClass('highlight')
-
-            const targetPlaylistName = $(event.target).text().trim()
-            const elementId = event.dataTransfer?.getData(DATA_TRANSFER_KEY)
-            console.info(DEFINE.NAME, 'onDrop()', `action:${action}`, `targetPlaylistName:"${targetPlaylistName}"`, `elementId:"${elementId}"`)
-
-            if (!targetPlaylistName || !elementId) {
-                return
-            }
-
-            void triggerAction(action, elementId, targetPlaylistName, currentPlaylist.value?.name ?? '')
-        }
-
-        return {
-            playlists,
-            isOnWatchLater,
-
-            ActionType,
-            onDragOver,
-            onDragEnter,
-            onDragLeave,
-            onDrop,
-        }
-    },
+    return [
+        ...playlistZones,
+        ...actionsZones,
+    ]
 })
+
+const currentPlaylist = ref<Playlist | null>(null)
+const isOnWatchLater = computed(() => currentPlaylist.value?.youtubeId === WATCH_LATER_LIST_ID)
+
+const observer = new MutationObserver(registerDragListeners)
+onUnmounted(() => {
+    observer.disconnect()
+})
+
+const renderedOnce = ref(false)
+const render = debounce(() => {
+    void (async() => {
+        console.info(DEFINE.NAME, 'PlaylistOrganizer::render')
+
+        playlists.value = await findPlaylistsInSidebar()
+        currentPlaylist.value = determineCurrentPlaylist()
+
+        const $videoListContainer = await findDelayedElement('#contents.ytd-playlist-video-list-renderer')
+        registerDragListeners()
+
+        observer.disconnect()
+        observer.observe($videoListContainer[0], {
+            childList: true,
+        })
+
+        renderedOnce.value = true
+    })()
+}, UI_WAIT_TIME)
+
+onBeforeMount(() => {
+    render()
+})
+onMounted(() => {
+    window.addEventListener('yt-navigate-finish', render)
+})
+onUnmounted(() => {
+    window.removeEventListener('yt-navigate-finish', render)
+})
+
+const onDragOver = (event: DragEvent) => {
+    event.preventDefault()
+    event.stopPropagation()
+}
+
+const onDragEnter = (event: DragEvent) => {
+    if (!event.target) {
+        return
+    }
+
+    $(event.target).addClass('highlight')
+}
+
+const onDragLeave = (event: DragEvent) => {
+    if (!event.target) {
+        return
+    }
+
+    $(event.target).removeClass('highlight')
+}
+
+const onDrop = (event: DragEvent, action: ActionType) => {
+    if (!event.target) {
+        return
+    }
+
+    $(event.target).removeClass('highlight')
+
+    const targetPlaylistName = $(event.target).text().trim()
+    const elementId = event.dataTransfer?.getData(DATA_TRANSFER_KEY)
+    console.info(DEFINE.NAME, 'onDrop()', `action:${action}`, `targetPlaylistName:"${targetPlaylistName}"`, `elementId:"${elementId}"`)
+
+    if (!targetPlaylistName || !elementId) {
+        return
+    }
+
+    void triggerAction(action, elementId, targetPlaylistName, currentPlaylist.value?.name ?? '')
+}
 </script>
 
 <template>
     <div
-        v-if="playlists.length > 0"
+        v-if="renderedOnce"
         class="playlist-organizer"
     >
         <div
-            v-for="playlist of playlists"
-            :key="playlist.youtubeId"
-            class="dropzone"
+            v-for="dropZone of dropZones"
+            :key="dropZone.key"
+            :class="`dropzone ${dropZone.class ?? ''}`"
             @dragover="onDragOver"
             @dragenter="onDragEnter"
             @dragleave="onDragLeave"
-            @drop="(ev) => onDrop(ev, ActionType.ADD_PLAYLIST)"
+            @drop="(ev) => onDrop(ev, dropZone.action)"
         >
-            {{ playlist.name }}
-        </div>
-
-        <div
-            class="dropzone remove-from-list"
-            @dragover="onDragOver"
-            @dragenter="onDragEnter"
-            @dragleave="onDragLeave"
-            @drop="(ev) => onDrop(ev, ActionType.REMOVE)"
-        >
-            Remove from List
-        </div>
-        <div
-            class="dropzone add-to-queue"
-            @dragover="onDragOver"
-            @dragenter="onDragEnter"
-            @dragleave="onDragLeave"
-            @drop="(ev) => onDrop(ev, ActionType.ADD_QUEUE)"
-        >
-            Add to Queue
-        </div>
-        <div
-            v-if="!isOnWatchLater"
-            class="dropzone add-to-watch-later"
-            @dragover="onDragOver"
-            @dragenter="onDragEnter"
-            @dragleave="onDragLeave"
-            @drop="(ev) => onDrop(ev, ActionType.ADD_WATCH_LATER)"
-        >
-            Add to Watch Later
+            {{ dropZone.label }}
         </div>
     </div>
 </template>
