@@ -194,6 +194,10 @@ export default defineComponent({
         &.add-to-queue{
             background: darkgreen;
         }
+
+        &.add-to-watch-later{
+            background: darkcyan;
+        }
     }
 }
 </style>
