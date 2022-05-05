@@ -3,6 +3,9 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path')
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const INLINE_ELEMENTS = require('eslint-plugin-vue/lib/utils/inline-non-void-elements.json')
+
 module.exports = {
     root: true,
 
@@ -18,15 +21,16 @@ module.exports = {
     // Predefines global variables (e.g. browser env predefines 'window' variable)
     env: {
         browser: true,
+        node: true,
         'vue/setup-compiler-macros': true,
     },
 
     // Disable warnings for variables that are accessed but not defined in same file
     globals: {
-        DEFINE: 'readonly',
-        GM: true,
-        $: true,
-        jQuery: true,
+        'DEFINE': 'readonly',
+        'GM': 'readonly',
+        '$': 'readonly',
+        'jQuery': 'readonly',
     },
 
     // Rules order is important, please avoid shuffling them
@@ -99,6 +103,10 @@ module.exports = {
             multiline: 1,
         }],
 
+        'vue/singleline-html-element-content-newline': ['error', {
+            'ignores': ['ExternalLink', 'pre', 'router-link', ...INLINE_ELEMENTS],
+        }],
+
         'vue/component-tags-order': ['error', {
             'order': ['script', 'template', 'style'],
         }],
@@ -165,6 +173,10 @@ module.exports = {
                     'variableLike',
                     'method',
                 ],
+                'filter': {
+                    'regex': '^update:',
+                    'match': false,
+                },
                 'format': ['strictCamelCase', 'UPPER_CASE'],
             },
         ],
