@@ -33,6 +33,5 @@
     "include": [
         "**/*",
         ".eslintrc.js",
-        "webpack.config.ts",
     ],
 }
