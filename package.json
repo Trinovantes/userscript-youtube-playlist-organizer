@@ -15,17 +15,7 @@
         "build": "webpack",
         "lint": "vue-tsc --noemit && eslint --ext .ts,.js,.vue --ignore-path .gitignore ."
     },
-    "babel": {
-        "presets": [
-            "@babel/preset-env",
-            "@babel/preset-typescript"
-        ]
-    },
     "devDependencies": {
-        "@babel/core": "^7.12.10",
-        "@babel/preset-env": "^7.12.11",
-        "@babel/preset-typescript": "^7.12.7",
-        "@babel/register": "^7.13.14",
         "@types/greasemonkey": "^4.0.1",
         "@types/jquery": "^3.5.3",
         "@types/lodash-es": "^4.17.6",
@@ -52,6 +42,7 @@
         "sass": "^1.32.8",
         "sass-loader": "^12.1.0",
         "style-loader": "^3.2.1",
+        "ts-node": "^10.7.0",
         "typescript": "^4.1",
         "vue": "^3.2.32",
         "vue-loader": "^17.0.0",
