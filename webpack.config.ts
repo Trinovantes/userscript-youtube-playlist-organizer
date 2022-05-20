@@ -10,7 +10,10 @@ import packageJson from './package.json'
 
 const isDev = (process.env.NODE_ENV === 'development')
 const srcDir = path.resolve(__dirname, 'src')
-const baseUrl = url.pathToFileURL(path.resolve(__dirname, 'dist')).href
+const distDir = path.resolve(__dirname, 'dist')
+const baseUrl = process.env.WSL_DISTRO_NAME
+    ? url.pathToFileURL(distDir).href.replace('file://', `file:////wsl.localhost/${process.env.WSL_DISTRO_NAME}`)
+    : url.pathToFileURL(distDir).href
 
 if (isDev) {
     let msg = ''
