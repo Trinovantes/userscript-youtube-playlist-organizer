@@ -45,8 +45,8 @@ window.addEventListener('yt-navigate-finish', () => {
     </div>
 </template>
 
-<style lang="scss">
-.userscript-youtube-playlist-organizer *{
+<style lang="scss" scoped>
+:global(.userscript-youtube-playlist-organizer *){
     background: none;
     outline: none;
     border: none;
@@ -60,9 +60,7 @@ window.addEventListener('yt-navigate-finish', () => {
     line-height: 1.5;
     vertical-align: baseline;
 }
-</style>
 
-<style lang="scss" scoped>
 a.settings-btn{
     @extend .icon-btn;
 
