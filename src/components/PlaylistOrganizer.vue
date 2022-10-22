@@ -23,7 +23,7 @@ const updateContainerMargins = async() => {
 }
 watch(dropZoneWidth, updateContainerMargins)
 
-interface DropZone {
+type DropZone = {
     key: string
     class?: string
     label: string

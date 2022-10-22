@@ -185,5 +185,7 @@ module.exports = {
             allowNullableBoolean: true,
             allowNullableString: true,
         }],
+
+        '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
     },
 }

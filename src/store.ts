@@ -6,7 +6,7 @@ const HYDRATION_KEY = '__INITIAL_STATE__'
 // State
 // ----------------------------------------------------------------------------
 
-interface State {
+type State = {
     dropZoneWidth: number
     showActionsAtTop: boolean
 }

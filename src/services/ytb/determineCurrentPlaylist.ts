@@ -1,4 +1,4 @@
-export interface Playlist {
+export type Playlist = {
     youtubeId: string
     name: string
 }
