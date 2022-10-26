@@ -11,7 +11,7 @@ export function determineCurrentPlaylist(): Playlist | null {
     }
 
     const youtubeId = matches[1]
-    const name = $('h1#title a.yt-simple-endpoint').text().trim() || $('#title-form #text-displayed').text().trim()
+    const name = $('ytd-page-manager ytd-playlist-header-renderer .metadata-wrapper > yt-dynamic-sizing-formatted-string yt-formatted-string').text().trim()
     console.info(DEFINE.NAME, 'determineCurrentPlaylist()', `youtubeId:"${youtubeId}" name:"${name}"`)
 
     if (!youtubeId || !name) {
