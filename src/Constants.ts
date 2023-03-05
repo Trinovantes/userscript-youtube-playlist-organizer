@@ -10,9 +10,15 @@ export const MAX_UI_WAIT_ATTEMPTS = 5
 export const WATCH_LATER_LIST_ID = 'WL'
 export const LIKED_LIST_ID = 'LL'
 
-export const PADDING = 16 // Same as defined in variables.scss
+// Same as defined in variables.scss
+export const BTN_SIZE = 48
+export const PADDING = 16
+
 export const YTB_MASTHEAD_HEIGHT = 56
 export const YTB_MASTHEAD_HEIGHT_PX = `${YTB_MASTHEAD_HEIGHT}px`
 export const YTB_PLAYER_MARGIN = 12
+export const YTB_PLAYER_MARGIN_PX = `${YTB_PLAYER_MARGIN}px`
+export const YTB_PLAYER_HEIGHT = 225 + 64 + (YTB_PLAYER_MARGIN)
+export const YTB_PLAYER_HEIGHT_PX = `${YTB_PLAYER_HEIGHT}px`
 export const YTB_PLAYER_WIDTH = 400 + (YTB_PLAYER_MARGIN * 2)
 export const YTB_PLAYER_WIDTH_PX = `${YTB_PLAYER_WIDTH}px`
