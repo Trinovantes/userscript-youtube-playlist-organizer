@@ -4,7 +4,7 @@ export type Playlist = {
 }
 
 export function determineCurrentPlaylist(): Playlist | null {
-    const re = /youtube\.com\/playlist\?list=([\w]+)/
+    const re = /youtube\.com\/playlist\?.*list=([\w]+)/
     const matches = re.exec(location.href)
     if (!matches) {
         return null
