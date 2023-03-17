@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { debounce } from 'lodash-es'
+import debounce from 'lodash.debounce'
 import { computed, onBeforeMount, onMounted, onUnmounted, ref, watch } from 'vue'
 import { DATA_TRANSFER_KEY, UI_WAIT_TIME, WATCH_LATER_LIST_ID, YTB_MASTHEAD_HEIGHT_PX, YTB_PLAYER_MARGIN, YTB_PLAYER_MARGIN_PX, YTB_PLAYER_HEIGHT, BTN_SIZE, PADDING } from '@/Constants'
 import { Playlist, determineCurrentPlaylist } from '@/services/ytb/determineCurrentPlaylist'

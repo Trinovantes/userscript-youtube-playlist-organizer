@@ -10,7 +10,7 @@
 
         "target": "es2021",
         "module": "esnext",
-        "moduleResolution": "node",
+        "moduleResolution": "nodenext",
 
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
