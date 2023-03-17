@@ -40,9 +40,11 @@ const config: webpack.Configuration = {
         ? 'development'
         : 'production',
 
-    entry: path.resolve(srcDir, 'main.ts'),
+    entry: {
+        [packageJson.name]: path.resolve(srcDir, 'main.ts'),
+    },
     output: {
-        filename: `${packageJson.name}.user.js`,
+        path: distDir,
     },
 
     resolve: {
@@ -119,7 +121,7 @@ const config: webpack.Configuration = {
                 name: packageJson.productName,
                 version: isDev
                     ? '0.0.0'
-                    : '[version]',
+                    : packageJson.version,
                 match: [
                     '*://*.youtube.com/*',
                 ],
@@ -131,10 +133,15 @@ const config: webpack.Configuration = {
                     'https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js',
                 ],
             },
-            proxyScript: {
-                enable: isDev,
-                baseUrl,
-            },
+            ...(isDev
+                ? {
+                    proxyScript: {
+                        baseURL: `${baseUrl}/`,
+                        filename: '[basename].proxy.user.js',
+                    },
+                }
+                : {}
+            ),
         }),
     ],
 }
