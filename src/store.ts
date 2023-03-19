@@ -9,12 +9,14 @@ const HYDRATION_KEY = '__INITIAL_STATE__'
 type State = {
     dropZoneWidth: number
     showActionsAtTop: boolean
+    hiddenPlaylists: Array<string>
 }
 
 function createDefaultState(): State {
     const defaultState: State = {
         dropZoneWidth: 400,
         showActionsAtTop: false,
+        hiddenPlaylists: [],
     }
 
     return defaultState
@@ -52,6 +54,25 @@ export const useStore = defineStore('Store', {
             } catch (err) {
                 console.warn(DEFINE.NAME, err)
             }
+        },
+
+        async addHiddenPlaylist(playlistName: string) {
+            console.info(DEFINE.NAME, `addHiddenPlaylist "${playlistName}"`)
+
+            this.hiddenPlaylists.unshift(playlistName)
+            await this.save()
+        },
+
+        async removeHiddenPlaylist(idx: string) {
+            console.info(DEFINE.NAME, `removeHiddenPlaylist [${idx}]`)
+
+            const i = parseInt(idx)
+            if (i < 0 || i >= this.hiddenPlaylists.length) {
+                throw new Error(`Invalid index (${idx})`)
+            }
+
+            this.hiddenPlaylists.splice(i, 1)
+            await this.save()
         },
     },
 })

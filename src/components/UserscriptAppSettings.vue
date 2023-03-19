@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { ref } from 'vue'
 import { TITLE } from '@/Constants'
 import { useStore } from '@/store'
 
@@ -6,6 +7,21 @@ defineEmits(['close'])
 
 const projectUrl = DEFINE.REPO.url
 const store = useStore()
+
+const playlistToHide = ref<string | null>()
+const addItem = async(e: Event) => {
+    e.preventDefault()
+
+    if (!playlistToHide.value) {
+        return
+    }
+
+    await store.addHiddenPlaylist(playlistToHide.value)
+    playlistToHide.value = null
+}
+const removeItem = async(idx: string) => {
+    await store.removeHiddenPlaylist(idx)
+}
 </script>
 
 <template>
@@ -20,26 +36,89 @@ const store = useStore()
         </div>
 
         <div class="group">
-            <label
-                for="showActionsAtTop"
-                title="Moves the zones for &quot;Remove from List&quot;, &quot;Add to Queue&quot;, and &quot;Add to Watch Later&quot; to the top of the sidebar list"
-            >
-                Show Action Drop Zones at the Top of List
+            <div class="setting">
+                <label for="dropZoneWidth">
+                    Sidebar Width
+                </label>
+                <input
+                    id="dropZoneWidth"
+                    v-model.number="store.dropZoneWidth"
+                    type="number"
+                >
+            </div>
+
+            <div class="setting">
+                <label for="showActionsAtTop">
+                    <strong>
+                        Show Actions at Top of Sidebar
+                    </strong>
+                    <span>
+                        This moves the "Add to Queue", "Remove from List", and "Add to Watch Later" actions to the top of the sidebar
+                    </span>
+                </label>
 
                 <input
                     id="showActionsAtTop"
                     v-model="store.showActionsAtTop"
                     type="checkbox"
                 >
-            </label>
-            <label for="dropZoneWidth">
-                Drop Zone Width
-                <input
-                    id="dropZoneWidth"
-                    v-model.number="store.dropZoneWidth"
-                    type="number"
-                >
-            </label>
+            </div>
+
+            <div class="setting">
+                <label for="hiddenPlaylists">
+                    <strong>
+                        Hide Playlists
+                    </strong>
+                    <span>
+                        Hide playlists from the sidebar by name
+                    </span>
+                </label>
+                <div class="list-setting">
+                    <form
+                        class="list-item"
+                        @submit="addItem"
+                    >
+                        <input
+                            id="hiddenPlaylists"
+                            v-model="playlistToHide"
+                            placeholder="Name of playlist to hide (case-sensitive)"
+                        >
+                        <button
+                            class="btn positive"
+                            type="submit"
+                        >
+                            Add
+                        </button>
+                    </form>
+
+                    <template
+                        v-if="store.hiddenPlaylists.length > 0"
+                    >
+                        <div
+                            v-for="[idx, hiddenPlaylist] of Object.entries(store.hiddenPlaylists)"
+                            :key="idx"
+                            class="list-item"
+                        >
+                            <a
+                                class="btn negative"
+                                @click="removeItem(idx)"
+                            >
+                                Remove
+                            </a>
+                            <div>
+                                {{ hiddenPlaylist }}
+                            </div>
+                        </div>
+                    </template>
+                    <template
+                        v-else
+                    >
+                        <em>
+                            There are currently no hidden playlists
+                        </em>
+                    </template>
+                </div>
+            </div>
         </div>
 
         <div class="group actions">
@@ -64,11 +143,13 @@ const store = useStore()
 .settings{
     display: grid;
     gap: $padding;
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
 .group{
     display: grid;
-    gap: math.div($padding, 2);
+    gap: $padding;
 
     &:not(:first-child){
         border-top: $border;
@@ -105,15 +186,48 @@ a.project-url{
     }
 }
 
-label{
-    cursor: pointer;
-    font-weight: bold;
+.setting{
+    display: grid;
+    gap: $padding;
+    grid-template-columns: 1fr 2fr;
 
-    align-items: center;
+    align-items: start;
+    justify-items: start;
+
+    label{
+        display: grid;
+        gap: math.div($padding, 2);
+        font-weight: bold;
+
+        strong{
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 20px;
+        }
+
+        span{
+            font-weight: normal;
+            font-size: 12px;
+            line-height: 16px;
+        }
+    }
+}
+
+.list-setting{
     display: grid;
     gap: math.div($padding, 2);
-    grid-template-columns: 1fr 2fr;
-    justify-items: left;
+    width: 100%;
+
+    .list-item{
+        display: flex;
+        gap: math.div($padding, 2);
+        align-items: center;
+
+        input,
+        div{
+            flex: 1;
+        }
+    }
 }
 
 input{
@@ -132,10 +246,11 @@ input{
     }
 }
 
-a.btn{
+.btn{
     background-color: white;
     border: $border;
     border-radius: $border-radius;
+    color: #111;
     cursor: pointer;
     display: inline-block;
     padding: math.div($padding, 4) math.div($padding, 2);
@@ -152,6 +267,16 @@ a.btn{
 
         &:hover{
             background-color: darkgreen;
+        }
+    }
+
+    &.negative{
+        background: darkred;
+        border-color: maroon;
+        color: white;
+
+        &:hover{
+            background-color: maroon;
         }
     }
 }

@@ -76,6 +76,10 @@ const dropZones = computed<Array<DropZone>>(() => {
 
     const playlistZones: Array<DropZone> = []
     for (const playlist of playlists.value) {
+        if (store.hiddenPlaylists.includes(playlist.name)) {
+            continue
+        }
+
         playlistZones.push({
             key: playlist.youtubeId,
             label: playlist.name,

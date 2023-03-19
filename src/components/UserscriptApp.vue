@@ -50,6 +50,7 @@ window.addEventListener('yt-navigate-finish', () => {
     background: none;
     outline: none;
     border: none;
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
 
@@ -57,7 +58,8 @@ window.addEventListener('yt-navigate-finish', () => {
     font-size: 15px;
     font-weight: normal;
     font-family: Arial, Helvetica, sans-serif;
-    line-height: 1.5;
+    line-height: 25px;
+    text-align: left;
     vertical-align: baseline;
 }
 
@@ -94,6 +96,7 @@ a.settings-btn{
         top: 50%; left: 50%;
         transform: translateY(-50%) translateX(-50%);
         min-width: $min-dialog-width;
+        max-width: $max-dialog-width;
     }
 }
 </style>
