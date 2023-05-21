@@ -20,7 +20,7 @@ export async function findPlaylistsInSidebar(): Promise<Array<Playlist>> {
             continue
         }
 
-        const matches = /playlist\?list=([\w]+)/.exec(href)
+        const matches = /playlist\?list=([\w-]+)/.exec(href)
         if (!matches) {
             continue
         }
