@@ -7,7 +7,7 @@ export async function findDelayedElement(selector: string, parent?: HTMLElement 
     for (let attempts = 0; attempts < MAX_UI_WAIT_ATTEMPTS; attempts++) {
         // Exponential back off
         const delay = UI_WAIT_TIME * Math.pow(2, attempts)
-        console.info(DEFINE.NAME, `Waiting ${delay}ms`)
+        console.info(DEFINE.NAME, 'findDelayedElement()', `Waiting ${delay}ms for "${selector}"`)
         await sleep(delay)
 
         if (parent) {

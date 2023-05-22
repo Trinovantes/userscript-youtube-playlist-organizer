@@ -7,7 +7,7 @@ export async function findPlaylistsInSidebar(): Promise<Array<Playlist>> {
     const $homeSection = await findDelayedElement('#contentContainer ytd-guide-section-renderer:nth-child(1)')
     const $showMoreBtn = await findDelayedElement('ytd-guide-collapsible-entry-renderer #expander-item', $homeSection)
     $showMoreBtn.trigger('click')
-    const $playlistLinks = await findDelayedElement('#expandable-items > ytd-guide-entry-renderer', $homeSection)
+    const $playlistLinks = await findDelayedElement('ytd-guide-entry-renderer', $homeSection)
 
     const playlists: Array<Playlist> = []
 
