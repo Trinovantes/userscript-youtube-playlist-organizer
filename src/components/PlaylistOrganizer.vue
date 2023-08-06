@@ -202,6 +202,7 @@ const onDrop = (event: DragEvent, action: ActionType) => {
     overflow-x: hidden;
     overflow-y: auto;
 
+    z-index: 9999;
     position: fixed;
     top: v-bind(YTB_MASTHEAD_HEIGHT_PX);
     right: v-bind(YTB_PLAYER_MARGIN_PX);
