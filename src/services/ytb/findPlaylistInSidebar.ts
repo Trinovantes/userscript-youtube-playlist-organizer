@@ -1,4 +1,4 @@
-import { LIKED_LIST_ID } from '@/Constants'
+import { LIKED_LIST_ID, WATCH_LATER_LIST_ID } from '@/Constants'
 import { findDelayedElement } from '@/utils/findDelayedElement'
 import type { Playlist } from './determineCurrentPlaylist'
 
@@ -28,7 +28,12 @@ export async function findPlaylistsInSidebar(): Promise<Array<Playlist>> {
         const youtubeId = matches[1]
 
         // We can't modify Liked videos so we skip this list
-        if (youtubeId.startsWith(LIKED_LIST_ID)) {
+        if (youtubeId === LIKED_LIST_ID) {
+            continue
+        }
+
+        //  We have a special area for WL so we don't need this list
+        if (youtubeId === WATCH_LATER_LIST_ID) {
             continue
         }
 
