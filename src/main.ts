@@ -7,6 +7,11 @@ import { useStore } from './store'
 async function main() {
     await $.when($.ready)
 
+    // Do not activate on ytb music
+    if (window.location.origin === 'https://music.youtube.com') {
+        return
+    }
+
     const appContainerId = DEFINE.NAME
     $('body').append(`<div id="${appContainerId}">`)
 
