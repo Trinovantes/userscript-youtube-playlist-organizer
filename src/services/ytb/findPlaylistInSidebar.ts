@@ -12,7 +12,7 @@ export async function findPlaylistsInSidebar(): Promise<Array<Playlist>> {
     const playlists: Array<Playlist> = []
 
     for (const playlistLink of $playlistLinks) {
-        const name = $(playlistLink).text().trim()
+        const name = $(playlistLink).find('.title').text().trim()
         const href = $(playlistLink).find('a#endpoint').attr('href')
 
         // Skip playlists that failed to parse
