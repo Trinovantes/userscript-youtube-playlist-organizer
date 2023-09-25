@@ -1,22 +1,22 @@
 import { MAX_UI_WAIT_ATTEMPTS, UI_WAIT_TIME } from '@/Constants'
 import { sleep } from './sleep'
 
-export async function findDelayedElement(selector: string, parent?: Element): Promise<HTMLElement> {
-    let target: HTMLElement | null = null
+export async function findDelayedElementAll(selector: string, parent?: HTMLElement): Promise<Array<HTMLElement>> {
+    let target: NodeListOf<HTMLElement> | null = null
     const logTarget = (msg: string) => {
-        console.groupCollapsed(DEFINE.NAME, `findDelayedElement("${selector}")`, msg)
+        console.groupCollapsed(DEFINE.NAME, `findDelayedElementAll("${selector}")`, msg)
         console.info(target)
         console.groupEnd()
     }
 
     for (let attempts = 0; attempts < MAX_UI_WAIT_ATTEMPTS; attempts++) {
         if (parent) {
-            target = parent.querySelector(selector)
+            target = parent.querySelectorAll(selector)
         } else {
-            target = document.querySelector(selector)
+            target = document.querySelectorAll(selector)
         }
 
-        if (target) {
+        if (target.length > 0) {
             logTarget('[FOUND]')
             break
         }
@@ -28,8 +28,8 @@ export async function findDelayedElement(selector: string, parent?: Element): Pr
     }
 
     if (!target) {
-        throw new Error(`findDelayedElement() failed to find "${selector}"`)
+        throw new Error(`findDelayedElementAll() failed to find "${selector}"`)
     }
 
-    return target
+    return [...target]
 }

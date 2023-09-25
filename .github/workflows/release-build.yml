@@ -7,11 +7,10 @@ on:
     tags:
       - v*
     paths-ignore:
-      - .github/**
-      - .vscode/**
+      - README.md
+      - .vscode
       - .editorconfig
       - .gitignore
-      - README.md
 
 env:
   AUTO_TAG: latest
@@ -24,18 +23,16 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Save yarn cache location to env
         run: echo "YARN_CACHE=$(yarn cache dir)" >> $GITHUB_ENV
 
       - name: Cache node_modules
-        uses: actions/cache@v2
-        env:
-          CACHE_NAME: cache-node-modules
+        uses: actions/cache@v3
         with:
           path: ${{ env.YARN_CACHE }}
-          key: ${{ runner.os }}-build-${{ env.CACHE_NAME }}-${{ hashFiles('**/yarn.lock', '**/package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock', '**/package-lock.json') }}
 
       - name: Install dependencies
         run: yarn install

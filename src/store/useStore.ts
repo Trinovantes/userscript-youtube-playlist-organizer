@@ -32,7 +32,7 @@ export const useStore = defineStore('Store', {
     actions: {
         async load() {
             try {
-                const stateString = await GM.getValue(HYDRATION_KEY, '{}') || '{}'
+                const stateString = await GM.getValue(HYDRATION_KEY, '{}')
                 const parsedState = JSON.parse(stateString) as State
 
                 this.$patch({
@@ -64,10 +64,10 @@ export const useStore = defineStore('Store', {
         },
 
         async removeHiddenPlaylist(idx: string) {
-            console.info(DEFINE.NAME, `removeHiddenPlaylist [${idx}]`)
+            console.info(DEFINE.NAME, `removeHiddenPlaylist idx:${idx}`)
 
             const i = parseInt(idx)
-            if (i < 0 || i >= this.hiddenPlaylists.length) {
+            if (isNaN(i) || i < 0 || i >= this.hiddenPlaylists.length) {
                 throw new Error(`Invalid index (${idx})`)
             }
 

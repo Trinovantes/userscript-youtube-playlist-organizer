@@ -1,6 +1,5 @@
-declare const DEFINE: {
+declare const DEFINE: Readonly<{
     IS_DEV: boolean
-
     NAME: string
     PRODUCT_NAME: string
     AUTHOR: string
@@ -9,4 +8,4 @@ declare const DEFINE: {
     REPO: {
         url: string
     }
-}
+}>

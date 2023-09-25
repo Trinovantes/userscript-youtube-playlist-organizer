@@ -1,29 +1,6 @@
 $btn-size: 48px;
 $padding: 16px;
-$min-dialog-width: 300px;
-$max-dialog-width: 800px;
 
 $border-radius: 4px;
 $border: 1px solid #ddd;
-
-.icon-btn{
-    background-size: 50% 50%;
-    background-color: white;
-    background-repeat: no-repeat;
-    background-position: center;
-    border-radius: 50%;
-    cursor: pointer;
-    display: block;
-    transition: 0.25s;
-
-    width: $btn-size;
-    height: $btn-size;
-
-    text-decoration: none;
-    text-indent: -9999px;
-    overflow: hidden;
-
-    &:hover{
-        background-color: #eee;
-    }
-}
+$text-color: #111;

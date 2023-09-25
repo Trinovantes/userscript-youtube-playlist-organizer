@@ -1,20 +1,12 @@
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
-import { TITLE } from '@/Constants'
+import { ref } from 'vue'
+import { projectTitle } from '@/Constants'
+import { useIsOnPlaylistPage } from '@/utils/useIsOnPlaylistPage'
 import PlaylistOrganizer from '@/components/PlaylistOrganizer.vue'
 import UserscriptAppSettings from '@/components/UserscriptAppSettings.vue'
-import { determineIsOnPlaylistPage } from '@/services/ytb/determineIsOnPlaylistPage'
 
-const isOpen = ref(false)
-const isOnPlaylistPage = ref(false)
-
-onMounted(() => {
-    isOnPlaylistPage.value = determineIsOnPlaylistPage()
-})
-
-window.addEventListener('yt-navigate-finish', () => {
-    isOnPlaylistPage.value = determineIsOnPlaylistPage()
-})
+const { isOnPlaylistPage } = useIsOnPlaylistPage()
+const dialogRef = ref<HTMLDialogElement | null>(null)
 </script>
 
 <template>
@@ -22,81 +14,53 @@ window.addEventListener('yt-navigate-finish', () => {
         v-if="isOnPlaylistPage"
         class="userscript-youtube-playlist-organizer"
     >
-        <div
-            v-if="isOpen"
-            class="dialog-wrapper"
+        <dialog
+            ref="dialogRef"
         >
-            <div class="dialog">
-                <UserscriptAppSettings
-                    @close="isOpen = false"
-                />
-            </div>
-        </div>
+            <UserscriptAppSettings
+                @close="dialogRef?.close()"
+            />
+        </dialog>
 
         <PlaylistOrganizer />
 
-        <a
+        <button
             class="settings-btn"
-            :title="TITLE"
-            @click="isOpen = true"
+            :title="projectTitle"
+            @click="dialogRef?.showModal()"
         >
             Settings
-        </a>
+        </button>
     </div>
 </template>
 
 <style lang="scss" scoped>
-:global(.userscript-youtube-playlist-organizer *){
-    background: none;
-    outline: none;
-    border: none;
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-
-    color: #111;
-    font-size: 15px;
-    font-weight: normal;
-    font-family: Arial, Helvetica, sans-serif;
-    line-height: 25px;
-    text-align: left;
-    vertical-align: baseline;
-}
-
-a.settings-btn{
-    @extend .icon-btn;
+button.settings-btn{
+    background-image: url('@/assets/img/settings.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 50% 50%;
+    border-radius: 50%;
+    border: $border;
+    cursor: pointer;
+    display: block;
+    overflow: hidden;
+    text-decoration: none;
+    text-indent: -9999px;
+    transition: 0.25s;
+    width: $btn-size; height: $btn-size;
 
     position: fixed;
+    z-index: 9999;
     bottom: $padding;
     right: $padding;
-    z-index: 9999;
 
-    background-image: url('@/assets/img/settings.png');
+    background-color: white;
     box-shadow: rgba(11, 11, 11, 0.1) 0 2px 8px;
 
     &:hover{
+        background-color: #eee;
         box-shadow: rgba(11, 11, 11, 0.4) 0 0px 8px;
-    }
-}
-
-.dialog-wrapper{
-    background: rgba(11, 11, 11, 0.4);
-
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    z-index: 99999;
-
-    > .dialog{
-        background: white;
-        padding: $padding;
-        border-radius: $border-radius;
-
-        position: absolute;
-        top: 50%; left: 50%;
-        transform: translateY(-50%) translateX(-50%);
-        min-width: $min-dialog-width;
-        max-width: $max-dialog-width;
     }
 }
 </style>

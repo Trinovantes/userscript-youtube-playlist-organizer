@@ -1,175 +1,64 @@
 <script lang="ts" setup>
-import debounce from 'lodash.debounce'
-import { computed, onBeforeMount, onMounted, onUnmounted, ref, watch } from 'vue'
-import { DATA_TRANSFER_KEY, UI_WAIT_TIME, WATCH_LATER_LIST_ID, YTB_MASTHEAD_HEIGHT_PX, YTB_PLAYER_MARGIN, YTB_PLAYER_MARGIN_PX, YTB_PLAYER_HEIGHT, BTN_SIZE, PADDING } from '@/Constants'
-import { Playlist, determineCurrentPlaylist } from '@/services/ytb/determineCurrentPlaylist'
-import { findPlaylistsInSidebar } from '@/services/ytb/findPlaylistInSidebar'
-import { registerDragListeners } from '@/services/ytb/registerEventListeners'
-import { ActionType, triggerAction } from '@/services/ytb/triggerAction'
-import { useStore } from '@/store'
+import { computed, watch } from 'vue'
+import { ActionType, triggerAction } from '@/utils/triggerAction'
+import { useStore } from '@/store/useStore'
 import { findDelayedElement } from '@/utils/findDelayedElement'
+import { useIsMiniPlayerVisible } from '@/utils/useIsMiniPlayerVisible'
+import { useRegisterPlaylistVideosListeners } from '@/utils/useRegisterPlaylistVideosListeners'
+import { useDropZones } from '@/utils/useDropZones'
+import { YTB_PLAYER_HEIGHT, BTN_SIZE, PADDING, YTB_PLAYER_MARGIN, DRAG_EV_TRANSFER_KEY, YTB_MASTHEAD_HEIGHT } from '@/Constants'
+
+const { dropZones, currentPlaylist, hasUpdatedOnce } = useDropZones()
+useRegisterPlaylistVideosListeners()
+
+const { isMiniPlayerVisible } = useIsMiniPlayerVisible()
+const dropZoneBottomOffset = computed(() => isMiniPlayerVisible.value ? YTB_PLAYER_HEIGHT : (BTN_SIZE + PADDING * 2))
 
 const store = useStore()
-const showActionsAtTop = computed(() => store.showActionsAtTop)
-
-const dropZoneBottomOffset = computed(() => isMiniPlayerVisible.value ? (YTB_PLAYER_HEIGHT) : (BTN_SIZE + PADDING * 2))
-const dropZoneHeightPx = computed(() => `calc(100vh - ${YTB_MASTHEAD_HEIGHT_PX} - ${dropZoneBottomOffset.value}px)`)
-
 const dropZoneWidth = computed(() => store.dropZoneWidth)
-const dropZoneWidthPx = computed(() => `${store.dropZoneWidth}px`)
-const updateContainerMargins = async() => {
-    const rightOffset = `${dropZoneWidth.value + (YTB_PLAYER_MARGIN * 2)}px`
+const rightOffset = computed(() => dropZoneWidth.value + (YTB_PLAYER_MARGIN * 2))
+watch(rightOffset, async(rightOffset) => {
+    const alertsContainer = await findDelayedElement('ytd-browse #alerts')
+    alertsContainer.setAttribute('style', `padding-right:${rightOffset}px;`)
 
-    const $alertsContainer = await findDelayedElement('ytd-browse #alerts')
-    $alertsContainer.css({
-        paddingRight: rightOffset,
-    })
-
-    const $playlistContainer = await findDelayedElement('ytd-playlist-video-list-renderer.ytd-item-section-renderer')
-    $playlistContainer.css({
-        margin: '0',
-        marginRight: rightOffset,
-        transform: 'none',
-    })
-}
-watch(dropZoneWidth, updateContainerMargins)
-
-const isMiniPlayerVisible = ref(false)
-const updateIsMiniPlayerVisible = () => {
-    // This must be called when DOM has finished rendering otherwise this will not find anything
-    // This function is using $ instead of using findDelayedElement because it must be synchronous to be used by MutationObserver
-    const $miniPlayer = $('ytd-app ytd-miniplayer #video-container #player-container')[0]
-    isMiniPlayerVisible.value = $miniPlayer.children.length > 0
-}
-
-type DropZone = {
-    key: string
-    class?: string
-    label: string
-    action: ActionType
-}
-const playlists = ref<Array<Playlist>>([])
-const dropZones = computed<Array<DropZone>>(() => {
-    const actionsZones: Array<DropZone> = [
-        {
-            key: 'remove-from-list',
-            class: 'remove-from-list',
-            label: 'Remove from List',
-            action: ActionType.REMOVE,
-        },
-        {
-            key: 'add-to-queue',
-            class: 'add-to-queue',
-            label: 'Add to Queue',
-            action: ActionType.ADD_QUEUE,
-        },
-    ]
-
-    if (!isOnWatchLater.value) {
-        actionsZones.push({
-            key: 'add-to-watch-later',
-            class: 'add-to-watch-later',
-            label: 'Add to Watch Later',
-            action: ActionType.ADD_WATCH_LATER,
-        })
-    }
-
-    const playlistZones: Array<DropZone> = []
-    for (const playlist of playlists.value) {
-        if (store.hiddenPlaylists.includes(playlist.name)) {
-            continue
-        }
-
-        playlistZones.push({
-            key: playlist.youtubeId,
-            label: playlist.name,
-            action: ActionType.ADD_PLAYLIST,
-        })
-    }
-
-    return showActionsAtTop.value
-        ? [...actionsZones, ...playlistZones]
-        : [...playlistZones, ...actionsZones]
-})
-
-const currentPlaylist = ref<Playlist | null>(null)
-const isOnWatchLater = computed(() => currentPlaylist.value?.youtubeId === WATCH_LATER_LIST_ID)
-
-const renderedOnce = ref(false)
-const render = debounce(() => {
-    void (async() => {
-        console.info(DEFINE.NAME, 'PlaylistOrganizer::render')
-
-        playlists.value = await findPlaylistsInSidebar()
-        currentPlaylist.value = determineCurrentPlaylist()
-
-        await updateContainerMargins()
-
-        const $videoListContainer = await findDelayedElement('#contents.ytd-playlist-video-list-renderer')
-        registerDragListeners()
-        videoListObserver?.disconnect()
-        videoListObserver?.observe($videoListContainer[0], { childList: true })
-
-        const $miniPlayer = await findDelayedElement('ytd-app ytd-miniplayer #video-container #player-container')
-        updateIsMiniPlayerVisible()
-        miniPlayerObserver?.disconnect()
-        miniPlayerObserver?.observe($miniPlayer[0], { childList: true })
-
-        renderedOnce.value = true
-    })()
-}, UI_WAIT_TIME)
-
-let videoListObserver: MutationObserver | null = null
-let miniPlayerObserver: MutationObserver | null = null
-onBeforeMount(() => {
-    videoListObserver = new MutationObserver(registerDragListeners)
-    miniPlayerObserver = new MutationObserver(updateIsMiniPlayerVisible)
-    render()
-})
-onUnmounted(() => {
-    videoListObserver?.disconnect()
-    miniPlayerObserver?.disconnect()
-})
-onMounted(() => {
-    window.addEventListener('yt-navigate-finish', render)
-})
-onUnmounted(() => {
-    window.removeEventListener('yt-navigate-finish', render)
+    const playlistContainer = await findDelayedElement('ytd-playlist-video-list-renderer.ytd-item-section-renderer')
+    playlistContainer.setAttribute('style', `margin:0; margin-right:${rightOffset}px; transform:none;`)
+}, {
+    immediate: true,
 })
 
 const onDragOver = (event: DragEvent) => {
     event.preventDefault()
     event.stopPropagation()
 }
-
 const onDragEnter = (event: DragEvent) => {
-    if (!event.target) {
+    if (!event.target || !(event.target instanceof Element)) {
         return
     }
 
-    $(event.target).addClass('highlight')
+    event.target.classList.add('highlight')
 }
-
 const onDragLeave = (event: DragEvent) => {
-    if (!event.target) {
+    if (!event.target || !(event.target instanceof Element)) {
         return
     }
 
-    $(event.target).removeClass('highlight')
+    event.target.classList.remove('highlight')
 }
-
 const onDrop = (event: DragEvent, action: ActionType) => {
-    if (!event.target) {
+    if (!event.target || !(event.target instanceof Element)) {
         return
     }
 
-    $(event.target).removeClass('highlight')
+    event.target.classList.remove('highlight')
 
-    const targetPlaylistName = $(event.target).text().trim()
-    const elementId = event.dataTransfer?.getData(DATA_TRANSFER_KEY)
-    console.info(DEFINE.NAME, 'onDrop()', `action:${action}`, `targetPlaylistName:"${targetPlaylistName}"`, `elementId:"${elementId}"`)
+    const targetPlaylistName = event.target.textContent?.trim()
+    if (!targetPlaylistName) {
+        return
+    }
 
-    if (!targetPlaylistName || !elementId) {
+    const elementId = event.dataTransfer?.getData(DRAG_EV_TRANSFER_KEY)
+    if (!elementId) {
         return
     }
 
@@ -179,8 +68,16 @@ const onDrop = (event: DragEvent, action: ActionType) => {
 
 <template>
     <div
-        v-if="renderedOnce"
+        v-if="hasUpdatedOnce"
         class="playlist-organizer"
+        :style="{
+            zIndex: 99,
+            position: 'fixed',
+            top: `${YTB_MASTHEAD_HEIGHT}px`,
+            right: `${YTB_PLAYER_MARGIN}px`,
+            width: `${dropZoneWidth}px`,
+            height: `calc(100vh - ${YTB_MASTHEAD_HEIGHT}px - ${dropZoneBottomOffset}px)`
+        }"
     >
         <div
             v-for="dropZone of dropZones"
@@ -201,13 +98,6 @@ const onDrop = (event: DragEvent, action: ActionType) => {
     color: white;
     overflow-x: hidden;
     overflow-y: auto;
-
-    z-index: 9999;
-    position: fixed;
-    top: v-bind(YTB_MASTHEAD_HEIGHT_PX);
-    right: v-bind(YTB_PLAYER_MARGIN_PX);
-    width: v-bind(dropZoneWidthPx);
-    height: v-bind(dropZoneHeightPx);
 
     display: flex;
     flex-direction: column;

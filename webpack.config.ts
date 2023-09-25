@@ -1,12 +1,11 @@
-import { EOL } from 'os'
-import path from 'path'
-import url from 'url'
+import path from 'node:path'
+import url from 'node:url'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
-import { VueLoaderPlugin } from 'vue-loader'
 import webpack from 'webpack'
 import 'webpack-dev-server'
 import WebpackUserscript from 'webpack-userscript'
 import packageJson from './package.json'
+import { VueLoaderPlugin } from 'vue-loader'
 
 const isDev = (process.env.NODE_ENV === 'development')
 const srcDir = path.resolve(__dirname, 'src')
@@ -16,21 +15,15 @@ const baseUrl = process.env.WSL_DISTRO_NAME
     : url.pathToFileURL(distDir).href
 
 if (isDev) {
-    let msg = ''
-    const log = (s?: string) => {
-        msg += (s ?? '') + EOL
-    }
+    console.info(`
+        ${'-'.repeat(80)}
 
-    log('-'.repeat(80))
-    log()
-    log('Development Notes:')
-    log()
-    log('1. Go into Chrome -> Extensions -> TamperMonkey -> Enable "Allow access to file URLs"')
-    log(`2. Install http://localhost:8080/${packageJson.name}.proxy.user.js`)
-    log()
-    log('-'.repeat(80))
+            Development Notes:
+                1. Go into Chrome -> Extensions -> TamperMonkey -> Enable "Allow access to file URLs"
+                2. Install http://localhost:8080/${packageJson.name}.proxy.user.js
 
-    console.info(msg)
+        ${'-'.repeat(80)}
+    `)
 }
 
 const config: webpack.Configuration = {
@@ -43,6 +36,7 @@ const config: webpack.Configuration = {
     entry: {
         [packageJson.name]: path.resolve(srcDir, 'main.ts'),
     },
+
     output: {
         path: distDir,
     },
@@ -104,7 +98,6 @@ const config: webpack.Configuration = {
             __VUE_PROD_DEVTOOLS__: JSON.stringify(false),
 
             'DEFINE.IS_DEV': JSON.stringify(isDev),
-
             'DEFINE.NAME': JSON.stringify(packageJson.name),
             'DEFINE.PRODUCT_NAME': JSON.stringify(packageJson.productName),
             'DEFINE.AUTHOR': JSON.stringify(packageJson.author),
@@ -128,9 +121,6 @@ const config: webpack.Configuration = {
                 grant: [
                     'GM.getValue',
                     'GM.setValue',
-                ],
-                require: [
-                    'https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js',
                 ],
             },
             ...(isDev

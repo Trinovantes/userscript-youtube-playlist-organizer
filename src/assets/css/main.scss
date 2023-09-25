@@ -11,10 +11,130 @@
         top: 0; bottom: 0;
         left: 0; right: 0;
         z-index: 0;
+
+        &.dragging{
+            background: rgba(black, 0.2);
+            border-color: white;
+        }
+    }
+}
+
+.userscript-youtube-playlist-organizer{
+    *{
+        background: none;
+        outline: none;
+        border: none;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+
+        color: $text-color;
+        font-size: 15px;
+        font-weight: normal;
+        font-family: Arial, Helvetica, sans-serif;
+        line-height: 25px;
+        text-align: left;
+        vertical-align: baseline;
     }
 
-    &.dragging:before{
-        background: rgba(black, 0.2);
-        border-color: white;
+    .flex-hgap{
+        display: flex;
+        gap: $padding;
+    }
+
+    .flex-vgap{
+        display: flex;
+        flex-direction: column;
+        gap: $padding;
+    }
+
+    .flex-1{
+        flex: 1;
+    }
+
+    dialog{
+        background: white;
+        border-radius: $border-radius;
+    
+        position: fixed;
+        top: 50%; left: 50%;
+        translate: -50% -50%;
+    
+        &::backdrop{
+            background: rgba(11, 11, 11, 0.4);
+        }
+
+        h1{
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        h2{
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        a{
+            color: blue;
+            text-decoration: underline;
+
+            &:hover{
+                text-decoration: none;
+            }
+        }
+
+        input{
+            color: $text-color;
+            font-weight: normal;
+
+            background: white;
+            border: $border;
+            border-radius: $border-radius;
+            padding: math.div($padding, 4);
+
+            &:focus{
+                border-color: black;
+            }
+
+            &:not([type='checkbox']){
+                width: 100%;
+            }
+        }
+
+        button{
+            border-radius: $border-radius;
+            cursor: pointer;
+            display: inline-block;
+            padding: math.div($padding, 4) math.div($padding, 2);
+            text-align: center;
+
+            background-color: white;
+            border: $border;
+            color: $text-color;
+
+            &:hover{
+                background-color: #eee;
+            }
+
+            &.positive{
+                background-color: green;
+                border-color: darkgreen;
+                color: white;
+
+                &:hover{
+                    background-color: darkgreen;
+                }
+            }
+
+            &.negative{
+                background: darkred;
+                border-color: maroon;
+                color: white;
+
+                &:hover{
+                    background-color: maroon;
+                }
+            }
+        }
     }
 }

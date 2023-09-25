@@ -1,31 +1,29 @@
-import { createPinia } from 'pinia'
-import { createApp } from 'vue'
-import '@/assets/css/main.scss'
-import UserscriptApp from '@/components/UserscriptApp.vue'
-import { useStore } from './store'
+import './assets/css/main.scss'
+import { createVueApp } from './createVueApp'
 
 async function main() {
-    await $.when($.ready)
+    // Do not activate inside youtube's ad iframe
+    if (window.self !== window.top) {
+        return
+    }
 
     // Do not activate on ytb music
     if (window.location.origin === 'https://music.youtube.com') {
         return
     }
 
-    const appContainerId = DEFINE.NAME
-    $('body').append(`<div id="${appContainerId}">`)
+    const node = document.createElement('div')
+    node.id = DEFINE.NAME
+    document.querySelector('body')?.appendChild(node)
 
-    const app = createApp(UserscriptApp)
-
-    const pinia = createPinia()
-    app.use(pinia)
-
-    const store = useStore()
-    await store.load()
-
-    app.mount(`#${appContainerId}`)
+    const app = await createVueApp()
+    app.mount(node)
 }
 
-main().catch((err) => {
-    console.warn(DEFINE.NAME, err)
-})
+if (document.readyState !== 'loading') {
+    void main()
+} else {
+    window.addEventListener('DOMContentLoaded', () => {
+        void main()
+    })
+}
