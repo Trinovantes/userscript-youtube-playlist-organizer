@@ -6,19 +6,6 @@ import debounce from 'lodash.debounce'
 let counter = 0
 
 export function useRegisterPlaylistVideosListeners() {
-    const onNavigation = debounce(() => {
-        void (async() => {
-            const videoListContainer = await findDelayedElement('#contents.ytd-playlist-video-list-renderer')
-            observer?.disconnect()
-            observer?.observe(videoListContainer, { childList: true })
-            listeners.clear()
-
-            console.groupCollapsed(DEFINE.NAME, 'useRegisterPlaylistVideosListeners::onNavigation')
-            console.info('Observing', videoListContainer)
-            console.groupEnd()
-        })()
-    }, UI_WAIT_TIME)
-
     const update = debounce(() => {
         void (async() => {
             const videoListContainer = await findDelayedElement('#contents.ytd-playlist-video-list-renderer')
@@ -55,7 +42,26 @@ export function useRegisterPlaylistVideosListeners() {
         })()
     }, UI_WAIT_TIME)
 
-    const observer = new MutationObserver(update)
+    const onNavigation = debounce(() => {
+        void (async() => {
+            const videoListContainer = await findDelayedElement('#contents.ytd-playlist-video-list-renderer')
+            observer?.disconnect()
+            observer?.observe(videoListContainer, { childList: true })
+            listeners.clear()
+
+            console.groupCollapsed(DEFINE.NAME, 'useRegisterPlaylistVideosListeners::onNavigation')
+            console.info('Observing', videoListContainer)
+            console.groupEnd()
+        })()
+    }, UI_WAIT_TIME)
+
+    const observer = new MutationObserver((mutations) => {
+        for (const node of mutations[0].removedNodes) {
+            removeListenerIfExist(node as Element, 'dragstart')
+            removeListenerIfExist(node as Element, 'dragleave')
+        }
+        update()
+    })
     onMounted(() => {
         onNavigation()
         update()
