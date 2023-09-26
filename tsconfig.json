@@ -1,8 +1,8 @@
 {
     "ts-node": {
         "compilerOptions": {
-            "module": "CommonJS"
-        }
+            "module": "CommonJS",
+        },
     },
     "compilerOptions": {
         "strict": true,
@@ -26,15 +26,17 @@
         "outDir": "dist",
         "baseUrl": ".",
         "paths": {
-            "@/*": ["./src/*"]
-        }
+            "@/*": ["./src/*"],
+        },
     },
     "exclude": [
+        "**/raw/**/*",
+        "**/*.html",
         "node_modules",
-        "dist"
+        "dist",
     ],
     "include": [
         "**/*",
-        ".eslintrc.js"
-    ]
+        ".eslintrc.js",
+    ],
 }

@@ -75,7 +75,7 @@ module.exports = {
         }],
         'vue/singleline-html-element-content-newline': ['error', {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            ignores: ['ExternalLink', 'router-link', ...INLINE_ELEMENTS],
+            ignores: ['ExternalLink', 'router-link', 'pre', ...INLINE_ELEMENTS],
         }],
 
         '@typescript-eslint/prefer-literal-enum-member': 'off',

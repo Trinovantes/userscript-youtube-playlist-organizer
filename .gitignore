@@ -103,6 +103,7 @@ dist*
 .tern-port
 
 # Playwright
+tests/e2e/results/
 /test-results/
 /playwright-report/
 /playwright/.cache/
