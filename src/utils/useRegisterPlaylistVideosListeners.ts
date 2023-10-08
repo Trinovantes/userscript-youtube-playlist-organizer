@@ -18,7 +18,6 @@ export function useRegisterPlaylistVideosListeners() {
                 addListener(videoRow, elementId, 'dragstart', (ev) => {
                     const event = ev as DragEvent
                     const targetEl = event.target as HTMLElement
-                    console.log('drag start', elementId, targetEl)
                     event.dataTransfer?.setData(DRAG_EV_TRANSFER_KEY, elementId.toString())
                     targetEl.classList.add('dragging')
                 })
