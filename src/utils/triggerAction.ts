@@ -24,7 +24,7 @@ export async function triggerAction(action: ActionType, elementId: string, targe
 
             // Since the popup UI is kept in the DOM and getting reused, we need to release the event loop so that
             // YouTube's JS can run and update the popup's hooks before we interact with it
-            await sleep(1)
+            await sleep(500)
 
             const popup = await findDelayedElement('ytd-popup-container ytd-add-to-playlist-renderer')
             const playlistOptions = await findDelayedElementAll('#playlists > ytd-playlist-add-to-option-renderer', popup)
