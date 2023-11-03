@@ -1,5 +1,3 @@
 export async function sleep(ms: number): Promise<void> {
-    return new Promise((resolve) => {
-        setTimeout(resolve, ms)
-    })
+    await new Promise((resolve) => setTimeout(resolve, ms))
 }

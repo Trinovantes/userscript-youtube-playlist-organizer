@@ -78,6 +78,7 @@ module.exports = {
             ignores: ['ExternalLink', 'router-link', 'pre', ...INLINE_ELEMENTS],
         }],
 
+        '@typescript-eslint/return-await': ['error', 'always'],
         '@typescript-eslint/prefer-literal-enum-member': 'off',
         '@typescript-eslint/no-unnecessary-condition': 'off',
         '@typescript-eslint/semi': ['error', 'never'],
