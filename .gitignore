@@ -130,3 +130,6 @@ tests/e2e/results/
 /test-results/
 /playwright-report/
 /playwright/.cache/
+
+# CloudFlare Workers
+.wrangler/
