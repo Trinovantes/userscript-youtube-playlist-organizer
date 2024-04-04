@@ -10,6 +10,10 @@ const save = async() => {
     await store.save()
     emit('close')
 }
+const reset = async() => {
+    store.$reset()
+    await store.save()
+}
 const cancel = async() => {
     await store.load()
     emit('close')
@@ -28,6 +32,24 @@ const cancel = async() => {
         </div>
 
         <div class="group flex-vgap">
+            <div class="setting">
+                <label>
+                    <strong>
+                        Reset Data
+                    </strong>
+                    <span>
+                        This will reset all your settings and cached playlist names
+                    </span>
+                </label>
+
+                <button
+                    class="negative"
+                    @click="reset"
+                >
+                    Reset
+                </button>
+            </div>
+
             <div class="setting">
                 <label for="dropZoneWidth">
                     <strong>
@@ -99,7 +121,9 @@ const cancel = async() => {
             >
                 Save
             </button>
+
             <div class="flex-1" />
+
             <button
                 @click="cancel"
             >
