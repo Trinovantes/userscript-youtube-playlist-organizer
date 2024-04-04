@@ -93,7 +93,17 @@ const onDrop = (event: DragEvent, action: ActionType) => {
             @dragleave="onDragLeave"
             @drop="(ev) => onDrop(ev, dropZone.action)"
         >
-            {{ dropZone.label }}
+            <a
+                v-if="dropZone.url"
+                :href="dropZone.url"
+            >
+                {{ dropZone.label }}
+            </a>
+            <span
+                v-else
+            >
+                {{ dropZone.label }}
+            </span>
         </div>
 
         <div
@@ -133,23 +143,36 @@ const onDrop = (event: DragEvent, action: ActionType) => {
         align-content: baseline;
     }
 
-    &:not(:has(.no-playlists-warning)) .dropzone{
-        flex: 1;
-        padding: 0 ($padding * 2);
+    &:has(.no-playlists-warning) .dropzone{
+        flex: none;
+        padding: ($padding * 2) 0;
     }
 
     .dropzone{
-        color: white;
-        font-size: 2em;
-        font-weight: bold;
-
         align-items: center;
         background: #111;
         box-sizing: border-box;
         display: flex;
+        flex: 1;
         position: relative;
-        padding: $padding * 2;
         width: 100%;
+
+        a,
+        span{
+            color: white;
+            font-size: 2em;
+            font-weight: bold;
+
+            align-items: center;
+            display: flex;
+            flex: 1;
+            padding: 0 ($padding * 2);
+            text-decoration: none;
+        }
+
+        a:hover{
+            text-decoration: underline;
+        }
 
         &.highlight:before{
             background: rgba(black, 0.2);

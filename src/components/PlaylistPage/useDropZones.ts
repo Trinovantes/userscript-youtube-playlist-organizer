@@ -9,6 +9,7 @@ import { tryDebounce } from '@/utils/tryDebounce'
 type DropZone = {
     key: string
     class?: string
+    url?: string
     label: string
     action: ActionType
 }
@@ -62,6 +63,7 @@ export function useDropZones() {
                 key: 'add-to-watch-later',
                 class: 'add-to-watch-later',
                 label: 'Add to Watch Later',
+                url: 'https://www.youtube.com/playlist?list=WL',
                 action: ActionType.ADD_WATCH_LATER,
             })
         }
@@ -75,6 +77,7 @@ export function useDropZones() {
             playlistZones.push({
                 key: playlist.youtubeId,
                 label: playlist.name,
+                url: `https://www.youtube.com/playlist?list=${playlist.youtubeId}`,
                 action: ActionType.ADD_PLAYLIST,
             })
         }
