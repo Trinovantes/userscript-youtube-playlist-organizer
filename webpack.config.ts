@@ -33,6 +33,8 @@ const config: webpack.Configuration = {
         ? 'development'
         : 'production',
 
+    devtool: false,
+
     entry: {
         [packageJson.name]: path.resolve(srcDir, 'main.ts'),
     },
