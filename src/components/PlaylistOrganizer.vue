@@ -62,7 +62,10 @@ const onDrop = (event: DragEvent, action: ActionType) => {
         return
     }
 
-    void triggerAction(action, elementId, targetPlaylistName, currentPlaylist.value?.name ?? '')
+    triggerAction(action, elementId, targetPlaylistName, currentPlaylist.value?.name ?? '')
+        .catch((err: unknown) => {
+            console.warn(err)
+        })
 }
 </script>
 

@@ -21,9 +21,13 @@ async function main() {
 }
 
 if (document.readyState !== 'loading') {
-    void main()
+    main().catch((err: unknown) => {
+        console.warn(err)
+    })
 } else {
     window.addEventListener('DOMContentLoaded', () => {
-        void main()
+        main().catch((err: unknown) => {
+            console.warn(err)
+        })
     })
 }

@@ -1,58 +1,54 @@
-import { DRAG_EV_DATA_ATTR, DRAG_EV_TRANSFER_KEY, UI_WAIT_TIME } from '@/Constants'
+import { DRAG_EV_DATA_ATTR, DRAG_EV_TRANSFER_KEY } from '@/Constants'
 import { onUnmounted, onMounted } from 'vue'
 import { findDelayedElement } from './findDelayedElement'
-import debounce from 'lodash.debounce'
+import { debounceAsync } from './debounceAsync'
 
 let counter = 0
 
 export function useRegisterPlaylistVideosListeners() {
-    const update = debounce(() => {
-        void (async() => {
-            const videoListContainer = await findDelayedElement('#contents.ytd-playlist-video-list-renderer')
-            const videoRows = videoListContainer.children
+    const update = debounceAsync(async() => {
+        const videoListContainer = await findDelayedElement('#contents.ytd-playlist-video-list-renderer')
+        const videoRows = videoListContainer.children
 
-            for (const videoRow of videoRows) {
-                const elementId = counter++
+        for (const videoRow of videoRows) {
+            const elementId = counter++
 
-                removeListenerIfExist(videoRow, 'dragstart')
-                addListener(videoRow, elementId, 'dragstart', (ev) => {
-                    const event = ev as DragEvent
-                    const targetEl = event.target as HTMLElement
-                    event.dataTransfer?.setData(DRAG_EV_TRANSFER_KEY, elementId.toString())
-                    targetEl.classList.add('dragging')
-                })
+            removeListenerIfExist(videoRow, 'dragstart')
+            addListener(videoRow, elementId, 'dragstart', (ev) => {
+                const event = ev as DragEvent
+                const targetEl = event.target as HTMLElement
+                event.dataTransfer?.setData(DRAG_EV_TRANSFER_KEY, elementId.toString())
+                targetEl.classList.add('dragging')
+            })
 
-                removeListenerIfExist(videoRow, 'dragleave')
-                addListener(videoRow, elementId, 'dragleave', (ev) => {
-                    const event = ev as DragEvent
-                    const targetEl = event.target as HTMLElement
-                    targetEl.classList.remove('dragging')
-                })
+            removeListenerIfExist(videoRow, 'dragleave')
+            addListener(videoRow, elementId, 'dragleave', (ev) => {
+                const event = ev as DragEvent
+                const targetEl = event.target as HTMLElement
+                targetEl.classList.remove('dragging')
+            })
 
-                videoRow.classList.add('draggable-video')
-                videoRow.setAttribute('draggable', 'true')
-                videoRow.setAttribute(DRAG_EV_DATA_ATTR, elementId.toString())
-            }
+            videoRow.classList.add('draggable-video')
+            videoRow.setAttribute('draggable', 'true')
+            videoRow.setAttribute(DRAG_EV_DATA_ATTR, elementId.toString())
+        }
 
-            console.groupCollapsed(DEFINE.NAME, 'useRegisterPlaylistVideosListeners::update')
-            console.info('videoRows', videoRows)
-            console.info('listeners', listeners)
-            console.groupEnd()
-        })()
-    }, UI_WAIT_TIME)
+        console.groupCollapsed(DEFINE.NAME, 'useRegisterPlaylistVideosListeners::update')
+        console.info('videoRows', videoRows)
+        console.info('listeners', listeners)
+        console.groupEnd()
+    })
 
-    const onNavigation = debounce(() => {
-        void (async() => {
-            const videoListContainer = await findDelayedElement('#contents.ytd-playlist-video-list-renderer')
-            observer?.disconnect()
-            observer?.observe(videoListContainer, { childList: true })
-            listeners.clear()
+    const onNavigation = debounceAsync(async() => {
+        const videoListContainer = await findDelayedElement('#contents.ytd-playlist-video-list-renderer')
+        observer?.disconnect()
+        observer?.observe(videoListContainer, { childList: true })
+        listeners.clear()
 
-            console.groupCollapsed(DEFINE.NAME, 'useRegisterPlaylistVideosListeners::onNavigation')
-            console.info('Observing', videoListContainer)
-            console.groupEnd()
-        })()
-    }, UI_WAIT_TIME)
+        console.groupCollapsed(DEFINE.NAME, 'useRegisterPlaylistVideosListeners::onNavigation')
+        console.info('Observing', videoListContainer)
+        console.groupEnd()
+    })
 
     const observer = new MutationObserver((mutations) => {
         for (const node of mutations[0].removedNodes) {

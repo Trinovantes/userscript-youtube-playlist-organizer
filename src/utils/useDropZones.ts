@@ -1,10 +1,10 @@
-import { UI_WAIT_TIME, WATCH_LATER_LIST_ID } from '@/Constants'
+import { WATCH_LATER_LIST_ID } from '@/Constants'
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { Playlist, determineCurrentPlaylist } from './determineCurrentPlaylist'
 import { ActionType } from './triggerAction'
 import { useStore } from '@/store/useStore'
 import { findPlaylistsInSidebar } from './findPlaylistInSidebar'
-import debounce from 'lodash.debounce'
+import { debounceAsync } from './debounceAsync'
 
 type DropZone = {
     key: string
@@ -19,18 +19,16 @@ export function useDropZones() {
     const isOnWatchLater = computed(() => currentPlaylist.value?.youtubeId === WATCH_LATER_LIST_ID)
 
     const hasUpdatedOnce = ref(false)
-    const onNavigation = debounce(() => {
-        void (async() => {
-            playlists.value = await findPlaylistsInSidebar()
-            currentPlaylist.value = determineCurrentPlaylist()
-            hasUpdatedOnce.value = true
+    const onNavigation = debounceAsync(async() => {
+        playlists.value = await findPlaylistsInSidebar()
+        currentPlaylist.value = determineCurrentPlaylist()
+        hasUpdatedOnce.value = true
 
-            console.groupCollapsed(DEFINE.NAME, 'useDropZones::onNavigation')
-            console.info('playlists', [...playlists.value])
-            console.info('currentPlaylist', { ...currentPlaylist.value })
-            console.groupEnd()
-        })()
-    }, UI_WAIT_TIME)
+        console.groupCollapsed(DEFINE.NAME, 'useDropZones::onNavigation')
+        console.info('playlists', [...playlists.value])
+        console.info('currentPlaylist', { ...currentPlaylist.value })
+        console.groupEnd()
+    })
 
     onMounted(() => {
         onNavigation()
