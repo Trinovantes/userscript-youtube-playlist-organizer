@@ -36,6 +36,7 @@ module.exports = {
     rules: {
         semi: 'off',
         'comma-dangle': 'off',
+        'no-undef': 'off',
 
         'arrow-parens': ['error', 'always'],
         'eol-last': ['error', 'always'],
