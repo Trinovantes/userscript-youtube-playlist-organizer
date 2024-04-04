@@ -1,6 +1,6 @@
 import { DRAG_EV_DATA_ATTR } from '@/Constants'
 import { findDelayedElement } from '@/utils/findDelayedElement'
-import { findDelayedElementAll } from './findDelayedElementAll'
+import { findDelayedElementAll } from '@/utils/findDelayedElementAll'
 import { sleep } from '@/utils/sleep'
 
 export enum ActionType {

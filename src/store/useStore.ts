@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { Playlist } from './Playlist'
 
 const HYDRATION_KEY = '__INITIAL_STATE__'
 
@@ -9,14 +10,18 @@ const HYDRATION_KEY = '__INITIAL_STATE__'
 type State = {
     dropZoneWidth: number
     showActionsAtTop: boolean
+    showNoPlaylistWarning: boolean
     hiddenPlaylists: Array<string>
+    userPlaylists: Array<Playlist>
 }
 
 function createDefaultState(): State {
     const defaultState: State = {
         dropZoneWidth: 400,
         showActionsAtTop: false,
+        showNoPlaylistWarning: true,
         hiddenPlaylists: [],
+        userPlaylists: [],
     }
 
     return defaultState
@@ -33,7 +38,7 @@ export const useStore = defineStore('Store', {
         async load() {
             try {
                 const stateString = await GM.getValue(HYDRATION_KEY, '{}')
-                const parsedState = JSON.parse(stateString) as State
+                const parsedState = JSON.parse(stateString) as Partial<State>
 
                 this.$patch({
                     ...createDefaultState(),
@@ -50,7 +55,7 @@ export const useStore = defineStore('Store', {
             try {
                 const stateString = JSON.stringify(this.$state)
                 await GM.setValue(HYDRATION_KEY, stateString)
-                console.info(DEFINE.NAME, 'SAVE', `'${stateString}'`)
+                console.info(DEFINE.NAME, 'SAVE', JSON.parse(stateString))
             } catch (err) {
                 console.warn(DEFINE.NAME, err)
             }

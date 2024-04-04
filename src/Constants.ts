@@ -8,8 +8,11 @@ export const DRAG_EV_DATA_ATTR = 'data-element-id'
 export const UI_WAIT_TIME = 150
 export const MAX_UI_WAIT_ATTEMPTS = 5
 
+export const PLAYLIST_VISIBILITIES = ['Public', 'Private', 'Unlisted']
 export const WATCH_LATER_LIST_ID = 'WL'
 export const LIKED_LIST_ID = 'LL'
+
+export const playlistPathRe = /\/playlist\?.*list=(?<playlistId>[\w-]+)/
 
 // Same as defined in variables.scss
 export const BTN_SIZE = 48

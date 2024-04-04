@@ -1,14 +1,14 @@
 <script lang="ts" setup>
 import { computed, watch } from 'vue'
-import { ActionType, triggerAction } from '@/utils/triggerAction'
+import { ActionType, triggerAction } from './triggerAction'
+import { useIsMiniPlayerVisible } from './useIsMiniPlayerVisible'
+import { useRegisterPlaylistVideosListeners } from './useRegisterPlaylistVideosListeners'
+import { useDropZones } from './useDropZones'
 import { useStore } from '@/store/useStore'
+import { BTN_SIZE, PADDING, YTB_PLAYER_HEIGHT, YTB_PLAYER_MARGIN, DRAG_EV_TRANSFER_KEY, YTB_MASTHEAD_HEIGHT } from '@/Constants'
 import { findDelayedElement } from '@/utils/findDelayedElement'
-import { useIsMiniPlayerVisible } from '@/utils/useIsMiniPlayerVisible'
-import { useRegisterPlaylistVideosListeners } from '@/utils/useRegisterPlaylistVideosListeners'
-import { useDropZones } from '@/utils/useDropZones'
-import { YTB_PLAYER_HEIGHT, BTN_SIZE, PADDING, YTB_PLAYER_MARGIN, DRAG_EV_TRANSFER_KEY, YTB_MASTHEAD_HEIGHT } from '@/Constants'
 
-const { dropZones, currentPlaylist, hasUpdatedOnce } = useDropZones()
+const { dropZones, playlists, currentPlaylist, hasUpdatedOnce } = useDropZones()
 useRegisterPlaylistVideosListeners()
 
 const { isMiniPlayerVisible } = useIsMiniPlayerVisible()
@@ -18,11 +18,15 @@ const store = useStore()
 const dropZoneWidth = computed(() => store.dropZoneWidth)
 const rightOffset = computed(() => dropZoneWidth.value + (YTB_PLAYER_MARGIN * 2))
 watch(rightOffset, async(rightOffset) => {
+    console.groupCollapsed(DEFINE.NAME, 'PlaylistOrganizer.vue')
+
     const alertsContainer = await findDelayedElement('ytd-browse #alerts')
     alertsContainer.setAttribute('style', `padding-right:${rightOffset}px;`)
 
     const playlistContainer = await findDelayedElement('ytd-playlist-video-list-renderer.ytd-item-section-renderer')
     playlistContainer.setAttribute('style', `margin:0; margin-right:${rightOffset}px; transform:none;`)
+
+    console.groupEnd()
 }, {
     immediate: true,
 })
@@ -74,8 +78,6 @@ const onDrop = (event: DragEvent, action: ActionType) => {
         v-if="hasUpdatedOnce"
         class="playlist-organizer"
         :style="{
-            zIndex: 99,
-            position: 'fixed',
             top: `${YTB_MASTHEAD_HEIGHT}px`,
             right: `${YTB_PLAYER_MARGIN}px`,
             width: `${dropZoneWidth}px`,
@@ -93,11 +95,26 @@ const onDrop = (event: DragEvent, action: ActionType) => {
         >
             {{ dropZone.label }}
         </div>
+
+        <div
+            v-if="store.showNoPlaylistWarning && playlists.length === 0"
+            class="no-playlists-warning"
+        >
+            <p>
+                Due to YouTube's Apr 2024 UI change, it is not possible to determine your playlists from the sidebar's HTML.
+            </p>
+            <p>
+                Please visit <a href="https://www.youtube.com/feed/playlists">youtube.com/feed/playlists</a> for this UserScript to register your playlists.
+            </p>
+        </div>
     </div>
 </template>
 
 <style lang="scss" scoped>
 .playlist-organizer{
+    position: fixed;
+    z-index: 99;
+
     color: white;
     overflow-x: hidden;
     overflow-y: auto;
@@ -105,6 +122,21 @@ const onDrop = (event: DragEvent, action: ActionType) => {
     display: flex;
     flex-direction: column;
     gap: math.div($padding, 4);
+
+    .no-playlists-warning{
+        flex: 1;
+        width: 100%;
+        padding: $padding * 2;
+
+        display: grid;
+        gap: $padding;
+        align-content: baseline;
+    }
+
+    &:not(:has(.no-playlists-warning)) .dropzone{
+        flex: 1;
+        padding: 0 ($padding * 2);
+    }
 
     .dropzone{
         color: white;
@@ -115,9 +147,8 @@ const onDrop = (event: DragEvent, action: ActionType) => {
         background: #111;
         box-sizing: border-box;
         display: flex;
-        flex: 1;
         position: relative;
-        padding: 0 ($padding * 2);
+        padding: $padding * 2;
         width: 100%;
 
         &.highlight:before{

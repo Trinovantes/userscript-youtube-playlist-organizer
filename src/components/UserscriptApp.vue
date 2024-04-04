@@ -1,66 +1,42 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
-import { projectTitle } from '@/Constants'
-import { useIsOnPlaylistPage } from '@/utils/useIsOnPlaylistPage'
-import PlaylistOrganizer from '@/components/PlaylistOrganizer.vue'
-import UserscriptAppSettings from '@/components/UserscriptAppSettings.vue'
+import { playlistPathRe } from '@/Constants'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
+import AllPlaylistsPage from './AllPlaylistsPage/AllPlaylistsPage.vue'
+import PlaylistPage from './PlaylistPage/PlaylistPage.vue'
+import { tryDebounce } from '@/utils/tryDebounce'
 
-const { isOnPlaylistPage } = useIsOnPlaylistPage()
-const dialogRef = ref<HTMLDialogElement | null>(null)
+const isOnPlaylistPage = ref(false)
+const isOnAllPlaylistsPage = ref(false)
+const onNavigation = tryDebounce(() => {
+    console.groupCollapsed(DEFINE.NAME, 'App.vue', 'onNavigation')
+
+    isOnPlaylistPage.value = playlistPathRe.test(location.href)
+    console.info('isOnPlaylistPage', isOnPlaylistPage.value)
+
+    isOnAllPlaylistsPage.value = location.href.endsWith('youtube.com/feed/playlists')
+    console.info('isOnAllPlaylistPage', isOnAllPlaylistsPage.value)
+
+    console.groupEnd()
+})
+
+onMounted(() => {
+    onNavigation()
+    window.addEventListener('yt-navigate-finish', onNavigation)
+})
+onBeforeUnmount(() => {
+    window.removeEventListener('yt-navigate-finish', onNavigation)
+})
 </script>
 
 <template>
     <div
-        v-if="isOnPlaylistPage"
         class="userscript-youtube-playlist-organizer"
     >
-        <dialog
-            ref="dialogRef"
-        >
-            <UserscriptAppSettings
-                @close="dialogRef?.close()"
-            />
-        </dialog>
-
-        <PlaylistOrganizer />
-
-        <button
-            class="settings-btn"
-            :title="projectTitle"
-            @click="dialogRef?.showModal()"
-        >
-            Settings
-        </button>
+        <PlaylistPage
+            v-if="isOnPlaylistPage"
+        />
+        <AllPlaylistsPage
+            v-else-if="isOnAllPlaylistsPage"
+        />
     </div>
 </template>
-
-<style lang="scss" scoped>
-button.settings-btn{
-    background-image: url('@/assets/img/settings.png');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: 50% 50%;
-    border-radius: 50%;
-    border: $border;
-    cursor: pointer;
-    display: block;
-    overflow: hidden;
-    text-decoration: none;
-    text-indent: -9999px;
-    transition: 0.25s;
-    width: $btn-size; height: $btn-size;
-
-    position: fixed;
-    z-index: 9999;
-    bottom: $padding;
-    right: $padding;
-
-    background-color: white;
-    box-shadow: rgba(11, 11, 11, 0.1) 0 2px 8px;
-
-    &:hover{
-        background-color: #eee;
-        box-shadow: rgba(11, 11, 11, 0.4) 0 0px 8px;
-    }
-}
-</style>

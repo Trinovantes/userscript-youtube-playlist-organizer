@@ -1,12 +1,12 @@
 import { DRAG_EV_DATA_ATTR, DRAG_EV_TRANSFER_KEY } from '@/Constants'
 import { onUnmounted, onMounted } from 'vue'
-import { findDelayedElement } from './findDelayedElement'
-import { debounceAsync } from './debounceAsync'
+import { findDelayedElement } from '@/utils/findDelayedElement'
+import { tryDebounceAsync } from '@/utils/tryDebounce'
 
 let counter = 0
 
 export function useRegisterPlaylistVideosListeners() {
-    const update = debounceAsync(async() => {
+    const update = tryDebounceAsync(async() => {
         const videoListContainer = await findDelayedElement('#contents.ytd-playlist-video-list-renderer')
         const videoRows = videoListContainer.children
 
@@ -39,7 +39,7 @@ export function useRegisterPlaylistVideosListeners() {
         console.groupEnd()
     })
 
-    const onNavigation = debounceAsync(async() => {
+    const onNavigation = tryDebounceAsync(async() => {
         const videoListContainer = await findDelayedElement('#contents.ytd-playlist-video-list-renderer')
         observer?.disconnect()
         observer?.observe(videoListContainer, { childList: true })

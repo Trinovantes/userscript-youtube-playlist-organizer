@@ -1,10 +1,8 @@
-export type Playlist = {
-    youtubeId: string
-    name: string
-}
+import { playlistPathRe } from '@/Constants'
+import { Playlist } from '@/store/Playlist'
 
 export function determineCurrentPlaylist(): Playlist | null {
-    const youtubeId = /youtube\.com\/playlist\?.*list=([\w]+)/.exec(location.href)?.[1]
+    const youtubeId = playlistPathRe.exec(location.href)?.groups?.playlistId
     if (!youtubeId) {
         return null
     }

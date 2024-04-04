@@ -1,10 +1,10 @@
 import { WATCH_LATER_LIST_ID } from '@/Constants'
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { Playlist, determineCurrentPlaylist } from './determineCurrentPlaylist'
+import { determineCurrentPlaylist } from './determineCurrentPlaylist'
 import { ActionType } from './triggerAction'
 import { useStore } from '@/store/useStore'
-import { findPlaylistsInSidebar } from './findPlaylistInSidebar'
-import { debounceAsync } from './debounceAsync'
+import { Playlist } from '@/store/Playlist'
+import { tryDebounce } from '@/utils/tryDebounce'
 
 type DropZone = {
     key: string
@@ -14,20 +14,22 @@ type DropZone = {
 }
 
 export function useDropZones() {
-    const playlists = ref<Array<Playlist>>([])
+    const store = useStore()
+    const playlists = computed(() => store.userPlaylists)
+
     const currentPlaylist = ref<Playlist | null>(null)
     const isOnWatchLater = computed(() => currentPlaylist.value?.youtubeId === WATCH_LATER_LIST_ID)
 
     const hasUpdatedOnce = ref(false)
-    const onNavigation = debounceAsync(async() => {
-        playlists.value = await findPlaylistsInSidebar()
+    const onNavigation = tryDebounce(() => {
         currentPlaylist.value = determineCurrentPlaylist()
-        hasUpdatedOnce.value = true
 
         console.groupCollapsed(DEFINE.NAME, 'useDropZones::onNavigation')
         console.info('playlists', [...playlists.value])
         console.info('currentPlaylist', { ...currentPlaylist.value })
         console.groupEnd()
+
+        hasUpdatedOnce.value = true
     })
 
     onMounted(() => {
@@ -38,7 +40,6 @@ export function useDropZones() {
         window.removeEventListener('yt-navigate-finish', onNavigation)
     })
 
-    const store = useStore()
     const showActionsAtTop = computed(() => store.showActionsAtTop)
     const dropZones = computed<Array<DropZone>>(() => {
         const actionsZones: Array<DropZone> = [

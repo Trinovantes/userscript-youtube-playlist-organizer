@@ -1,10 +1,9 @@
-import { UI_WAIT_TIME } from '@/Constants'
-import debounce from 'lodash.debounce'
+import { tryDebounce } from '@/utils/tryDebounce'
 import { onMounted, onUnmounted, ref } from 'vue'
 
 export function useIsMiniPlayerVisible() {
     const isMiniPlayerVisible = ref(false)
-    const update = debounce(() => {
+    const update = tryDebounce(() => {
         const miniPlayer = document.querySelector('ytd-app ytd-miniplayer #video-container #player-container')
         isMiniPlayerVisible.value = (miniPlayer?.children.length ?? 0) > 0
 
@@ -13,7 +12,7 @@ export function useIsMiniPlayerVisible() {
         console.groupEnd()
     })
 
-    const onNavigation = debounce(() => {
+    const onNavigation = tryDebounce(() => {
         const miniPlayer = document.querySelector('ytd-app ytd-miniplayer #video-container #player-container')
         if (!miniPlayer) {
             return
@@ -25,7 +24,7 @@ export function useIsMiniPlayerVisible() {
         console.groupCollapsed(DEFINE.NAME, 'useIsMiniPlayerVisible::onNavigation')
         console.info('Observing', miniPlayer)
         console.groupEnd()
-    }, UI_WAIT_TIME)
+    })
 
     const observer = new MutationObserver(update)
     onMounted(() => {

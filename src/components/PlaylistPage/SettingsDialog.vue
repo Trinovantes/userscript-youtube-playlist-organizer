@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { projectTitle, projectUrl } from '@/Constants'
 import { useStore } from '@/store/useStore'
-import UserscriptAppSettingsHiddenPlaylists from './UserscriptAppSettingsHiddenPlaylists.vue'
+import SettingsDialogHiddenPlaylists from './SettingsDialogHiddenPlaylists.vue'
 
 const emit = defineEmits(['close'])
 
@@ -30,7 +30,12 @@ const cancel = async() => {
         <div class="group flex-vgap">
             <div class="setting">
                 <label for="dropZoneWidth">
-                    Sidebar Width
+                    <strong>
+                        Sidebar Width
+                    </strong>
+                    <span>
+                        This changes the size of the area where you can drag and drop videos
+                    </span>
                 </label>
                 <input
                     id="dropZoneWidth"
@@ -57,6 +62,23 @@ const cancel = async() => {
             </div>
 
             <div class="setting">
+                <label for="showNoPlaylistWarning">
+                    <strong>
+                        Show No Playlists Warning
+                    </strong>
+                    <span>
+                        Disable this if you do not want to see the warning when you have no playlists
+                    </span>
+                </label>
+
+                <input
+                    id="showNoPlaylistWarning"
+                    v-model="store.showNoPlaylistWarning"
+                    type="checkbox"
+                >
+            </div>
+
+            <div class="setting">
                 <label for="hiddenPlaylists">
                     <strong>
                         Hide Playlists
@@ -66,7 +88,7 @@ const cancel = async() => {
                     </span>
                 </label>
 
-                <UserscriptAppSettingsHiddenPlaylists />
+                <SettingsDialogHiddenPlaylists />
             </div>
         </div>
 
@@ -92,7 +114,7 @@ article{
     display: grid;
     max-height: 80vh;
     overflow-y: auto;
-    max-width: 600px;
+    max-width: 800px;
     width: 60vw;
 }
 
@@ -113,7 +135,7 @@ article{
     gap: $padding;
     grid-template-columns: 1fr 2fr;
 
-    align-items: baseline;
+    align-items: start;
     justify-items: start;
 
     label{
