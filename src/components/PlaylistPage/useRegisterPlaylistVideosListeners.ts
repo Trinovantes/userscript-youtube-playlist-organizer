@@ -7,6 +7,8 @@ let counter = 0
 
 export function useRegisterPlaylistVideosListeners() {
     const update = tryDebounceAsync(async() => {
+        console.groupCollapsed(DEFINE.NAME, 'useRegisterPlaylistVideosListeners::update')
+
         const videoListContainer = await findDelayedElement('#contents.ytd-playlist-video-list-renderer')
         const videoRows = videoListContainer.children
 
@@ -33,20 +35,21 @@ export function useRegisterPlaylistVideosListeners() {
             videoRow.setAttribute(DRAG_EV_DATA_ATTR, elementId.toString())
         }
 
-        console.groupCollapsed(DEFINE.NAME, 'useRegisterPlaylistVideosListeners::update')
         console.info('videoRows', videoRows)
         console.info('listeners', listeners)
+
         console.groupEnd()
     })
 
     const onNavigation = tryDebounceAsync(async() => {
+        console.groupCollapsed(DEFINE.NAME, 'useRegisterPlaylistVideosListeners::onNavigation')
+
         const videoListContainer = await findDelayedElement('#contents.ytd-playlist-video-list-renderer')
         observer?.disconnect()
         observer?.observe(videoListContainer, { childList: true })
         listeners.clear()
-
-        console.groupCollapsed(DEFINE.NAME, 'useRegisterPlaylistVideosListeners::onNavigation')
         console.info('Observing', videoListContainer)
+
         console.groupEnd()
     })
 
