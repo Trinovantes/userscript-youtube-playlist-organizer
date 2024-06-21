@@ -3,7 +3,13 @@ import { onUnmounted, onMounted } from 'vue'
 import { findDelayedElement } from '@/utils/findDelayedElement'
 import { tryDebounceAsync } from '@/utils/tryDebounce'
 
-let counter = 0
+// Give each video row a globally unique id
+let videoCounter = 0
+
+// Need to keep reference to original handlers in order to properly unregister them
+type DragHandler = (ev: Event) => void
+type ElementListenersMap = Map<number, DragHandler>
+const listeners = new Map<string, ElementListenersMap>()
 
 export function useRegisterPlaylistVideosListeners() {
     const update = tryDebounceAsync(async() => {
@@ -13,7 +19,7 @@ export function useRegisterPlaylistVideosListeners() {
         const videoRows = videoListContainer.children
 
         for (const videoRow of videoRows) {
-            const elementId = counter++
+            const elementId = videoCounter++
 
             removeListenerIfExist(videoRow, 'dragstart')
             addListener(videoRow, elementId, 'dragstart', (ev) => {
@@ -41,6 +47,14 @@ export function useRegisterPlaylistVideosListeners() {
         console.groupEnd()
     })
 
+    const observer = new MutationObserver((mutations) => {
+        for (const node of mutations[0].removedNodes) {
+            removeListenerIfExist(node as Element, 'dragstart')
+            removeListenerIfExist(node as Element, 'dragleave')
+        }
+        update()
+    })
+
     const onNavigation = tryDebounceAsync(async() => {
         console.groupCollapsed(DEFINE.NAME, 'useRegisterPlaylistVideosListeners::onNavigation')
 
@@ -53,13 +67,6 @@ export function useRegisterPlaylistVideosListeners() {
         console.groupEnd()
     })
 
-    const observer = new MutationObserver((mutations) => {
-        for (const node of mutations[0].removedNodes) {
-            removeListenerIfExist(node as Element, 'dragstart')
-            removeListenerIfExist(node as Element, 'dragleave')
-        }
-        update()
-    })
     onMounted(() => {
         onNavigation()
         update()
@@ -70,11 +77,6 @@ export function useRegisterPlaylistVideosListeners() {
         observer?.disconnect()
     })
 }
-
-// Need to keep reference to original handlers in order to properly unregister them
-type DragHandler = (ev: Event) => void
-type ElementListenersMap = Map<number, DragHandler>
-const listeners = new Map<string, ElementListenersMap>()
 
 function addListener(node: Element, elementId: number, eventName: string, handler: DragHandler) {
     if (!listeners.has(eventName)) {

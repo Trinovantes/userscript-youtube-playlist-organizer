@@ -1,12 +1,16 @@
 {
     "ts-node": {
+        "transpileOnly": true,
         "compilerOptions": {
             "module": "CommonJS",
+            "moduleResolution": "Node10",
         },
     },
     "compilerOptions": {
         "strict": true,
         "sourceMap": true,
+        "declaration": false,
+        "declarationMap": false,
 
         "target": "ESNext",
         "module": "ESNext",
@@ -17,6 +21,8 @@
         "resolveJsonModule": true,
         "forceConsistentCasingInFileNames": true,
         "skipLibCheck": true,
+        "strictFunctionTypes": true,
+        "strictNullChecks": true,
 
         "noUnusedLocals": true,
         "noImplicitReturns": true,
@@ -37,6 +43,6 @@
     ],
     "include": [
         "**/*",
-        ".eslintrc.js",
+        "eslint.config.mjs",
     ],
 }

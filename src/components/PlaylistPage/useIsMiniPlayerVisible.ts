@@ -12,6 +12,7 @@ export function useIsMiniPlayerVisible() {
         console.groupEnd()
     })
 
+    const observer = new MutationObserver(update)
     const onNavigation = tryDebounce(() => {
         const miniPlayer = document.querySelector('ytd-app ytd-miniplayer #video-container #player-container')
         if (!miniPlayer) {
@@ -26,7 +27,6 @@ export function useIsMiniPlayerVisible() {
         console.groupEnd()
     })
 
-    const observer = new MutationObserver(update)
     onMounted(() => {
         onNavigation()
         update()
