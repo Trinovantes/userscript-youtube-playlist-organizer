@@ -8,17 +8,21 @@ import stylistic from '@stylistic/eslint-plugin'
 import nodePlugin from 'eslint-plugin-n'
 import vueParser from 'vue-eslint-parser'
 import { readFileSync } from 'node:fs'
+import { includeIgnoreFile } from '@eslint/compat'
+import path from 'node:path'
 
 const inlineElementsJson = readFileSync('node_modules/eslint-plugin-vue/lib/utils/inline-non-void-elements.json').toString('utf-8')
 const inlineElements = JSON.parse(inlineElementsJson)
 
 export default tseslint.config(
+    includeIgnoreFile(path.resolve('.gitignore')),
+
     {
         ignores: [
-            'dist/*',
-            '**/raw/**',
+            '**/raw/**/*',
         ],
     },
+
     {
         languageOptions: {
             globals: {

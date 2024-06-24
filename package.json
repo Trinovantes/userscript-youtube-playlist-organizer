@@ -16,6 +16,7 @@
         "lint": "vue-tsc --noemit && eslint"
     },
     "devDependencies": {
+        "@eslint/compat": "^1.1.0",
         "@eslint/js": "^9.4.0",
         "@stylistic/eslint-plugin": "^2.1.0",
         "@types/greasemonkey": "^4.0.1",
