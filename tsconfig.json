@@ -36,13 +36,13 @@
         },
     },
     "exclude": [
-        "**/raw/**/*",
+        "**/dist*",
+        "**/raw",
         "**/*.html",
         "node_modules",
-        "dist",
     ],
     "include": [
         "**/*",
-        "eslint.config.mjs",
+        "eslint.config.*js",
     ],
 }
