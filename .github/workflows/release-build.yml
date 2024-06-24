@@ -12,6 +12,9 @@ on:
       - .editorconfig
       - .gitignore
 
+permissions:
+  contents: write # Allow workflow to create release
+
 env:
   AUTO_TAG: latest
   AUTO_TITLE: Latest Build
