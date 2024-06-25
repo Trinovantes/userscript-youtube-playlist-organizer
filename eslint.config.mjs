@@ -181,7 +181,7 @@ export default tseslint.config(
                         'method',
                     ],
                     filter: {
-                        regex: '^update:',
+                        regex: '(^update:)|(^toJSON$)',
                         match: false,
                     },
                     format: ['strictCamelCase', 'UPPER_CASE'],
