@@ -133,3 +133,6 @@ tests/e2e/results/
 
 # CloudFlare Workers
 .wrangler/
+
+# VitePress
+.vitepress/cache
