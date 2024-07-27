@@ -67,6 +67,22 @@ const cancel = async() => {
             </div>
 
             <div class="setting">
+                <label for="clickDelay">
+                    <strong>
+                        Click Delay
+                    </strong>
+                    <span>
+                        Time (in ms) to wait between clicking buttons
+                    </span>
+                </label>
+                <input
+                    id="clickDelay"
+                    v-model.number="store.clickDelay"
+                    type="number"
+                >
+            </div>
+
+            <div class="setting">
                 <label for="showActionsAtTop">
                     <strong>
                         Show Actions at Top of Sidebar

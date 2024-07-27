@@ -15,6 +15,7 @@ const { isMiniPlayerVisible } = useIsMiniPlayerVisible()
 const dropZoneBottomOffset = computed(() => isMiniPlayerVisible.value ? YTB_PLAYER_HEIGHT : (BTN_SIZE + PADDING * 2))
 
 const store = useStore()
+const clickDelay = computed(() => store.clickDelay)
 const dropZoneWidth = computed(() => store.dropZoneWidth)
 const rightOffset = computed(() => dropZoneWidth.value + (YTB_PLAYER_MARGIN * 2))
 watch(rightOffset, async(rightOffset) => {
@@ -66,7 +67,7 @@ const onDrop = (event: DragEvent, action: ActionType) => {
         return
     }
 
-    triggerAction(action, elementId, targetPlaylistName, currentPlaylist.value?.name ?? '')
+    triggerAction(action, elementId, targetPlaylistName, currentPlaylist.value?.name ?? '', clickDelay.value)
         .catch((err: unknown) => {
             console.warn(err)
         })

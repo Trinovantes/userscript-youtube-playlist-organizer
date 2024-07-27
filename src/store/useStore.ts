@@ -9,6 +9,7 @@ const HYDRATION_KEY = '__INITIAL_STATE__'
 
 type State = {
     dropZoneWidth: number
+    clickDelay: number
     showActionsAtTop: boolean
     showNoPlaylistWarning: boolean
     hiddenPlaylists: Array<string>
@@ -18,6 +19,7 @@ type State = {
 function createDefaultState(): State {
     const defaultState: State = {
         dropZoneWidth: 400,
+        clickDelay: 100,
         showActionsAtTop: false,
         showNoPlaylistWarning: true,
         hiddenPlaylists: [],

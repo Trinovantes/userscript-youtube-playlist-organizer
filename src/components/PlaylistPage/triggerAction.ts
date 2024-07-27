@@ -10,13 +10,13 @@ export enum ActionType {
     REMOVE,
 }
 
-export async function triggerAction(action: ActionType, elementId: string, targetPlaylistName: string, currentPlaylistName: string): Promise<void> {
+export async function triggerAction(action: ActionType, elementId: string, targetPlaylistName: string, currentPlaylistName: string, clickDelay: number): Promise<void> {
     const videoRow = await findDelayedElement(`.draggable-video[${DRAG_EV_DATA_ATTR}="${elementId}"]`)
     const menuBtn = videoRow?.querySelector<HTMLElement>('#menu button')
     menuBtn?.click()
+    await sleep(clickDelay)
 
     const menuLinks = await findDelayedElementAll('ytd-menu-popup-renderer #items > ytd-menu-service-item-renderer')
-
     switch (action) {
         case ActionType.ADD_PLAYLIST: {
             const actionLink = menuLinks.filter((el) => el.querySelector<HTMLElement>('yt-formatted-string')?.textContent?.toLowerCase().startsWith('save to playlist'))[0]
@@ -24,7 +24,7 @@ export async function triggerAction(action: ActionType, elementId: string, targe
 
             // Since the popup UI is kept in the DOM and getting reused, we need to release the event loop so that
             // YouTube's JS can run and update the popup's hooks before we interact with it
-            await sleep(500)
+            await sleep(clickDelay)
 
             const popup = await findDelayedElement('ytd-popup-container ytd-add-to-playlist-renderer')
             const playlistOptions = await findDelayedElementAll('#playlists > ytd-playlist-add-to-option-renderer', popup)
