@@ -2,6 +2,7 @@
 import { useStore } from '@/store/useStore'
 import { onMounted, ref } from 'vue'
 import { findAllPlaylists } from './findAllPlaylists'
+import { sleep } from '@/utils/sleep'
 
 const store = useStore()
 const isFinished = ref(true)
@@ -10,10 +11,12 @@ const parsePage = async() => {
     isFinished.value = false
 
     try {
+        const minDelay = sleep(1000) // Add a minimum delay so UI shows the progress bar
         const foundPlaylists = await findAllPlaylists()
         console.info('foundPlaylists', [...foundPlaylists])
         store.userPlaylists = foundPlaylists
         await store.save()
+        await minDelay
     } catch (err: unknown) {
         console.warn(err)
     }
