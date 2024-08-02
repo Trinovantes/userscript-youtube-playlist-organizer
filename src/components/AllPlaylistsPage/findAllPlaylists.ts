@@ -6,7 +6,7 @@ import { findDelayedElementAll } from '@/utils/findDelayedElementAll'
 export async function findAllPlaylists(): Promise<Array<Playlist>> {
     console.groupCollapsed(DEFINE.NAME, 'findAllPlaylists')
 
-    const playlistTiles = await findDelayedElementAll('#primary #contents ytd-rich-grid-row ytd-rich-item-renderer')
+    const playlistTiles = await findDelayedElementAll('#primary #contents ytd-rich-item-renderer')
     const foundPlaylists = new Array<Playlist>()
     console.info('playlistTiles', playlistTiles)
 
