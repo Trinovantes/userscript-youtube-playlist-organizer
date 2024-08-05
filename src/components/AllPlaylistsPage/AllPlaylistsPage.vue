@@ -12,9 +12,7 @@ const parsePage = async() => {
 
     try {
         const minDelay = sleep(1000) // Add a minimum delay so UI shows the progress bar
-        const foundPlaylists = await findAllPlaylists()
-        console.info('foundPlaylists', [...foundPlaylists])
-        store.userPlaylists = foundPlaylists
+        store.userPlaylists = await findAllPlaylists()
         await store.save()
         await minDelay
     } catch (err: unknown) {
