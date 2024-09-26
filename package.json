@@ -33,7 +33,7 @@
         "lodash.debounce": "^4.0.8",
         "pinia": "^2.0.13",
         "sass": "^1.32.8",
-        "sass-loader": "^16.0.0",
+        "sass-loader": "^16.0.2",
         "style-loader": "^4.0.0",
         "ts-node": "^10.7.0",
         "typescript": "^5.0.2",
