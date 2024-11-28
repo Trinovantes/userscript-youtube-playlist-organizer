@@ -14,6 +14,7 @@ on:
 
 permissions:
   contents: write # Allow workflow to create release
+  pull-requests: read # Allow workflow to read pull requests related to release's commits
 
 env:
   AUTO_TAG: latest
