@@ -74,7 +74,7 @@ const config: webpack.Configuration = {
                     {
                         loader: 'sass-loader',
                         options: {
-                            additionalData: '@use "sass:math"; @import "@/assets/css/variables.scss";',
+                            additionalData: '@use "sass:color"; @use "sass:math"; @use "@/assets/css/variables.scss" as *;',
                         },
                     },
                 ],
