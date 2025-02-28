@@ -48,13 +48,13 @@ export function useDropZones() {
                 key: 'remove-from-list',
                 class: 'remove-from-list',
                 label: 'Remove from List',
-                action: ActionType.REMOVE,
+                action: 'REMOVE',
             },
             {
                 key: 'add-to-queue',
                 class: 'add-to-queue',
                 label: 'Add to Queue',
-                action: ActionType.ADD_QUEUE,
+                action: 'ADD_QUEUE',
             },
         ]
 
@@ -64,7 +64,7 @@ export function useDropZones() {
                 class: 'add-to-watch-later',
                 label: 'Add to Watch Later',
                 url: 'https://www.youtube.com/playlist?list=WL',
-                action: ActionType.ADD_WATCH_LATER,
+                action: 'ADD_WATCH_LATER',
             })
         }
 
@@ -78,7 +78,7 @@ export function useDropZones() {
                 key: playlist.youtubeId,
                 label: playlist.name,
                 url: `https://www.youtube.com/playlist?list=${playlist.youtubeId}`,
-                action: ActionType.ADD_PLAYLIST,
+                action: 'ADD_PLAYLIST',
             })
         }
 
