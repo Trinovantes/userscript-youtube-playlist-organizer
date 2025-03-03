@@ -3,12 +3,11 @@ import { findDelayedElement } from '@/utils/findDelayedElement'
 import { findDelayedElementAll } from '@/utils/findDelayedElementAll'
 import { sleep } from '@/utils/sleep'
 
-export enum ActionType {
-    ADD_PLAYLIST,
-    ADD_WATCH_LATER,
-    ADD_QUEUE,
-    REMOVE,
-}
+export type ActionType =
+    'ADD_PLAYLIST' |
+    'ADD_WATCH_LATER' |
+    'ADD_QUEUE' |
+    'REMOVE'
 
 export async function triggerAction(action: ActionType, elementId: string, targetPlaylistName: string, currentPlaylistName: string, clickDelay: number): Promise<void> {
     const videoRow = await findDelayedElement(`.draggable-video[${DRAG_EV_DATA_ATTR}="${elementId}"]`)
@@ -18,7 +17,7 @@ export async function triggerAction(action: ActionType, elementId: string, targe
 
     const menuLinks = await findDelayedElementAll('ytd-menu-popup-renderer #items > ytd-menu-service-item-renderer')
     switch (action) {
-        case ActionType.ADD_PLAYLIST: {
+        case 'ADD_PLAYLIST': {
             const actionLink = menuLinks.filter((el) => el.querySelector<HTMLElement>('yt-formatted-string')?.textContent?.toLowerCase().startsWith('save to playlist'))[0]
             actionLink.click()
 
@@ -44,19 +43,19 @@ export async function triggerAction(action: ActionType, elementId: string, targe
             break
         }
 
-        case ActionType.ADD_WATCH_LATER: {
+        case 'ADD_WATCH_LATER': {
             const actionLink = menuLinks.filter((el) => el.querySelector<HTMLElement>('yt-formatted-string')?.textContent?.toLowerCase().startsWith('save to watch later'))[0]
             actionLink.click()
             break
         }
 
-        case ActionType.ADD_QUEUE: {
+        case 'ADD_QUEUE': {
             const actionLink = menuLinks.filter((el) => el.querySelector<HTMLElement>('yt-formatted-string')?.textContent?.toLowerCase().startsWith('add to queue'))[0]
             actionLink.click()
             break
         }
 
-        case ActionType.REMOVE: {
+        case 'REMOVE': {
             const actionLink = menuLinks.filter((el) => el.querySelector<HTMLElement>('yt-formatted-string')?.textContent?.toLowerCase().startsWith('remove from'))[0]
             actionLink.click()
             break

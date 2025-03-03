@@ -23,6 +23,7 @@
         "skipLibCheck": true,
         "strictFunctionTypes": true,
         "strictNullChecks": true,
+        "erasableSyntaxOnly": true,
 
         "noUnusedLocals": true,
         "noImplicitReturns": true,
