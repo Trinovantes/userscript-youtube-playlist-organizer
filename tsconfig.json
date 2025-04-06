@@ -24,11 +24,13 @@
         "strictFunctionTypes": true,
         "strictNullChecks": true,
         "erasableSyntaxOnly": true,
+        "useUnknownInCatchVariables": true,
 
         "noUnusedLocals": true,
         "noImplicitReturns": true,
         "noFallthroughCasesInSwitch": true,
         "noImplicitOverride": true,
+        "noImplicitThis": true,
 
         "outDir": "dist",
         "baseUrl": ".",
@@ -41,9 +43,11 @@
         "**/raw",
         "**/*.html",
         "node_modules",
+        "libs",
     ],
     "include": [
         "**/*",
+        ".vitepress/**/*",
         "eslint.config.*js",
     ],
 }
