@@ -20,6 +20,7 @@ export default tseslint.config(
     {
         ignores: [
             '**/raw/**/*',
+            'libs',
         ],
     },
 
