@@ -47,7 +47,12 @@ export default tseslint.config(
             }],
             '@stylistic/generator-star-spacing': ['error', 'before'],
             '@stylistic/arrow-parens': ['error', 'always'],
-            '@stylistic/space-before-function-paren': ['error', 'never'],
+            '@stylistic/space-before-function-paren': ['error', {
+                anonymous: 'never',
+                named: 'never',
+                asyncArrow: 'never',
+                catch: 'always',
+            }],
             '@stylistic/indent': ['error', 4, {
                 SwitchCase: 1,
             }],
