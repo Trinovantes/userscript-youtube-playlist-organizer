@@ -4,10 +4,10 @@ import { findDelayedElementAll } from '@/utils/findDelayedElementAll'
 import { sleep } from '@/utils/sleep'
 
 export type ActionType =
-    'ADD_PLAYLIST' |
-    'ADD_WATCH_LATER' |
-    'ADD_QUEUE' |
-    'REMOVE'
+    | 'ADD_PLAYLIST'
+    | 'ADD_WATCH_LATER'
+    | 'ADD_QUEUE'
+    | 'REMOVE'
 
 export async function triggerAction(action: ActionType, elementId: string, targetPlaylistName: string, currentPlaylistName: string, clickDelay: number): Promise<void> {
     const videoRow = await findDelayedElement(`.draggable-video[${DRAG_EV_DATA_ATTR}="${elementId}"]`)

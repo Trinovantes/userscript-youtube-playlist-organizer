@@ -79,6 +79,8 @@ export default tseslint.config(
                 overrides: {
                     '?': 'before',
                     ':': 'before',
+                    '&': 'before',
+                    '|': 'before',
                 },
             }],
         },
