@@ -22,12 +22,12 @@ async function main() {
 
 if (document.readyState !== 'loading') {
     main().catch((err: unknown) => {
-        console.warn(err)
+        console.warn(DEFINE.NAME, err)
     })
 } else {
     window.addEventListener('DOMContentLoaded', () => {
         main().catch((err: unknown) => {
-            console.warn(err)
+            console.warn(DEFINE.NAME, err)
         })
     })
 }

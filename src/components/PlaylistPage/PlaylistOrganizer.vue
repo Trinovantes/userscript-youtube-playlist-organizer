@@ -59,18 +59,23 @@ const onDrop = (event: DragEvent, action: ActionType) => {
 
     const targetPlaylistName = event.target.textContent?.trim()
     if (!targetPlaylistName) {
+        console.warn(DEFINE.NAME, 'onDrop failed (invalid targetPlaylistName)')
+        return
+    }
+
+    const currentPlaylistName = currentPlaylist.value?.name
+    if (!currentPlaylistName) {
+        console.warn(DEFINE.NAME, 'onDrop failed (invalid currentPlaylistName)')
         return
     }
 
     const elementId = event.dataTransfer?.getData(DRAG_EV_TRANSFER_KEY)
     if (!elementId) {
+        console.warn(DEFINE.NAME, 'onDrop failed (invalid elementId)')
         return
     }
 
-    triggerAction(action, elementId, targetPlaylistName, currentPlaylist.value?.name ?? '', clickDelay.value)
-        .catch((err: unknown) => {
-            console.warn(err)
-        })
+    void triggerAction(action, elementId, targetPlaylistName, currentPlaylistName, clickDelay.value)
 }
 </script>
 
