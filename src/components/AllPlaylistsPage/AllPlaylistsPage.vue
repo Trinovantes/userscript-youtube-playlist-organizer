@@ -82,6 +82,7 @@ onMounted(async() => {
 }
 
 .progress{
+    background: #fff;
     position: fixed;
     z-index: 99;
     bottom: $padding;
