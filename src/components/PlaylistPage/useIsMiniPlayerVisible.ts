@@ -4,8 +4,8 @@ import { onMounted, onUnmounted, ref } from 'vue'
 export function useIsMiniPlayerVisible() {
     const isMiniPlayerVisible = ref(false)
     const update = tryDebounce(() => {
-        const miniPlayer = document.querySelector('ytd-app ytd-miniplayer #video-container #player-container')
-        isMiniPlayerVisible.value = (miniPlayer?.children.length ?? 0) > 0
+        const miniPlayer = document.querySelector('ytd-app ytd-miniplayer')
+        isMiniPlayerVisible.value = miniPlayer?.classList.contains('ytdMiniplayerComponentVisible') ?? false
 
         console.groupCollapsed(DEFINE.NAME, 'useIsMiniPlayerVisible::update')
         console.info('isMiniPlayerVisible', isMiniPlayerVisible.value)
@@ -14,13 +14,16 @@ export function useIsMiniPlayerVisible() {
 
     const observer = new MutationObserver(update)
     const onNavigation = tryDebounce(() => {
-        const miniPlayer = document.querySelector('ytd-app ytd-miniplayer #video-container #player-container')
+        const miniPlayer = document.querySelector('ytd-app ytd-miniplayer')
         if (!miniPlayer) {
             return
         }
 
         observer?.disconnect()
-        observer?.observe(miniPlayer, { childList: true })
+        observer?.observe(miniPlayer, {
+            attributes: true,
+            attributeFilter: ['class'],
+        })
 
         console.groupCollapsed(DEFINE.NAME, 'useIsMiniPlayerVisible::onNavigation')
         console.info('Observing', miniPlayer)
