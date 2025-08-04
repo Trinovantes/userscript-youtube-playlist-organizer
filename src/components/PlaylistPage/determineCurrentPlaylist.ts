@@ -4,11 +4,15 @@ import { Playlist } from '@/store/Playlist'
 export function determineCurrentPlaylist(): Playlist | null {
     const youtubeId = playlistPathRe.exec(location.href)?.groups?.playlistId
     if (!youtubeId) {
+        console.warn('Failed to determineCurrentPlaylist (invalid url)', location.href)
         return null
     }
 
-    const name = document.querySelector('ytd-page-manager ytd-playlist-header-renderer .metadata-wrapper > yt-dynamic-sizing-formatted-string yt-formatted-string')?.textContent?.trim()
+    const titleTag = document.querySelector('title')
+    const fullTitle = titleTag?.textContent
+    const name = fullTitle?.replace(/- YouTube$/, '').trim()
     if (!name) {
+        console.warn('Failed to determineCurrentPlaylist (invalid titleTag)', titleTag)
         return null
     }
 
