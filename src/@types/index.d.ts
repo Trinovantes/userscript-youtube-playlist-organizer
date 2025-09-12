@@ -1,11 +1,11 @@
-declare const DEFINE: Readonly<{
-    IS_DEV: boolean
-    NAME: string
-    PRODUCT_NAME: string
-    AUTHOR: string
-    DESC: string
-    VERSION: string
-    REPO: {
-        url: string
-    }
-}>
+declare global {
+    const __IS_DEV__: boolean
+    const __NAME__: string
+    const __PRODUCT_NAME__: string
+    const __AUTHOR__: string
+    const __DESC__: string
+    const __VERSION__: string
+    const __REPO_URL__: string
+}
+
+export {}

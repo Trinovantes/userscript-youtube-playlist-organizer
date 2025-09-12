@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { projectTitle } from '@/Constants'
+import { projectTitle } from '../../Constants.ts'
 import { ref } from 'vue'
 import PlaylistOrganizer from './PlaylistOrganizer.vue'
 import SettingsDialog from './SettingsDialog.vue'
@@ -29,7 +29,7 @@ const dialogRef = ref<HTMLDialogElement | null>(null)
 
 <style lang="scss" scoped>
 button.settings-btn{
-    background-image: url('@/assets/img/settings.png');
+    background-image: url('@img/settings.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: 50% 50%;

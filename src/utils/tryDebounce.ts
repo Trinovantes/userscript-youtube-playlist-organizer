@@ -1,4 +1,4 @@
-import { UI_WAIT_TIME } from '@/Constants'
+import { UI_WAIT_TIME } from '../Constants.ts'
 import debounce from 'lodash.debounce'
 
 export function tryDebounce<T>(syncFn: () => T): ReturnType<typeof debounce> {

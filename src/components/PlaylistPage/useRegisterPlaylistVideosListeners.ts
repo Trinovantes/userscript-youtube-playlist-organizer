@@ -1,7 +1,7 @@
-import { DRAG_EV_DATA_ATTR, DRAG_EV_TRANSFER_KEY } from '@/Constants'
+import { DRAG_EV_DATA_ATTR, DRAG_EV_TRANSFER_KEY } from '../../Constants.ts'
 import { onUnmounted, onMounted } from 'vue'
-import { findDelayedElement } from '@/utils/findDelayedElement'
-import { tryDebounceAsync } from '@/utils/tryDebounce'
+import { findDelayedElement } from '../../utils/findDelayedElement.ts'
+import { tryDebounceAsync } from '../../utils/tryDebounce.ts'
 
 // Give each video row a globally unique id
 let videoCounter = 0
@@ -12,8 +12,8 @@ type ElementListenersMap = Map<number, DragHandler>
 const listeners = new Map<string, ElementListenersMap>()
 
 export function useRegisterPlaylistVideosListeners() {
-    const update = tryDebounceAsync(async() => {
-        console.groupCollapsed(DEFINE.NAME, 'useRegisterPlaylistVideosListeners::update')
+    const update = tryDebounceAsync(async () => {
+        console.groupCollapsed(__NAME__, 'useRegisterPlaylistVideosListeners::update')
 
         const videoListContainer = await findDelayedElement('#contents.ytd-playlist-video-list-renderer')
         const videoRows = videoListContainer.children
@@ -55,8 +55,8 @@ export function useRegisterPlaylistVideosListeners() {
         update()
     })
 
-    const onNavigation = tryDebounceAsync(async() => {
-        console.groupCollapsed(DEFINE.NAME, 'useRegisterPlaylistVideosListeners::onNavigation')
+    const onNavigation = tryDebounceAsync(async () => {
+        console.groupCollapsed(__NAME__, 'useRegisterPlaylistVideosListeners::onNavigation')
 
         const videoListContainer = await findDelayedElement('#contents.ytd-playlist-video-list-renderer')
         observer?.disconnect()

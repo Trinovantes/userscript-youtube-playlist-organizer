@@ -1,10 +1,10 @@
-import { MAX_UI_WAIT_ATTEMPTS, UI_WAIT_TIME } from '@/Constants'
-import { sleep } from './sleep'
+import { MAX_UI_WAIT_ATTEMPTS, UI_WAIT_TIME } from '../Constants.ts'
+import { sleep } from './sleep.ts'
 
 export async function findDelayedElementAll(selector: string, parent?: HTMLElement): Promise<Array<HTMLElement>> {
     let target: NodeListOf<HTMLElement> | null = null
     const logTarget = (msg: string) => {
-        console.groupCollapsed(DEFINE.NAME, `findDelayedElementAll("${selector}")`, msg)
+        console.groupCollapsed(__NAME__, `findDelayedElementAll("${selector}")`, msg)
         console.info(target)
         console.groupEnd()
     }

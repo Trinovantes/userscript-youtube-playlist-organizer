@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { Playlist } from './Playlist'
+import type { Playlist } from './Playlist.ts'
 
 const HYDRATION_KEY = '__INITIAL_STATE__'
 
@@ -47,9 +47,9 @@ export const useStore = defineStore('Store', {
                     ...parsedState,
                 })
 
-                console.info(DEFINE.NAME, 'LOAD', parsedState)
+                console.info(__NAME__, 'LOAD', parsedState)
             } catch (err) {
-                console.warn(DEFINE.NAME, err)
+                console.warn(__NAME__, err)
             }
         },
 
@@ -57,21 +57,21 @@ export const useStore = defineStore('Store', {
             try {
                 const stateString = JSON.stringify(this.$state)
                 await GM.setValue(HYDRATION_KEY, stateString)
-                console.info(DEFINE.NAME, 'SAVE', JSON.parse(stateString))
+                console.info(__NAME__, 'SAVE', JSON.parse(stateString))
             } catch (err) {
-                console.warn(DEFINE.NAME, err)
+                console.warn(__NAME__, err)
             }
         },
 
         async addHiddenPlaylist(playlistName: string) {
-            console.info(DEFINE.NAME, `addHiddenPlaylist "${playlistName}"`)
+            console.info(__NAME__, `addHiddenPlaylist "${playlistName}"`)
 
             this.hiddenPlaylists.unshift(playlistName)
             await this.save()
         },
 
         async removeHiddenPlaylist(idx: string) {
-            console.info(DEFINE.NAME, `removeHiddenPlaylist idx:${idx}`)
+            console.info(__NAME__, `removeHiddenPlaylist idx:${idx}`)
 
             const i = parseInt(idx)
             if (isNaN(i) || i < 0 || i >= this.hiddenPlaylists.length) {

@@ -32,7 +32,7 @@ This tool relies on timers and jQuery selectors to find playlists and videos on 
 1. Install prereqs
 
     * `node`
-    * `yarn`
+    * `pnpm`
     * Tampermonkey on Chrome
 
 2. In Chrome:
@@ -44,8 +44,8 @@ This tool relies on timers and jQuery selectors to find playlists and videos on 
 3. Run dev server
 
     ```
-    yarn install
-    yarn dev
+    pnpm install
+    pnpm dev
     ```
 
 4. In Chrome:

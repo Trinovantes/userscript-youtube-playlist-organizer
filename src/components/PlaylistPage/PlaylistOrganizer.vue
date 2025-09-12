@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { computed, watch } from 'vue'
-import { ActionType, triggerAction } from './triggerAction'
-import { useIsMiniPlayerVisible } from './useIsMiniPlayerVisible'
-import { useRegisterPlaylistVideosListeners } from './useRegisterPlaylistVideosListeners'
-import { useDropZones } from './useDropZones'
-import { useStore } from '@/store/useStore'
-import { BTN_SIZE, PADDING, YTB_PLAYER_HEIGHT, YTB_PLAYER_MARGIN, DRAG_EV_TRANSFER_KEY, YTB_MASTHEAD_HEIGHT } from '@/Constants'
-import { findDelayedElement } from '@/utils/findDelayedElement'
+import { type ActionType, triggerAction } from './triggerAction.ts'
+import { useIsMiniPlayerVisible } from './useIsMiniPlayerVisible.ts'
+import { useRegisterPlaylistVideosListeners } from './useRegisterPlaylistVideosListeners.ts'
+import { useDropZones } from './useDropZones.ts'
+import { useStore } from '../../store/useStore.ts'
+import { BTN_SIZE, PADDING, YTB_PLAYER_HEIGHT, YTB_PLAYER_MARGIN, DRAG_EV_TRANSFER_KEY, YTB_MASTHEAD_HEIGHT } from '../../Constants.ts'
+import { findDelayedElement } from '../../utils/findDelayedElement.ts'
 
 const { dropZones, playlists, currentPlaylist, hasUpdatedOnce } = useDropZones()
 useRegisterPlaylistVideosListeners()
@@ -18,8 +18,8 @@ const store = useStore()
 const clickDelay = computed(() => store.clickDelay)
 const dropZoneWidth = computed(() => store.dropZoneWidth)
 const rightOffset = computed(() => dropZoneWidth.value + (YTB_PLAYER_MARGIN * 2))
-watch(rightOffset, async(rightOffset) => {
-    console.groupCollapsed(DEFINE.NAME, 'PlaylistOrganizer.vue')
+watch(rightOffset, async (rightOffset) => {
+    console.groupCollapsed(__NAME__, 'PlaylistOrganizer.vue')
 
     const alertsContainer = await findDelayedElement('ytd-browse #alerts')
     alertsContainer.setAttribute('style', `padding-right:${rightOffset}px;`)
@@ -59,19 +59,19 @@ const onDrop = (event: DragEvent, action: ActionType) => {
 
     const targetPlaylistName = event.target.textContent?.trim()
     if (!targetPlaylistName) {
-        console.warn(DEFINE.NAME, 'onDrop failed (invalid targetPlaylistName)')
+        console.warn(__NAME__, 'onDrop failed (invalid targetPlaylistName)')
         return
     }
 
     const currentPlaylistName = currentPlaylist.value?.name
     if (!currentPlaylistName) {
-        console.warn(DEFINE.NAME, 'onDrop failed (invalid currentPlaylistName)')
+        console.warn(__NAME__, 'onDrop failed (invalid currentPlaylistName)')
         return
     }
 
     const elementId = event.dataTransfer?.getData(DRAG_EV_TRANSFER_KEY)
     if (!elementId) {
-        console.warn(DEFINE.NAME, 'onDrop failed (invalid elementId)')
+        console.warn(__NAME__, 'onDrop failed (invalid elementId)')
         return
     }
 

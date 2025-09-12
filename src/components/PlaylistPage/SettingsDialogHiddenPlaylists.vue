@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { useStore } from '@/store/useStore'
+import { useStore } from '../../store/useStore.ts'
 
 const store = useStore()
 const playlistToHide = ref<string | null>()
-const addItem = async(e: Event) => {
+const addItem = async (e: Event) => {
     e.preventDefault()
 
     if (!playlistToHide.value) {
@@ -14,7 +14,7 @@ const addItem = async(e: Event) => {
     await store.addHiddenPlaylist(playlistToHide.value)
     playlistToHide.value = null
 }
-const removeItem = async(idx: string) => {
+const removeItem = async (idx: string) => {
     await store.removeHiddenPlaylist(idx)
 }
 </script>

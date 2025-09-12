@@ -1,7 +1,7 @@
-import { DRAG_EV_DATA_ATTR } from '@/Constants'
-import { findDelayedElement } from '@/utils/findDelayedElement'
-import { findDelayedElementAll } from '@/utils/findDelayedElementAll'
-import { sleep } from '@/utils/sleep'
+import { DRAG_EV_DATA_ATTR } from '../../Constants.ts'
+import { findDelayedElement } from '../../utils/findDelayedElement.ts'
+import { findDelayedElementAll } from '../../utils/findDelayedElementAll.ts'
+import { sleep } from '../../utils/sleep.ts'
 
 export type ActionType =
     | 'ADD_PLAYLIST'
@@ -10,7 +10,7 @@ export type ActionType =
     | 'REMOVE'
 
 export async function triggerAction(action: ActionType, elementId: string, targetPlaylistName: string, currentPlaylistName: string, clickDelay: number): Promise<void> {
-    console.groupCollapsed(DEFINE.NAME, `triggerAction:${action}`)
+    console.groupCollapsed(__NAME__, `triggerAction:${action}`)
 
     try {
         if (action === 'ADD_PLAYLIST' && currentPlaylistName === targetPlaylistName) {
