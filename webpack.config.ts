@@ -4,12 +4,12 @@ import HtmlWebpackPlugin from 'html-webpack-plugin'
 import webpack from 'webpack'
 import 'webpack-dev-server'
 import WebpackUserscript from 'webpack-userscript'
-import packageJson from './package.json'
+import packageJson from './package.json' with { type: 'json' }
 import { VueLoaderPlugin } from 'vue-loader'
 
 const isDev = (process.env.NODE_ENV === 'development')
-const srcDir = path.resolve(__dirname, 'src')
-const distDir = path.resolve(__dirname, 'dist')
+const srcDir = path.resolve('src')
+const distDir = path.resolve('dist')
 const baseUrl = process.env.WSL_DISTRO_NAME
     ? url.pathToFileURL(distDir).href.replace('file://', `file:////wsl.localhost/${process.env.WSL_DISTRO_NAME}`)
     : url.pathToFileURL(distDir).href
@@ -46,7 +46,8 @@ const config: webpack.Configuration = {
     resolve: {
         extensions: ['.ts', '.js', '.vue'],
         alias: {
-            '@': path.resolve(srcDir),
+            '@css': path.resolve(srcDir, 'assets', 'css'),
+            '@img': path.resolve(srcDir, 'assets', 'img'),
         },
     },
 
@@ -74,7 +75,7 @@ const config: webpack.Configuration = {
                     {
                         loader: 'sass-loader',
                         options: {
-                            additionalData: '@use "sass:color"; @use "sass:math"; @use "@/assets/css/variables.scss" as *;',
+                            additionalData: '@use "sass:color"; @use "sass:math"; @use "@css/variables.scss" as *;',
                         },
                     },
                 ],
@@ -96,23 +97,23 @@ const config: webpack.Configuration = {
 
     plugins: [
         new webpack.DefinePlugin({
-            '__VUE_OPTIONS_API__': JSON.stringify(false),
-            '__VUE_PROD_DEVTOOLS__': JSON.stringify(false),
-            '__VUE_PROD_HYDRATION_MISMATCH_DETAILS__': JSON.stringify(false),
+            __VUE_OPTIONS_API__: JSON.stringify(false),
+            __VUE_PROD_DEVTOOLS__: JSON.stringify(false),
+            __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: JSON.stringify(false),
 
-            'DEFINE.IS_DEV': JSON.stringify(isDev),
-            'DEFINE.NAME': JSON.stringify(packageJson.name),
-            'DEFINE.PRODUCT_NAME': JSON.stringify(packageJson.productName),
-            'DEFINE.AUTHOR': JSON.stringify(packageJson.author),
-            'DEFINE.DESC': JSON.stringify(packageJson.description),
-            'DEFINE.VERSION': JSON.stringify(packageJson.version),
-            'DEFINE.REPO': JSON.stringify(packageJson.repository),
+            __IS_DEV__: JSON.stringify(isDev),
+            __NAME__: JSON.stringify(packageJson.name),
+            __PRODUCT_NAME__: JSON.stringify(packageJson.productName),
+            __AUTHOR__: JSON.stringify(packageJson.author),
+            __DESC__: JSON.stringify(packageJson.description),
+            __VERSION__: JSON.stringify(packageJson.version),
+            __REPO_URL__: JSON.stringify(packageJson.repository.url),
         }),
         new VueLoaderPlugin(),
         new HtmlWebpackPlugin({
             inject: false,
         }),
-        new WebpackUserscript({
+        new WebpackUserscript.default({
             headers: {
                 name: packageJson.productName,
                 version: isDev

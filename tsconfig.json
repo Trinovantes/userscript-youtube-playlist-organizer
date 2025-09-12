@@ -2,8 +2,8 @@
     "ts-node": {
         "transpileOnly": true,
         "compilerOptions": {
-            "module": "CommonJS",
-            "moduleResolution": "Node10",
+            "module": "commonjs",
+            "moduleResolution": "node10",
         },
     },
     "compilerOptions": {
@@ -12,31 +12,30 @@
         "declaration": false,
         "declarationMap": false,
 
-        "target": "ESNext",
-        "module": "ESNext",
-        "moduleResolution": "Bundler",
+        "target": "esnext",
+        "module": "nodenext",
+        "moduleResolution": "nodenext",
 
-        "esModuleInterop": true,
+        "allowImportingTsExtensions": true,
         "allowSyntheticDefaultImports": true,
-        "resolveJsonModule": true,
+        "erasableSyntaxOnly": true,
+        "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
+        "noEmit": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitOverride": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noUnusedLocals": true,
+        "resolveJsonModule": true,
         "skipLibCheck": true,
         "strictFunctionTypes": true,
         "strictNullChecks": true,
-        "erasableSyntaxOnly": true,
         "useUnknownInCatchVariables": true,
-
-        "noUnusedLocals": true,
-        "noImplicitReturns": true,
-        "noFallthroughCasesInSwitch": true,
-        "noImplicitOverride": true,
-        "noImplicitThis": true,
+        "verbatimModuleSyntax": true,
 
         "outDir": "dist",
         "baseUrl": ".",
-        "paths": {
-            "@/*": ["./src/*"],
-        },
     },
     "exclude": [
         "**/dist*",

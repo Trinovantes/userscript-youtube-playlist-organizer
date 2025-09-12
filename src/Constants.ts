@@ -1,5 +1,5 @@
-export const projectTitle = `${DEFINE.PRODUCT_NAME} ${DEFINE.VERSION}`
-export const projectUrl = DEFINE.REPO.url
+export const projectTitle = `${__PRODUCT_NAME__} ${__VERSION__}`
+export const projectUrl = __REPO_URL__
 
 export const LOCALSTORE_STATE = 'LOCALSTORE_STATE'
 export const DRAG_EV_TRANSFER_KEY = 'dragElementId'

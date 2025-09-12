@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import { useStore } from '@/store/useStore'
+import { useStore } from '../../store/useStore.ts'
 import { onMounted, ref } from 'vue'
-import { findAllPlaylists } from './findAllPlaylists'
-import { sleep } from '@/utils/sleep'
+import { findAllPlaylists } from './findAllPlaylists.ts'
+import { sleep } from '../../utils/sleep.ts'
 
 const store = useStore()
 const isFinished = ref(true)
-const parsePage = async() => {
-    console.groupCollapsed(DEFINE.NAME, 'AllPlaylistsPage.vue', 'parsePage')
+const parsePage = async () => {
+    console.groupCollapsed(__NAME__, 'AllPlaylistsPage.vue', 'parsePage')
     isFinished.value = false
 
     try {
@@ -23,7 +23,7 @@ const parsePage = async() => {
     console.groupEnd()
 }
 
-onMounted(async() => {
+onMounted(async () => {
     if (store.userPlaylists.length > 0) {
         return
     }

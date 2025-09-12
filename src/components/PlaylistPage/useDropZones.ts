@@ -1,10 +1,10 @@
-import { WATCH_LATER_LIST_ID } from '@/Constants'
+import { WATCH_LATER_LIST_ID } from '../../Constants.ts'
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { determineCurrentPlaylist } from './determineCurrentPlaylist'
-import { ActionType } from './triggerAction'
-import { useStore } from '@/store/useStore'
-import { Playlist } from '@/store/Playlist'
-import { tryDebounce } from '@/utils/tryDebounce'
+import { determineCurrentPlaylist } from './determineCurrentPlaylist.ts'
+import type { ActionType } from './triggerAction.ts'
+import { useStore } from '../../store/useStore.ts'
+import type { Playlist } from '../../store/Playlist.ts'
+import { tryDebounce } from '../../utils/tryDebounce.ts'
 
 type DropZone = {
     key: string
@@ -25,7 +25,7 @@ export function useDropZones() {
     const onNavigation = tryDebounce(() => {
         currentPlaylist.value = determineCurrentPlaylist()
 
-        console.groupCollapsed(DEFINE.NAME, 'useDropZones::onNavigation')
+        console.groupCollapsed(__NAME__, 'useDropZones::onNavigation')
         console.info('playlists', [...playlists.value])
         console.info('currentPlaylist', { ...currentPlaylist.value })
         console.groupEnd()

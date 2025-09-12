@@ -1,6 +1,6 @@
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
-import { useStore } from './store/useStore'
+import { useStore } from './store/useStore.ts'
 import UserscriptApp from './components/UserscriptApp.vue'
 
 export async function createVueApp() {

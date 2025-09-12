@@ -1,5 +1,5 @@
-import { playlistPathRe } from '@/Constants'
-import { Playlist } from '@/store/Playlist'
+import { playlistPathRe } from '../../Constants.ts'
+import type { Playlist } from '../../store/Playlist.ts'
 
 export function determineCurrentPlaylist(): Playlist | null {
     const youtubeId = playlistPathRe.exec(location.href)?.groups?.playlistId

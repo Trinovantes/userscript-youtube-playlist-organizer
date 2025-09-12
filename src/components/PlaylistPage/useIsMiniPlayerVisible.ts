@@ -1,4 +1,4 @@
-import { tryDebounce } from '@/utils/tryDebounce'
+import { tryDebounce } from '../../utils/tryDebounce.ts'
 import { onMounted, onUnmounted, ref } from 'vue'
 
 export function useIsMiniPlayerVisible() {
@@ -7,7 +7,7 @@ export function useIsMiniPlayerVisible() {
         const miniPlayer = document.querySelector('ytd-app ytd-miniplayer')
         isMiniPlayerVisible.value = miniPlayer?.classList.contains('ytdMiniplayerComponentVisible') ?? false
 
-        console.groupCollapsed(DEFINE.NAME, 'useIsMiniPlayerVisible::update')
+        console.groupCollapsed(__NAME__, 'useIsMiniPlayerVisible::update')
         console.info('isMiniPlayerVisible', isMiniPlayerVisible.value)
         console.groupEnd()
     })
@@ -25,7 +25,7 @@ export function useIsMiniPlayerVisible() {
             attributeFilter: ['class'],
         })
 
-        console.groupCollapsed(DEFINE.NAME, 'useIsMiniPlayerVisible::onNavigation')
+        console.groupCollapsed(__NAME__, 'useIsMiniPlayerVisible::onNavigation')
         console.info('Observing', miniPlayer)
         console.groupEnd()
     })

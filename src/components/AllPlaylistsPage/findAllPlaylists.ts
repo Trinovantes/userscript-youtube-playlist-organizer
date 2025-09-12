@@ -1,10 +1,10 @@
-import { PLAYLIST_VISIBILITIES, playlistPathRe, WATCH_LATER_LIST_ID, LIKED_LIST_ID } from '@/Constants'
-import { Playlist } from '@/store/Playlist'
-import { findDelayedElement } from '@/utils/findDelayedElement'
-import { findDelayedElementAll } from '@/utils/findDelayedElementAll'
+import { PLAYLIST_VISIBILITIES, playlistPathRe, WATCH_LATER_LIST_ID, LIKED_LIST_ID } from '../../Constants.ts'
+import type { Playlist } from '../../store/Playlist.ts'
+import { findDelayedElement } from '../../utils/findDelayedElement.ts'
+import { findDelayedElementAll } from '../../utils/findDelayedElementAll.ts'
 
 export async function findAllPlaylists(): Promise<Array<Playlist>> {
-    console.groupCollapsed(DEFINE.NAME, 'findAllPlaylists')
+    console.groupCollapsed(__NAME__, 'findAllPlaylists')
 
     const playlistTiles = await findDelayedElementAll('#primary #contents ytd-rich-item-renderer')
     const foundPlaylists = new Array<Playlist>()

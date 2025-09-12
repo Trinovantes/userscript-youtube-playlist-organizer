@@ -1,20 +1,20 @@
 <script lang="ts" setup>
-import { projectTitle, projectUrl } from '@/Constants'
-import { useStore } from '@/store/useStore'
+import { projectTitle, projectUrl } from '../../Constants.ts'
+import { useStore } from '../../store/useStore.ts'
 import SettingsDialogHiddenPlaylists from './SettingsDialogHiddenPlaylists.vue'
 
 const emit = defineEmits(['close'])
 
 const store = useStore()
-const save = async() => {
+const save = async () => {
     await store.save()
     emit('close')
 }
-const reset = async() => {
+const reset = async () => {
     store.$reset()
     await store.save()
 }
-const cancel = async() => {
+const cancel = async () => {
     await store.load()
     emit('close')
 }
