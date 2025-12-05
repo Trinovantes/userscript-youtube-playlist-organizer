@@ -12,9 +12,7 @@ type ElementListenersMap = Map<number, DragHandler>
 const listeners = new Map<string, ElementListenersMap>()
 
 export function useRegisterPlaylistVideosListeners() {
-    const update = tryDebounceAsync(async () => {
-        console.groupCollapsed(__NAME__, 'useRegisterPlaylistVideosListeners::update')
-
+    const update = tryDebounceAsync('useRegisterPlaylistVideosListeners::update', async () => {
         const videoListContainer = await findDelayedElement('#contents.ytd-playlist-video-list-renderer')
         const videoRows = videoListContainer.children
 
@@ -43,8 +41,6 @@ export function useRegisterPlaylistVideosListeners() {
 
         console.info('videoRows', videoRows)
         console.info('listeners', listeners)
-
-        console.groupEnd()
     })
 
     const observer = new MutationObserver((mutations) => {
@@ -55,16 +51,12 @@ export function useRegisterPlaylistVideosListeners() {
         update()
     })
 
-    const onNavigation = tryDebounceAsync(async () => {
-        console.groupCollapsed(__NAME__, 'useRegisterPlaylistVideosListeners::onNavigation')
-
+    const onNavigation = tryDebounceAsync('useRegisterPlaylistVideosListeners::onNavigation', async () => {
         const videoListContainer = await findDelayedElement('#contents.ytd-playlist-video-list-renderer')
         observer?.disconnect()
         observer?.observe(videoListContainer, { childList: true })
         listeners.clear()
         console.info('Observing', videoListContainer)
-
-        console.groupEnd()
     })
 
     onMounted(() => {

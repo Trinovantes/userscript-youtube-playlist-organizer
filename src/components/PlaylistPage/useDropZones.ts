@@ -1,4 +1,4 @@
-import { WATCH_LATER_LIST_ID } from '../../Constants.ts'
+import { YTB_WATCH_LATER_LIST_ID } from '../../Constants.ts'
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { determineCurrentPlaylist } from './determineCurrentPlaylist.ts'
 import type { ActionType } from './triggerAction.ts'
@@ -19,18 +19,15 @@ export function useDropZones() {
     const playlists = computed(() => store.userPlaylists)
 
     const currentPlaylist = ref<Playlist | null>(null)
-    const isOnWatchLater = computed(() => currentPlaylist.value?.youtubeId === WATCH_LATER_LIST_ID)
+    const isOnWatchLater = computed(() => currentPlaylist.value?.youtubeId === YTB_WATCH_LATER_LIST_ID)
 
-    const hasUpdatedOnce = ref(false)
-    const onNavigation = tryDebounce(() => {
+    const isReady = ref(false) // Avoid FOUC
+    const onNavigation = tryDebounce('useDropZones::onNavigation', () => {
         currentPlaylist.value = determineCurrentPlaylist()
+        isReady.value = true
 
-        console.groupCollapsed(__NAME__, 'useDropZones::onNavigation')
         console.info('playlists', [...playlists.value])
         console.info('currentPlaylist', { ...currentPlaylist.value })
-        console.groupEnd()
-
-        hasUpdatedOnce.value = true
     })
 
     onMounted(() => {
@@ -88,10 +85,10 @@ export function useDropZones() {
     })
 
     return {
+        isReady,
         playlists,
         currentPlaylist,
         isOnWatchLater,
-        hasUpdatedOnce,
         dropZones,
     }
 }

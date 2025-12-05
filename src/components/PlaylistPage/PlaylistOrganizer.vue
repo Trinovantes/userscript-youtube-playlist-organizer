@@ -8,7 +8,7 @@ import { useStore } from '../../store/useStore.ts'
 import { BTN_SIZE, PADDING, YTB_PLAYER_HEIGHT, YTB_PLAYER_MARGIN, DRAG_EV_TRANSFER_KEY, YTB_MASTHEAD_HEIGHT } from '../../Constants.ts'
 import { findDelayedElement } from '../../utils/findDelayedElement.ts'
 
-const { dropZones, playlists, currentPlaylist, hasUpdatedOnce } = useDropZones()
+const { isReady, dropZones, currentPlaylist } = useDropZones()
 useRegisterPlaylistVideosListeners()
 
 const { isMiniPlayerVisible } = useIsMiniPlayerVisible()
@@ -19,7 +19,7 @@ const clickDelay = computed(() => store.clickDelay)
 const dropZoneWidth = computed(() => store.dropZoneWidth)
 const rightOffset = computed(() => dropZoneWidth.value + (YTB_PLAYER_MARGIN * 2))
 watch(rightOffset, async (rightOffset) => {
-    console.groupCollapsed(__NAME__, 'PlaylistOrganizer.vue')
+    console.groupCollapsed(__NAME__, 'PlaylistOrganizer.vue::rightOffset')
 
     const alertsContainer = await findDelayedElement('ytd-browse #alerts')
     alertsContainer.setAttribute('style', `padding-right:${rightOffset}px;`)
@@ -81,7 +81,7 @@ const onDrop = (event: DragEvent, action: ActionType) => {
 
 <template>
     <div
-        v-if="hasUpdatedOnce"
+        v-if="isReady"
         class="playlist-organizer"
         :style="{
             top: `${YTB_MASTHEAD_HEIGHT}px`,
@@ -111,18 +111,6 @@ const onDrop = (event: DragEvent, action: ActionType) => {
                 {{ dropZone.label }}
             </span>
         </div>
-
-        <div
-            v-if="store.showNoPlaylistWarning && playlists.length === 0"
-            class="no-playlists-warning"
-        >
-            <p>
-                Due to YouTube's Apr 2024 UI change, it is not possible to determine your playlists from the sidebar's HTML.
-            </p>
-            <p>
-                Please visit <a href="https://www.youtube.com/feed/playlists">youtube.com/feed/playlists</a> for this UserScript to register your playlists.
-            </p>
-        </div>
     </div>
 </template>
 
@@ -138,21 +126,6 @@ const onDrop = (event: DragEvent, action: ActionType) => {
     display: flex;
     flex-direction: column;
     gap: math.div($padding, 4);
-
-    .no-playlists-warning{
-        flex: 1;
-        width: 100%;
-        padding: $padding * 2;
-
-        display: grid;
-        gap: $padding;
-        align-content: baseline;
-    }
-
-    &:has(.no-playlists-warning) .dropzone{
-        flex: none;
-        padding: ($padding * 2) 0;
-    }
 
     .dropzone{
         align-items: center;
