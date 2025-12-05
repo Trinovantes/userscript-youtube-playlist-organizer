@@ -1,4 +1,4 @@
 export type Playlist = {
-    youtubeId: string
+    playlistId: string
     name: string
 }

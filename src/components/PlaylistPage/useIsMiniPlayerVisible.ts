@@ -1,4 +1,5 @@
-import { tryDebounce } from '../../utils/tryDebounce.ts'
+import { findDelayedElement } from '../../utils/findDelayedElement.ts'
+import { tryDebounce, tryDebounceAsync } from '../../utils/tryDebounce.ts'
 import { onMounted, onUnmounted, ref } from 'vue'
 
 export function useIsMiniPlayerVisible() {
@@ -10,29 +11,24 @@ export function useIsMiniPlayerVisible() {
     })
 
     const observer = new MutationObserver(update)
-    const onNavigation = tryDebounce('useIsMiniPlayerVisible::onNavigation', () => {
-        const miniPlayer = document.querySelector('ytd-app ytd-miniplayer')
-        if (!miniPlayer) {
-            return
-        }
-
-        observer?.disconnect()
-        observer?.observe(miniPlayer, {
+    const onNavigation = tryDebounceAsync('useIsMiniPlayerVisible::onNavigation', async () => {
+        const miniPlayer = await findDelayedElement('ytd-app ytd-miniplayer')
+        observer.disconnect()
+        observer.observe(miniPlayer, {
             attributes: true,
             attributeFilter: ['class'],
         })
-
         console.info('Observing', miniPlayer)
     })
 
     onMounted(() => {
-        onNavigation()
         update()
+        onNavigation()
         window.addEventListener('yt-navigate-finish', onNavigation)
     })
     onUnmounted(() => {
         window.removeEventListener('yt-navigate-finish', onNavigation)
-        observer?.disconnect()
+        observer.disconnect()
     })
 
     return {

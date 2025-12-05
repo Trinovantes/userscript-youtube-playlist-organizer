@@ -3,28 +3,32 @@ import { projectTitle } from '../../Constants.ts'
 import { ref } from 'vue'
 import PlaylistOrganizer from './PlaylistOrganizer.vue'
 import SettingsDialog from './SettingsDialog.vue'
+import { usePlaylistPageStore } from '../../store/usePlaylistPageStore.ts'
 
+const playlistPageStore = usePlaylistPageStore()
 const dialogRef = ref<HTMLDialogElement | null>(null)
 </script>
 
 <template>
-    <dialog
-        ref="dialogRef"
-    >
-        <SettingsDialog
-            @close="dialogRef?.close()"
-        />
-    </dialog>
+    <template v-if="playlistPageStore.currentPlaylist">
+        <dialog
+            ref="dialogRef"
+        >
+            <SettingsDialog
+                @close="dialogRef?.close()"
+            />
+        </dialog>
 
-    <PlaylistOrganizer />
+        <PlaylistOrganizer />
 
-    <button
-        class="settings-btn"
-        :title="projectTitle"
-        @click="dialogRef?.showModal()"
-    >
-        Settings
-    </button>
+        <button
+            class="settings-btn"
+            :title="projectTitle"
+            @click="dialogRef?.showModal()"
+        >
+            Settings
+        </button>
+    </template>
 </template>
 
 <style lang="scss" scoped>

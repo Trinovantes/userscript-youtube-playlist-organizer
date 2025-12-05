@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import type { Playlist } from './Playlist.ts'
 
 const HYDRATION_KEY = '__INITIAL_STATE__'
 
@@ -7,23 +6,17 @@ const HYDRATION_KEY = '__INITIAL_STATE__'
 // State
 // ----------------------------------------------------------------------------
 
-type State = {
+type SettingState = {
     dropZoneWidth: number
-    clickDelay: number
     showActionsAtTop: boolean
-    showNoPlaylistWarning: boolean
     hiddenPlaylists: Array<string>
-    userPlaylists: Array<Playlist>
 }
 
-function createDefaultState(): State {
-    const defaultState: State = {
+function createDefaultState(): SettingState {
+    const defaultState: SettingState = {
         dropZoneWidth: 400,
-        clickDelay: 100,
         showActionsAtTop: false,
-        showNoPlaylistWarning: true,
         hiddenPlaylists: [],
-        userPlaylists: [],
     }
 
     return defaultState
@@ -33,21 +26,21 @@ function createDefaultState(): State {
 // Store
 // ----------------------------------------------------------------------------
 
-export const useStore = defineStore('Store', {
+export const useSettingStore = defineStore('SettingStore', {
     state: createDefaultState,
 
     actions: {
         async load() {
             try {
                 const stateString = await GM.getValue(HYDRATION_KEY, '{}')
-                const parsedState = JSON.parse(stateString) as Partial<State>
+                const parsedState = JSON.parse(stateString) as Partial<SettingState>
 
                 this.$patch({
                     ...createDefaultState(),
                     ...parsedState,
                 })
 
-                console.info(__NAME__, 'LOAD', parsedState)
+                console.info(__NAME__, 'SettingStore::LOAD', parsedState)
             } catch (err) {
                 console.warn(__NAME__, err)
             }
@@ -57,21 +50,21 @@ export const useStore = defineStore('Store', {
             try {
                 const stateString = JSON.stringify(this.$state)
                 await GM.setValue(HYDRATION_KEY, stateString)
-                console.info(__NAME__, 'SAVE', JSON.parse(stateString))
+                console.info(__NAME__, 'SettingStore::SAVE', JSON.parse(stateString))
             } catch (err) {
                 console.warn(__NAME__, err)
             }
         },
 
         async addHiddenPlaylist(playlistName: string) {
-            console.info(__NAME__, `addHiddenPlaylist "${playlistName}"`)
+            console.info(__NAME__, `SettingStore::addHiddenPlaylist "${playlistName}"`)
 
             this.hiddenPlaylists.unshift(playlistName)
             await this.save()
         },
 
         async removeHiddenPlaylist(idx: string) {
-            console.info(__NAME__, `removeHiddenPlaylist idx:${idx}`)
+            console.info(__NAME__, `SettingStore::removeHiddenPlaylist idx:${idx}`)
 
             const i = parseInt(idx)
             if (isNaN(i) || i < 0 || i >= this.hiddenPlaylists.length) {

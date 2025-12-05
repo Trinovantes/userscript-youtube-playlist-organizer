@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { useStore } from '../../store/useStore.ts'
+import { useSettingStore } from '../../store/useSettingStore.ts'
 
-const store = useStore()
+const settingStore = useSettingStore()
 const playlistToHide = ref<string | null>()
 const addItem = async (e: Event) => {
     e.preventDefault()
@@ -11,11 +11,11 @@ const addItem = async (e: Event) => {
         return
     }
 
-    await store.addHiddenPlaylist(playlistToHide.value)
+    await settingStore.addHiddenPlaylist(playlistToHide.value)
     playlistToHide.value = null
 }
 const removeItem = async (idx: string) => {
-    await store.removeHiddenPlaylist(idx)
+    await settingStore.removeHiddenPlaylist(idx)
 }
 </script>
 
@@ -39,10 +39,10 @@ const removeItem = async (idx: string) => {
         </form>
 
         <template
-            v-if="store.hiddenPlaylists.length > 0"
+            v-if="settingStore.hiddenPlaylists.length > 0"
         >
             <div
-                v-for="[idx, hiddenPlaylist] of Object.entries(store.hiddenPlaylists)"
+                v-for="[idx, hiddenPlaylist] of Object.entries(settingStore.hiddenPlaylists)"
                 :key="idx"
                 class="flex-hgap"
             >

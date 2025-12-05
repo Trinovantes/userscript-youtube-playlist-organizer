@@ -1,22 +1,23 @@
 <script lang="ts" setup>
 import { computed, watch } from 'vue'
-import { type ActionType, triggerAction } from './triggerAction.ts'
-import { useIsMiniPlayerVisible } from './useIsMiniPlayerVisible.ts'
 import { useRegisterPlaylistVideosListeners } from './useRegisterPlaylistVideosListeners.ts'
-import { useDropZones } from './useDropZones.ts'
-import { useStore } from '../../store/useStore.ts'
-import { BTN_SIZE, PADDING, YTB_PLAYER_HEIGHT, YTB_PLAYER_MARGIN, DRAG_EV_TRANSFER_KEY, YTB_MASTHEAD_HEIGHT } from '../../Constants.ts'
+import { useDropZones, type DropZoneAction } from './useDropZones.ts'
+import { useSettingStore } from '../../store/useSettingStore.ts'
+import { BTN_SIZE, PADDING, YTB_PLAYER_HEIGHT, YTB_PLAYER_MARGIN, YTB_MASTHEAD_HEIGHT } from '../../Constants.ts'
 import { findDelayedElement } from '../../utils/findDelayedElement.ts'
-
-const { isReady, dropZones, currentPlaylist } = useDropZones()
-useRegisterPlaylistVideosListeners()
+import { triggerDropZoneAction } from './triggerDropZoneAction.ts'
+import { usePlaylistPageStore } from '../../store/usePlaylistPageStore.ts'
+import { useIsMiniPlayerVisible } from './useIsMiniPlayerVisible.ts'
 
 const { isMiniPlayerVisible } = useIsMiniPlayerVisible()
+const { dropZones } = useDropZones()
+useRegisterPlaylistVideosListeners()
+
+const playlistPageStore = usePlaylistPageStore()
+const settingStore = useSettingStore()
+const dropZoneWidth = computed(() => settingStore.dropZoneWidth)
 const dropZoneBottomOffset = computed(() => isMiniPlayerVisible.value ? YTB_PLAYER_HEIGHT : (BTN_SIZE + PADDING * 2))
 
-const store = useStore()
-const clickDelay = computed(() => store.clickDelay)
-const dropZoneWidth = computed(() => store.dropZoneWidth)
 const rightOffset = computed(() => dropZoneWidth.value + (YTB_PLAYER_MARGIN * 2))
 watch(rightOffset, async (rightOffset) => {
     console.groupCollapsed(__NAME__, 'PlaylistOrganizer.vue::rightOffset')
@@ -50,38 +51,22 @@ const onDragLeave = (event: DragEvent) => {
 
     event.target.classList.remove('highlight')
 }
-const onDrop = (event: DragEvent, action: ActionType) => {
+const onDrop = (event: DragEvent, action: DropZoneAction, targetPlaylistName: string, targetPlaylistId: string) => {
     if (!event.target || !(event.target instanceof Element)) {
         return
     }
 
+    triggerDropZoneAction(event, action, playlistPageStore.currentPlaylist, {
+        name: targetPlaylistName,
+        playlistId: targetPlaylistId,
+    })
+
     event.target.classList.remove('highlight')
-
-    const targetPlaylistName = event.target.textContent?.trim()
-    if (!targetPlaylistName) {
-        console.warn(__NAME__, 'onDrop failed (invalid targetPlaylistName)')
-        return
-    }
-
-    const currentPlaylistName = currentPlaylist.value?.name
-    if (!currentPlaylistName) {
-        console.warn(__NAME__, 'onDrop failed (invalid currentPlaylistName)')
-        return
-    }
-
-    const elementId = event.dataTransfer?.getData(DRAG_EV_TRANSFER_KEY)
-    if (!elementId) {
-        console.warn(__NAME__, 'onDrop failed (invalid elementId)')
-        return
-    }
-
-    void triggerAction(action, elementId, targetPlaylistName, currentPlaylistName, clickDelay.value)
 }
 </script>
 
 <template>
     <div
-        v-if="isReady"
         class="playlist-organizer"
         :style="{
             top: `${YTB_MASTHEAD_HEIGHT}px`,
@@ -93,11 +78,11 @@ const onDrop = (event: DragEvent, action: ActionType) => {
         <div
             v-for="dropZone of dropZones"
             :key="dropZone.key"
-            :class="`dropzone ${dropZone.class ?? ''}`"
+            :class="`dropzone ${dropZone.htmlClass ?? ''}`"
             @dragover="onDragOver"
             @dragenter="onDragEnter"
             @dragleave="onDragLeave"
-            @drop="(ev) => onDrop(ev, dropZone.action)"
+            @drop="(ev) => onDrop(ev, dropZone.action, dropZone.label, dropZone.key)"
         >
             <a
                 v-if="dropZone.url"

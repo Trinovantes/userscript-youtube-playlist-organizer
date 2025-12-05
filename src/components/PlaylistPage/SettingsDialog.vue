@@ -1,21 +1,21 @@
 <script lang="ts" setup>
 import { projectTitle, projectUrl } from '../../Constants.ts'
-import { useStore } from '../../store/useStore.ts'
+import { useSettingStore } from '../../store/useSettingStore.ts'
 import SettingsDialogHiddenPlaylists from './SettingsDialogHiddenPlaylists.vue'
 
 const emit = defineEmits(['close'])
 
-const store = useStore()
+const settingStore = useSettingStore()
 const save = async () => {
-    await store.save()
+    await settingStore.save()
     emit('close')
 }
 const reset = async () => {
-    store.$reset()
-    await store.save()
+    settingStore.$reset()
+    await settingStore.save()
 }
 const cancel = async () => {
-    await store.load()
+    await settingStore.load()
     emit('close')
 }
 </script>
@@ -61,23 +61,7 @@ const cancel = async () => {
                 </label>
                 <input
                     id="dropZoneWidth"
-                    v-model.number="store.dropZoneWidth"
-                    type="number"
-                >
-            </div>
-
-            <div class="setting">
-                <label for="clickDelay">
-                    <strong>
-                        Click Delay
-                    </strong>
-                    <span>
-                        Time (in ms) to wait between clicking buttons
-                    </span>
-                </label>
-                <input
-                    id="clickDelay"
-                    v-model.number="store.clickDelay"
+                    v-model.number="settingStore.dropZoneWidth"
                     type="number"
                 >
             </div>
@@ -94,24 +78,7 @@ const cancel = async () => {
 
                 <input
                     id="showActionsAtTop"
-                    v-model="store.showActionsAtTop"
-                    type="checkbox"
-                >
-            </div>
-
-            <div class="setting">
-                <label for="showNoPlaylistWarning">
-                    <strong>
-                        Show No Playlists Warning
-                    </strong>
-                    <span>
-                        Disable this if you do not want to see the warning when you have no playlists
-                    </span>
-                </label>
-
-                <input
-                    id="showNoPlaylistWarning"
-                    v-model="store.showNoPlaylistWarning"
+                    v-model="settingStore.showActionsAtTop"
                     type="checkbox"
                 >
             </div>

@@ -1,8 +1,8 @@
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
-import { useStore } from './store/useStore.ts'
+import { useSettingStore } from './store/useSettingStore.ts'
 import UserscriptApp from './components/UserscriptApp.vue'
-import { getAllPlaylists } from './ytb/getAllPlaylists.ts'
+import { usePlaylistPageStore } from './store/usePlaylistPageStore.ts'
 
 export async function createVueApp() {
     const app = createApp(UserscriptApp)
@@ -10,11 +10,11 @@ export async function createVueApp() {
     const pinia = createPinia()
     app.use(pinia)
 
-    const store = useStore(pinia)
-    await store.load()
+    const settingStore = useSettingStore(pinia)
+    await settingStore.load()
 
-    store.userPlaylists = await getAllPlaylists()
-    await store.save()
+    const playlistPageStore = usePlaylistPageStore(pinia)
+    await playlistPageStore.init()
 
     return app
 }

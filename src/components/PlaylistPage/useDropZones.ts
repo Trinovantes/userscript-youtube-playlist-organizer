@@ -1,94 +1,72 @@
 import { YTB_WATCH_LATER_LIST_ID } from '../../Constants.ts'
-import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { determineCurrentPlaylist } from './determineCurrentPlaylist.ts'
-import type { ActionType } from './triggerAction.ts'
-import { useStore } from '../../store/useStore.ts'
-import type { Playlist } from '../../store/Playlist.ts'
-import { tryDebounce } from '../../utils/tryDebounce.ts'
+import { computed } from 'vue'
+import { useSettingStore } from '../../store/useSettingStore.ts'
+import { usePlaylistPageStore } from '../../store/usePlaylistPageStore.ts'
+
+export type DropZoneAction =
+    | 'MOVE_TO_PLAYLIST'
+    | 'ADD_WATCH_LATER'
+    | 'ADD_QUEUE'
+    | 'REMOVE'
 
 type DropZone = {
-    key: string
-    class?: string
-    url?: string
+    action: DropZoneAction
     label: string
-    action: ActionType
+    key: string
+    htmlClass?: string
+    url?: string
 }
 
 export function useDropZones() {
-    const store = useStore()
-    const playlists = computed(() => store.userPlaylists)
+    const settingStore = useSettingStore()
+    const playlistPageStore = usePlaylistPageStore()
 
-    const currentPlaylist = ref<Playlist | null>(null)
-    const isOnWatchLater = computed(() => currentPlaylist.value?.youtubeId === YTB_WATCH_LATER_LIST_ID)
-
-    const isReady = ref(false) // Avoid FOUC
-    const onNavigation = tryDebounce('useDropZones::onNavigation', () => {
-        currentPlaylist.value = determineCurrentPlaylist()
-        isReady.value = true
-
-        console.info('playlists', [...playlists.value])
-        console.info('currentPlaylist', { ...currentPlaylist.value })
-    })
-
-    onMounted(() => {
-        onNavigation()
-        window.addEventListener('yt-navigate-finish', onNavigation)
-    })
-    onUnmounted(() => {
-        window.removeEventListener('yt-navigate-finish', onNavigation)
-    })
-
-    const showActionsAtTop = computed(() => store.showActionsAtTop)
     const dropZones = computed<Array<DropZone>>(() => {
         const actionsZones: Array<DropZone> = [
             {
-                key: 'remove-from-list',
-                class: 'remove-from-list',
-                label: 'Remove from List',
                 action: 'REMOVE',
+                label: 'Remove from List',
+                key: 'remove-from-list',
+                htmlClass: 'remove-from-list',
             },
             {
-                key: 'add-to-queue',
-                class: 'add-to-queue',
-                label: 'Add to Queue',
                 action: 'ADD_QUEUE',
+                label: 'Add to Queue',
+                key: 'add-to-queue',
+                htmlClass: 'add-to-queue',
             },
         ]
 
-        if (!isOnWatchLater.value) {
+        if (playlistPageStore.currentPlaylist?.playlistId !== YTB_WATCH_LATER_LIST_ID) {
             actionsZones.push({
-                key: 'add-to-watch-later',
-                class: 'add-to-watch-later',
-                label: 'Add to Watch Later',
-                url: 'https://www.youtube.com/playlist?list=WL',
                 action: 'ADD_WATCH_LATER',
+                label: 'Add to Watch Later',
+                key: 'add-to-watch-later',
+                htmlClass: 'add-to-watch-later',
+                url: 'https://www.youtube.com/playlist?list=WL',
             })
         }
 
         const playlistZones: Array<DropZone> = []
-        for (const playlist of playlists.value) {
-            if (store.hiddenPlaylists.includes(playlist.name)) {
+        for (const playlist of playlistPageStore.userPlaylists) {
+            if (settingStore.hiddenPlaylists.includes(playlist.name)) {
                 continue
             }
 
             playlistZones.push({
-                key: playlist.youtubeId,
+                action: 'MOVE_TO_PLAYLIST',
                 label: playlist.name,
-                url: `https://www.youtube.com/playlist?list=${playlist.youtubeId}`,
-                action: 'ADD_PLAYLIST',
+                key: playlist.playlistId,
+                url: `https://www.youtube.com/playlist?list=${playlist.playlistId}`,
             })
         }
 
-        return showActionsAtTop.value
+        return settingStore.showActionsAtTop
             ? [...actionsZones, ...playlistZones]
             : [...playlistZones, ...actionsZones]
     })
 
     return {
-        isReady,
-        playlists,
-        currentPlaylist,
-        isOnWatchLater,
         dropZones,
     }
 }

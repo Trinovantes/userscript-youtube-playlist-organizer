@@ -1,18 +1,15 @@
 export const projectTitle = `${__PRODUCT_NAME__} ${__VERSION__}`
 export const projectUrl = __REPO_URL__
 
-export const LOCALSTORE_STATE = 'LOCALSTORE_STATE'
-export const DRAG_EV_TRANSFER_KEY = 'dragElementId'
-export const DRAG_EV_DATA_ATTR = 'data-element-id'
+export const DRAG_EVENT_DATA_KEY_VIDEO_ID = 'dragVideoId'
+export const DATA_ATTR_VIDEO_ID = 'data-video-id'
 
-export const UI_WAIT_TIME = 150
+export const UI_WAIT_TIME = 150 // ms
 export const MAX_UI_WAIT_ATTEMPTS = 5
 
 export const YTB_PLAYLIST_VISIBILITIES = new Set(['Public', 'Private', 'Unlisted'])
 export const YTB_WATCH_LATER_LIST_ID = 'WL'
 export const YTB_LIKED_LIST_ID = 'LL'
-
-export const playlistPathRe = /\/playlist\?.*list=(?<playlistId>[\w-]+)/
 
 // Same as defined in variables.scss
 export const BTN_SIZE = 48

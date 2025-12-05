@@ -1,5 +1,5 @@
 import { YTB_LIKED_LIST_ID, YTB_PLAYLIST_VISIBILITIES, YTB_WATCH_LATER_LIST_ID } from '../Constants.ts'
-import type { Playlist } from '../store/Playlist.ts'
+import type { Playlist } from './Playlist.ts'
 import { sleep } from '../utils/sleep.ts'
 
 // Since we are interacting with YouTube's internal API that can change at any time, we have to assume any fields can be removed at any time
@@ -131,7 +131,7 @@ export async function getAllPlaylists() {
 
             playlists.push({
                 name: playlistName,
-                youtubeId: playlistId,
+                playlistId: playlistId,
             })
 
             console.info('Found', playlists.at(-1))

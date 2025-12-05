@@ -1,9 +1,8 @@
-import { playlistPathRe } from '../../Constants.ts'
-import type { Playlist } from '../../store/Playlist.ts'
+import type { Playlist } from './Playlist.ts'
 
-export function determineCurrentPlaylist(): Playlist | null {
-    const youtubeId = playlistPathRe.exec(location.href)?.groups?.playlistId
-    if (!youtubeId) {
+export function getCurrentPlaylist(): Playlist | null {
+    const playlistId = /\/playlist\?.*list=(?<playlistId>[\w-]+)/.exec(location.href)?.groups?.playlistId
+    if (!playlistId) {
         console.warn('Failed to determineCurrentPlaylist (invalid url)', location.href)
         return null
     }
@@ -17,7 +16,7 @@ export function determineCurrentPlaylist(): Playlist | null {
     }
 
     return {
-        youtubeId,
+        playlistId,
         name,
     }
 }
