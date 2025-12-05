@@ -129,7 +129,7 @@ const onDrop = (event: DragEvent, action: ActionType) => {
 <style lang="scss" scoped>
 .playlist-organizer{
     position: fixed;
-    z-index: 99999;
+    z-index: 2001;
 
     color: white;
     overflow-x: hidden;
