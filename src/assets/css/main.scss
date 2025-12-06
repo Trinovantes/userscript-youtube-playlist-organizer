@@ -1,5 +1,5 @@
 .draggable-video{
-    cursor: pointer;
+    cursor: grab;
     position: relative;
     margin-bottom: 5px;
 
@@ -16,6 +16,18 @@
             background: rgba(black, 0.2);
             border-color: white;
         }
+    }
+}
+
+label.bulk-action{
+    cursor: pointer;
+    padding: $padding;
+    z-index: 1;
+
+    input{
+        cursor: pointer;
+        width: $padding * 2;
+        height: $padding * 2;
     }
 }
 

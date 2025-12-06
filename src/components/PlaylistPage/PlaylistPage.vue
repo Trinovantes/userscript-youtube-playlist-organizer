@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import { projectTitle } from '../../Constants.ts'
 import { ref } from 'vue'
-import PlaylistOrganizer from './PlaylistOrganizer.vue'
+import PlaylistPageOrganizer from './PlaylistPageOrganizer.vue'
+import PlaylistPageBulkActionButtons from './PlaylistPageBulkActionButtons.vue'
 import SettingsDialog from './SettingsDialog.vue'
 import { usePlaylistPageStore } from '../../store/usePlaylistPageStore.ts'
 
@@ -19,7 +20,8 @@ const dialogRef = ref<HTMLDialogElement | null>(null)
             />
         </dialog>
 
-        <PlaylistOrganizer />
+        <PlaylistPageOrganizer />
+        <PlaylistPageBulkActionButtons />
 
         <button
             class="settings-btn"

@@ -1,6 +1,7 @@
 import { YTB_LIKED_LIST_ID, YTB_PLAYLIST_VISIBILITIES, YTB_WATCH_LATER_LIST_ID } from '../Constants.ts'
 import type { Playlist } from './Playlist.ts'
 import { sleep } from '../utils/sleep.ts'
+import { findDelayedElement } from '../utils/findDelayedElement.ts'
 
 // Since we are interacting with YouTube's internal API that can change at any time, we have to assume any fields can be removed at any time
 type DeepPartial<T> = T extends object ? {
@@ -57,11 +58,7 @@ export async function getAllPlaylists() {
     try {
         console.groupCollapsed(__NAME__, 'getAllPlaylists')
 
-        const ytdApp = document.querySelector('ytd-app')
-        if (!ytdApp) {
-            throw new Error('Failed to query ytd-app')
-        }
-
+        const ytdApp = await findDelayedElement('ytd-app')
         const returnValue = Array<YtGetAllPlaylistResponse>()
         ytdApp.dispatchEvent(new CustomEvent('yt-action', {
             detail: {
@@ -89,9 +86,11 @@ export async function getAllPlaylists() {
 
         // Busy wait for result
         for (let attempt = 0; attempt < 5; attempt++) {
-            while (returnValue.length === 0) {
-                await sleep(100)
+            if (returnValue.length !== 0) {
+                break
             }
+
+            await sleep(100)
         }
         if (returnValue.length === 0) {
             throw new Error('Failed to get response from InnerTube (missing returnValue)')
