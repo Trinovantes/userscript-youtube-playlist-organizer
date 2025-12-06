@@ -13,11 +13,13 @@ Remove from List | 2 Clicks | 1 Drag
 
 ### Why Userscript instead of YouTube API
 
-As of [2016](https://developers.google.com/youtube/v3/revision_history#september-15-2016), the Watch Later list has been depricated from YouTube's API. As a result, the only way to programatically make changes to the Watch Later list is by directly emulating user actions on the website.
+As of [2016](https://developers.google.com/youtube/v3/revision_history#september-15-2016), the Watch Later list has been depricated from YouTube's API. As a result, the only way to programatically make changes to the Watch Later list is by emulating user actions on the website or using YouTube's internal API.
 
-### Disclaimer
+### Known Issues
 
-This tool relies on timers and jQuery selectors to find playlists and videos on the page. Random lag may break the script. In addition, this tool *will* stop working whenever YouTube's markup changes.
+* If you try to add a video into a playlist that already has the video, it will appear multiple times in the playlist
+
+* This tool uses YouTube website's internal API that changes on a regular basis so this userscript is prone to randomly breaking
 
 ## Installation Guide
 
