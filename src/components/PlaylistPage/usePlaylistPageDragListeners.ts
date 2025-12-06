@@ -2,6 +2,8 @@ import { DATA_ATTR_VIDEO_ID, DRAG_EVENT_DATA_KEY_VIDEO_ID } from '../../Constant
 import { onUnmounted, onMounted } from 'vue'
 import { findDelayedElement } from '../../utils/findDelayedElement.ts'
 import { tryDebounceAsync } from '../../utils/tryDebounce.ts'
+import { getVideoId } from '../../ytb/Video.ts'
+import { findDelayedElementAll } from '../../utils/findDelayedElementAll.ts'
 
 type DragEventName = 'dragleave' | 'dragstart'
 type DragHandler = (ev: Event) => void
@@ -10,13 +12,13 @@ type ElementListenersMap = Map<string, DragHandler>
 // Need to keep reference to original handlers in order to properly unregister them
 const listeners = new Map<DragEventName, ElementListenersMap>()
 
-export function useRegisterPlaylistVideosListeners() {
-    const update = tryDebounceAsync('useRegisterPlaylistVideosListeners::update', async () => {
-        const videoListContainer = await findDelayedElement('#contents.ytd-playlist-video-list-renderer')
-        const videoRows = videoListContainer.children
+export function usePlaylistPageDragListeners() {
+    const update = tryDebounceAsync('usePlaylistPageDragListeners::update', async () => {
+        const videoRows = await findDelayedElementAll('#contents.ytd-playlist-video-list-renderer ytd-playlist-video-renderer')
 
         for (const videoRow of videoRows) {
-            const videoId = getVideoId(videoRow)
+            const href = videoRow.querySelector('a#thumbnail')?.getAttribute('href')
+            const videoId = getVideoId(href ?? '')
 
             removeListenerIfExist('dragstart', videoRow)
             addListener('dragstart', videoRow, videoId, (ev) => {
@@ -49,11 +51,12 @@ export function useRegisterPlaylistVideosListeners() {
         }
         update()
     })
-
-    const onNavigation = tryDebounceAsync('useRegisterPlaylistVideosListeners::onNavigation', async () => {
+    const onNavigation = tryDebounceAsync('usePlaylistPageDragListeners::onNavigation', async () => {
         const videoListContainer = await findDelayedElement('#contents.ytd-playlist-video-list-renderer')
         observer.disconnect()
-        observer.observe(videoListContainer, { childList: true })
+        observer.observe(videoListContainer, {
+            childList: true,
+        })
         console.info('Observing', videoListContainer)
 
         // If we navigated away from playlist page, then all the nodes are invalid and we can simply clear our references to their handlers
@@ -69,16 +72,6 @@ export function useRegisterPlaylistVideosListeners() {
         window.removeEventListener('yt-navigate-finish', onNavigation)
         observer.disconnect()
     })
-}
-
-function getVideoId(node: Element): string {
-    const href = node.querySelector('a#thumbnail')?.getAttribute('href')
-    const videoId = /\/watch\?v=(?<videoId>[\w-]+)&?/.exec(href ?? '')?.groups?.videoId
-    if (!videoId) {
-        throw new Error(`Failed to get videoId from "${href}"`)
-    }
-
-    return videoId
 }
 
 function addListener(eventName: DragEventName, node: Node, videoId: string, handler: DragHandler) {

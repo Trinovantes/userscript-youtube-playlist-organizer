@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, watch } from 'vue'
-import { useRegisterPlaylistVideosListeners } from './useRegisterPlaylistVideosListeners.ts'
-import { useDropZones, type DropZoneAction } from './useDropZones.ts'
+import { usePlaylistPageDragListeners } from './usePlaylistPageDragListeners.ts'
+import { usePlaylistPageDropZones, type DropZoneAction } from './usePlaylistPageDropZones.ts'
 import { useSettingStore } from '../../store/useSettingStore.ts'
 import { BTN_SIZE, PADDING, YTB_PLAYER_HEIGHT, YTB_PLAYER_MARGIN, YTB_MASTHEAD_HEIGHT } from '../../Constants.ts'
 import { findDelayedElement } from '../../utils/findDelayedElement.ts'
@@ -10,8 +10,8 @@ import { usePlaylistPageStore } from '../../store/usePlaylistPageStore.ts'
 import { useIsMiniPlayerVisible } from './useIsMiniPlayerVisible.ts'
 
 const { isMiniPlayerVisible } = useIsMiniPlayerVisible()
-const { dropZones } = useDropZones()
-useRegisterPlaylistVideosListeners()
+const { dropZones } = usePlaylistPageDropZones()
+usePlaylistPageDragListeners()
 
 const playlistPageStore = usePlaylistPageStore()
 const settingStore = useSettingStore()
@@ -67,7 +67,7 @@ const onDrop = (event: DragEvent, action: DropZoneAction, targetPlaylistName: st
 
 <template>
     <div
-        class="playlist-organizer"
+        class="playlist-page-organizer"
         :style="{
             top: `${YTB_MASTHEAD_HEIGHT}px`,
             right: `${YTB_PLAYER_MARGIN}px`,
@@ -100,7 +100,7 @@ const onDrop = (event: DragEvent, action: DropZoneAction, targetPlaylistName: st
 </template>
 
 <style lang="scss" scoped>
-.playlist-organizer{
+.playlist-page-organizer{
     position: fixed;
     z-index: 2001;
 

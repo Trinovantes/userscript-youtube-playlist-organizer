@@ -1,8 +1,8 @@
 import { DRAG_EVENT_DATA_KEY_VIDEO_ID, YTB_WATCH_LATER_LIST_ID } from '../../Constants.ts'
 import type { Playlist } from '../../ytb/Playlist.ts'
-import { addVideoToQueue } from '../../ytb/addVideoToQueue.ts'
+import { addVideosToQueue } from '../../ytb/addVideosToQueue.ts'
 import { editPlaylist } from '../../ytb/editPlaylist.ts'
-import type { DropZoneAction } from './useDropZones.ts'
+import type { DropZoneAction } from './usePlaylistPageDropZones.ts'
 
 export function triggerDropZoneAction(event: DragEvent, action: DropZoneAction, currentPlaylist: Playlist | null, targetPlaylist: Playlist | null) {
     try {
@@ -30,7 +30,7 @@ export function triggerDropZoneAction(event: DragEvent, action: DropZoneAction, 
         switch (action) {
             case 'MOVE_TO_PLAYLIST': {
                 if (currentPlaylist.playlistId === targetPlaylist.playlistId) {
-                    throw new Error(`Trying to add to same playlist "${currentPlaylist.name}"`)
+                    throw new Error(`Trying to move to same playlist "${currentPlaylist.name}"`)
                 }
 
                 editPlaylist(targetPlaylist.playlistId, true, [{ ytdPlaylistVideoRenderer, videoId }])
@@ -45,7 +45,7 @@ export function triggerDropZoneAction(event: DragEvent, action: DropZoneAction, 
             }
 
             case 'ADD_QUEUE': {
-                addVideoToQueue({ ytdPlaylistVideoRenderer, videoId })
+                addVideosToQueue([{ ytdPlaylistVideoRenderer, videoId }])
                 break
             }
 
