@@ -4,12 +4,17 @@ type YtbThumbnail = HTMLElement & {
     resolveCommand: (command: unknown) => void
 }
 
-export function addVideoToQueue(video: Video) {
+export function addVideosToQueue(videos: Array<Video>) {
     try {
-        console.groupCollapsed(__NAME__, 'addVideoToQueue', video.videoId)
-        console.info(video.ytdPlaylistVideoRenderer)
+        console.groupCollapsed(__NAME__, 'addVideosToQueue', videos.length)
+        if (videos.length === 0) {
+            return
+        }
 
-        const ytdThumbnail = video.ytdPlaylistVideoRenderer.querySelector('ytd-thumbnail#thumbnail') as YtbThumbnail | undefined
+        const videoIds = videos.map((v) => v.videoId)
+        console.info(videoIds)
+
+        const ytdThumbnail = videos[0].ytdPlaylistVideoRenderer.querySelector('ytd-thumbnail#thumbnail') as YtbThumbnail | undefined
         if (!ytdThumbnail) {
             throw new Error('Failed to find thumbnail')
         }
@@ -24,11 +29,11 @@ export function addVideoToQueue(video: Video) {
                             listType: 'PLAYLIST_EDIT_LIST_TYPE_QUEUE',
                             onCreateListCommand: {
                                 createPlaylistServiceEndpoint: {
-                                    videoIds: [video.videoId],
+                                    videoIds: videoIds,
                                     params: 'CAQ%3D', // WTF is this ???
                                 },
                             },
-                            videoIds: [video.videoId],
+                            videoIds: videoIds,
                         },
                     },
                 ],

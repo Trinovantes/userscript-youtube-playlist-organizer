@@ -1,4 +1,3 @@
-import { YTB_WATCH_LATER_LIST_ID } from '../../Constants.ts'
 import { computed } from 'vue'
 import { useSettingStore } from '../../store/useSettingStore.ts'
 import { usePlaylistPageStore } from '../../store/usePlaylistPageStore.ts'
@@ -17,7 +16,7 @@ type DropZone = {
     url?: string
 }
 
-export function useDropZones() {
+export function usePlaylistPageDropZones() {
     const settingStore = useSettingStore()
     const playlistPageStore = usePlaylistPageStore()
 
@@ -37,7 +36,7 @@ export function useDropZones() {
             },
         ]
 
-        if (playlistPageStore.currentPlaylist?.playlistId !== YTB_WATCH_LATER_LIST_ID) {
+        if (!playlistPageStore.isWatchLaterPage) {
             actionsZones.push({
                 action: 'ADD_WATCH_LATER',
                 label: 'Add to Watch Later',
