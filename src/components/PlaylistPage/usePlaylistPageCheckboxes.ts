@@ -36,6 +36,7 @@ export function usePlaylistPageCheckboxes() {
             }
 
             checkbox.setAttribute(DATA_ATTR_VIDEO_ID, videoId)
+            checkbox.checked = Boolean(playlistPageStore.checkedVideos.find((video) => video.videoId === videoId))
         }
 
         playlistPageStore.updateCheckedVideos()
