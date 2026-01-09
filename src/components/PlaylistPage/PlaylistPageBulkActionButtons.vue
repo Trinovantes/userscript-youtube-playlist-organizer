@@ -37,7 +37,7 @@ const targetPlaylist = ref<Playlist | null>(null)
                 @click="playlistPageStore.moveAllCheckedVideosToPlaylist(targetPlaylist)"
                 :disabled="disableBulkAction"
             >
-                Move All to Playlist
+                Move Selected to Playlist
 
                 <select
                     v-model="targetPlaylist"
@@ -58,14 +58,14 @@ const targetPlaylist = ref<Playlist | null>(null)
                 @click="playlistPageStore.removeAllCheckedVideos"
                 :disabled="disableBulkAction"
             >
-                Remove All
+                Remove Selected
             </button>
 
             <button
                 @click="playlistPageStore.addAllCheckedVideosToQueue"
                 :disabled="disableBulkAction"
             >
-                Add All to Queue
+                Add Selected to Queue
             </button>
 
             <button
@@ -73,7 +73,7 @@ const targetPlaylist = ref<Playlist | null>(null)
                 @click="playlistPageStore.addAllCheckedVideosToWatchLater"
                 :disabled="disableBulkAction"
             >
-                Add All to Watch Later
+                Add Selected to Watch Later
             </button>
 
             <label
