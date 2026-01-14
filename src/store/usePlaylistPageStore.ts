@@ -75,6 +75,22 @@ export const usePlaylistPageStore = defineStore('PlaylistPageStore', () => {
 
         checkedVideos.value = videos
     })
+    const unmountCheckedVideos = () => {
+        for (const video of checkedVideos.value) {
+            video.ytdPlaylistVideoRenderer.remove()
+        }
+    }
+    const uncheckCheckedVideos = () => {
+        for (const video of checkedVideos.value) {
+            const checkbox = video.ytdPlaylistVideoRenderer.querySelector<HTMLInputElement>('input[type="checkbox"]')
+            if (!checkbox) {
+                continue
+            }
+
+            checkbox.checked = false
+            checkbox.dispatchEvent(new Event('change'))
+        }
+    }
 
     const toggleAllVideos = tryFnDebounceAsync('PlaylistPageStore::toggleAllVideos', async (enable: boolean) => {
         const videoRows = await findDelayedElementAll('#contents.ytd-playlist-video-list-renderer ytd-playlist-video-renderer')
@@ -108,11 +124,7 @@ export const usePlaylistPageStore = defineStore('PlaylistPageStore', () => {
 
         editPlaylist(targetPlaylist.playlistId, true, checkedVideos.value)
         editPlaylist(currentPlaylist.value.playlistId, false, checkedVideos.value)
-        for (const video of checkedVideos.value) {
-            video.ytdPlaylistVideoRenderer.remove()
-        }
-
-        updateCheckedVideos()
+        unmountCheckedVideos()
     })
 
     const removeAllCheckedVideos = tryFnDebounce('PlaylistPageStore::removeAllCheckedVideos', () => {
@@ -126,19 +138,17 @@ export const usePlaylistPageStore = defineStore('PlaylistPageStore', () => {
         }
 
         editPlaylist(currentPlaylist.value.playlistId, false, checkedVideos.value)
-        for (const video of checkedVideos.value) {
-            video.ytdPlaylistVideoRenderer.remove()
-        }
-
-        updateCheckedVideos()
+        unmountCheckedVideos()
     })
 
     const addAllCheckedVideosToQueue = tryFnDebounce('PlaylistPageStore::addAllCheckedVideosToQueue', () => {
         addVideosToQueue(checkedVideos.value)
+        uncheckCheckedVideos()
     })
 
     const addAllCheckedVideosToWatchLater = tryFnDebounce('PlaylistPageStore::addAllCheckedVideosToWatchLater', () => {
         editPlaylist(YTB_WATCH_LATER_LIST_ID, true, checkedVideos.value)
+        uncheckCheckedVideos()
     })
 
     // ------------------------------------------------------------------------
