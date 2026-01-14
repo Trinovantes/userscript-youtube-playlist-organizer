@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import type { Playlist } from '../ytb/Playlist.ts'
-import { tryFn, tryFnAsync, tryFnDebounce, tryFnDebounceAsync } from '../utils/tryFn.ts'
+import { tryFn, tryFnDebounce, tryFnDebounceAsync } from '../utils/tryFn.ts'
 import { getCurrentPlaylist } from '../ytb/getCurrentPlaylist.ts'
 import { getAllPlaylists } from '../ytb/getAllPlaylists.ts'
 import { YTB_WATCH_LATER_LIST_ID } from '../Constants.ts'
@@ -54,7 +54,7 @@ export const usePlaylistPageStore = defineStore('PlaylistPageStore', () => {
     // ------------------------------------------------------------------------
 
     const checkedVideos = ref<Array<Video>>([])
-    const updateCheckedVideos = tryFnAsync('PlaylistPageStore::updateCheckedVideos', async () => {
+    const updateCheckedVideos = tryFnDebounceAsync('PlaylistPageStore::updateCheckedVideos', async () => {
         const videoRows = await findDelayedElementAll('#contents.ytd-playlist-video-list-renderer ytd-playlist-video-renderer')
         const videos = new Array<Video>()
 
