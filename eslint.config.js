@@ -11,7 +11,8 @@ import { includeIgnoreFile } from '@eslint/compat'
 import path from 'node:path'
 import { defineConfig } from 'eslint/config'
 
-const inlineElements = await import('eslint-plugin-vue/dist/utils/inline-non-void-elements.js')
+const inlineElementsJson = await import('eslint-plugin-vue/dist/utils/inline-non-void-elements.js')
+const inlineElements = inlineElementsJson.default.default
 
 export default defineConfig(
     includeIgnoreFile(path.resolve('.gitignore')),
@@ -94,6 +95,7 @@ export default defineConfig(
 
     {
         rules: {
+            'no-useless-assignment': ['off'],
             'no-empty-pattern': ['error', {
                 allowObjectPatternsAsParameters: true,
             }],
@@ -238,7 +240,7 @@ export default defineConfig(
                 order: ['script', 'template', 'style'],
             }],
             'vue/singleline-html-element-content-newline': ['error', {
-                ignores: ['ExternalLink', 'router-link', 'pre', ...inlineElements.default.default],
+                ignores: ['ExternalLink', 'router-link', 'pre', ...inlineElements],
             }],
         },
     },

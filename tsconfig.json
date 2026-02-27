@@ -35,7 +35,13 @@
         "verbatimModuleSyntax": true,
 
         "outDir": "dist",
-        "baseUrl": ".",
+        "paths": {
+            "tests/*": ["./tests/*"],
+        },
+        "types": [
+            "node",
+            "greasemonkey",
+        ],
     },
     "exclude": [
         "**/dist*",
