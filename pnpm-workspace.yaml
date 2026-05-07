@@ -1,6 +1,6 @@
-ignoredBuiltDependencies:
-  - '@parcel/watcher'
-  - esbuild
-
 overrides:
   '@types/node': '^24'
+
+allowBuilds:
+  '@parcel/watcher': false
+  esbuild: false
